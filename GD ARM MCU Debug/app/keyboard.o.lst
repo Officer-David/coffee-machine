@@ -1,0 +1,1484 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"keyboard.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	keyinfo,100,4
+  16              		.comm	keyTouch_in,2,2
+  17              		.comm	keyboard_id,1,1
+  18              		.comm	keyboard_task_step,1,1
+  19              		.section	.text.ini_keys_value,"ax",%progbits
+  20              		.align	1
+  21              		.global	ini_keys_value
+  22              		.arch armv7e-m
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  26              		.fpu softvfp
+  28              	ini_keys_value:
+  29              	.LFB116:
+  30              		.file 1 "../app/keyboard.c"
+   1:../app/keyboard.c **** 
+   2:../app/keyboard.c **** /*
+   3:../app/keyboard.c ****   ******************************************************************************
+   4:../app/keyboard.c ****   * @file           : keyboard.c
+   5:../app/keyboard.c ****   * @brief         : keyboard program body
+   6:../app/keyboard.c ****   ******************************************************************************
+   7:../app/keyboard.c ****   * @attention
+   8:../app/keyboard.c ****   *
+   9:../app/keyboard.c ****   * Date					 		
+  10:../app/keyboard.c ****   * Description
+  11:../app/keyboard.c ****   *____________________________________________________________________________*/
+  12:../app/keyboard.c **** 
+  13:../app/keyboard.c **** /*_____ I N C L U D E S ____________________________________________________*/
+  14:../app/keyboard.c **** #define _KEYBOARD_C_
+  15:../app/keyboard.c **** #include <string.h>
+  16:../app/keyboard.c **** #include "gd32f30x.h"
+  17:../app/keyboard.c **** #include "os_lyh_core.h"
+  18:../app/keyboard.c **** #include "configboard.h"
+  19:../app/keyboard.c **** #include "keyboard.h"
+  20:../app/keyboard.c **** #include "app.h"
+  21:../app/keyboard.c **** 
+  22:../app/keyboard.c **** /*_____ D E F I N I T I O N S ________________________________________________*/
+  23:../app/keyboard.c **** 
+  24:../app/keyboard.c **** 
+  25:../app/keyboard.c **** /*_____ M A C R O S ______________________________________________________*/
+  26:../app/keyboard.c **** 
+  27:../app/keyboard.c **** 
+  28:../app/keyboard.c **** /*_____ F U N C T I O N S __________________________________________________*/
+  29:../app/keyboard.c **** void ini_keys_value(void)
+  30:../app/keyboard.c **** {
+  31              		.loc 1 30 1
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 1, uses_anonymous_args = 0
+  35 0000 80B5     		push	{r7, lr}
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 00AF     		add	r7, sp, #0
+  40              		.cfi_def_cfa_register 7
+  31:../app/keyboard.c **** 	memset((uint8_t*)&keyinfo, 0, sizeof(_keystruct));
+  41              		.loc 1 31 2
+  42 0004 6422     		movs	r2, #100
+  43 0006 0021     		movs	r1, #0
+  44 0008 3248     		ldr	r0, .L2
+  45 000a FFF7FEFF 		bl	memset
+  32:../app/keyboard.c **** 	keyinfo.ulUIOnboardSwitches = 0xFFFFFFFF;
+  46              		.loc 1 32 30
+  47 000e 314B     		ldr	r3, .L2
+  48 0010 4FF0FF32 		mov	r2, #-1
+  49 0014 DA61     		str	r2, [r3, #28]
+  33:../app/keyboard.c **** #ifdef KEY_HOLD_FUNCTION_ENABLE
+  34:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_1] = Ms_600/Ms_10;	  // interval time: 1s	
+  50              		.loc 1 34 32
+  51 0016 2F4B     		ldr	r3, .L2
+  52 0018 3C22     		movs	r2, #60
+  53 001a 1A84     		strh	r2, [r3, #32]	@ movhi
+  35:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_2] = Ms_1000/Ms_10;	  // interval time: 1s	
+  54              		.loc 1 35 32
+  55 001c 2D4B     		ldr	r3, .L2
+  56 001e 6422     		movs	r2, #100
+  57 0020 5A84     		strh	r2, [r3, #34]	@ movhi
+  36:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_3] = Ms_1000/Ms_10;	  // interval time: 1s	
+  58              		.loc 1 36 32
+  59 0022 2C4B     		ldr	r3, .L2
+  60 0024 6422     		movs	r2, #100
+  61 0026 9A84     		strh	r2, [r3, #36]	@ movhi
+  37:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_4] = Ms_1000/Ms_10;	  // interval time: 1s	
+  62              		.loc 1 37 32
+  63 0028 2A4B     		ldr	r3, .L2
+  64 002a 6422     		movs	r2, #100
+  65 002c DA84     		strh	r2, [r3, #38]	@ movhi
+  38:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_5] = Ms_1000/Ms_10;	  // interval time: 1s	
+  66              		.loc 1 38 32
+  67 002e 294B     		ldr	r3, .L2
+  68 0030 6422     		movs	r2, #100
+  69 0032 1A85     		strh	r2, [r3, #40]	@ movhi
+  39:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_6] = Ms_1000/Ms_10;	  // interval time: 1s	
+  70              		.loc 1 39 32
+  71 0034 274B     		ldr	r3, .L2
+  72 0036 6422     		movs	r2, #100
+  73 0038 5A85     		strh	r2, [r3, #42]	@ movhi
+  40:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_7] = Ms_1000/Ms_10;	  // interval time: 1s	
+  74              		.loc 1 40 32
+  75 003a 264B     		ldr	r3, .L2
+  76 003c 6422     		movs	r2, #100
+  77 003e 9A85     		strh	r2, [r3, #44]	@ movhi
+  41:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_8] = Ms_1000/Ms_10;	  // interval time: 1s	
+  78              		.loc 1 41 32
+  79 0040 244B     		ldr	r3, .L2
+  80 0042 6422     		movs	r2, #100
+  81 0044 DA85     		strh	r2, [r3, #46]	@ movhi
+  42:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_9] = Ms_3000/Ms_10;	  // interval time: 3s	
+  82              		.loc 1 42 32
+  83 0046 234B     		ldr	r3, .L2
+  84 0048 4FF49672 		mov	r2, #300
+  85 004c 1A86     		strh	r2, [r3, #48]	@ movhi
+  43:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_10] = Ms_3000/Ms_10;	  // interval time: 3s	
+  86              		.loc 1 43 33
+  87 004e 214B     		ldr	r3, .L2
+  88 0050 4FF49672 		mov	r2, #300
+  89 0054 5A86     		strh	r2, [r3, #50]	@ movhi
+  44:../app/keyboard.c **** 	keyinfo.ulHoldTime[KEY_POS_11] = Ms_1000/Ms_10;	  // interval time: 1s	
+  90              		.loc 1 44 33
+  91 0056 1F4B     		ldr	r3, .L2
+  92 0058 6422     		movs	r2, #100
+  93 005a 9A86     		strh	r2, [r3, #52]	@ movhi
+  45:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_1] = 0xFFFF;
+  94              		.loc 1 45 36
+  95 005c 1D4B     		ldr	r3, .L2
+  96 005e 4FF6FF72 		movw	r2, #65535
+  97 0062 A3F84220 		strh	r2, [r3, #66]	@ movhi
+  46:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_2] = 0xFFFF;
+  98              		.loc 1 46 36
+  99 0066 1B4B     		ldr	r3, .L2
+ 100 0068 4FF6FF72 		movw	r2, #65535
+ 101 006c A3F84420 		strh	r2, [r3, #68]	@ movhi
+  47:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_3] = 0xFFFF;
+ 102              		.loc 1 47 36
+ 103 0070 184B     		ldr	r3, .L2
+ 104 0072 4FF6FF72 		movw	r2, #65535
+ 105 0076 A3F84620 		strh	r2, [r3, #70]	@ movhi
+  48:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_4] = 0xFFFF;
+ 106              		.loc 1 48 36
+ 107 007a 164B     		ldr	r3, .L2
+ 108 007c 4FF6FF72 		movw	r2, #65535
+ 109 0080 A3F84820 		strh	r2, [r3, #72]	@ movhi
+  49:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_5] = 0xFFFF;
+ 110              		.loc 1 49 36
+ 111 0084 134B     		ldr	r3, .L2
+ 112 0086 4FF6FF72 		movw	r2, #65535
+ 113 008a A3F84A20 		strh	r2, [r3, #74]	@ movhi
+  50:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_6] = 0xFFFF;
+ 114              		.loc 1 50 36
+ 115 008e 114B     		ldr	r3, .L2
+ 116 0090 4FF6FF72 		movw	r2, #65535
+ 117 0094 A3F84C20 		strh	r2, [r3, #76]	@ movhi
+  51:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_7] = 0xFFFF;
+ 118              		.loc 1 51 36
+ 119 0098 0E4B     		ldr	r3, .L2
+ 120 009a 4FF6FF72 		movw	r2, #65535
+ 121 009e A3F84E20 		strh	r2, [r3, #78]	@ movhi
+  52:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_8] = 0xFFFF;
+ 122              		.loc 1 52 36
+ 123 00a2 0C4B     		ldr	r3, .L2
+ 124 00a4 4FF6FF72 		movw	r2, #65535
+ 125 00a8 A3F85020 		strh	r2, [r3, #80]	@ movhi
+  53:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_9] = 0xFFFF;
+ 126              		.loc 1 53 36
+ 127 00ac 094B     		ldr	r3, .L2
+ 128 00ae 4FF6FF72 		movw	r2, #65535
+ 129 00b2 A3F85220 		strh	r2, [r3, #82]	@ movhi
+  54:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_10] = 0xFFFF;
+ 130              		.loc 1 54 37
+ 131 00b6 074B     		ldr	r3, .L2
+ 132 00b8 4FF6FF72 		movw	r2, #65535
+ 133 00bc A3F85420 		strh	r2, [r3, #84]	@ movhi
+  55:../app/keyboard.c **** 	keyinfo.pulUIHoldCount[KEY_POS_11] = 0xFFFF;
+ 134              		.loc 1 55 37
+ 135 00c0 044B     		ldr	r3, .L2
+ 136 00c2 4FF6FF72 		movw	r2, #65535
+ 137 00c6 A3F85620 		strh	r2, [r3, #86]	@ movhi
+  56:../app/keyboard.c **** #endif
+  57:../app/keyboard.c **** 	keyTouch_in = 0u;
+ 138              		.loc 1 57 14
+ 139 00ca 034B     		ldr	r3, .L2+4
+ 140 00cc 0022     		movs	r2, #0
+ 141 00ce 1A80     		strh	r2, [r3]	@ movhi
+  58:../app/keyboard.c **** }
+ 142              		.loc 1 58 1
+ 143 00d0 00BF     		nop
+ 144 00d2 80BD     		pop	{r7, pc}
+ 145              	.L3:
+ 146              		.align	2
+ 147              	.L2:
+ 148 00d4 00000000 		.word	keyinfo
+ 149 00d8 00000000 		.word	keyTouch_in
+ 150              		.cfi_endproc
+ 151              	.LFE116:
+ 153              		.section	.text.key_switch_debouncer,"ax",%progbits
+ 154              		.align	1
+ 155              		.global	key_switch_debouncer
+ 156              		.syntax unified
+ 157              		.thumb
+ 158              		.thumb_func
+ 159              		.fpu softvfp
+ 161              	key_switch_debouncer:
+ 162              	.LFB117:
+  59:../app/keyboard.c **** 
+  60:../app/keyboard.c **** /**************************************************************************************************
+  61:../app/keyboard.c **** * function name: UIOnboardSwitchDebouncer
+  62:../app/keyboard.c **** * input: non
+  63:../app/keyboard.c **** * output: non
+  64:../app/keyboard.c **** * description: scan all key
+  65:../app/keyboard.c **** ***************************************************************************************************
+  66:../app/keyboard.c **** void key_switch_debouncer(uint32_t ulSwitches)
+  67:../app/keyboard.c **** {
+ 163              		.loc 1 67 1
+ 164              		.cfi_startproc
+ 165              		@ args = 0, pretend = 0, frame = 16
+ 166              		@ frame_needed = 1, uses_anonymous_args = 0
+ 167 0000 80B5     		push	{r7, lr}
+ 168              		.cfi_def_cfa_offset 8
+ 169              		.cfi_offset 7, -8
+ 170              		.cfi_offset 14, -4
+ 171 0002 84B0     		sub	sp, sp, #16
+ 172              		.cfi_def_cfa_offset 24
+ 173 0004 00AF     		add	r7, sp, #0
+ 174              		.cfi_def_cfa_register 7
+ 175 0006 7860     		str	r0, [r7, #4]
+  68:../app/keyboard.c **** 	uint32_t ulDelta, ulIdx;
+  69:../app/keyboard.c **** 	
+  70:../app/keyboard.c **** 	keyinfo.ulPressF = 0u;
+ 176              		.loc 1 70 19
+ 177 0008 884B     		ldr	r3, .L15
+ 178 000a 0022     		movs	r2, #0
+ 179 000c 1A60     		str	r2, [r3]
+  71:../app/keyboard.c **** 	keyinfo.ulLPressF = 0u;
+ 180              		.loc 1 71 20
+ 181 000e 874B     		ldr	r3, .L15
+ 182 0010 0022     		movs	r2, #0
+ 183 0012 5A60     		str	r2, [r3, #4]
+  72:../app/keyboard.c **** 	keyinfo.ulReleaseF = 0u;
+ 184              		.loc 1 72 21
+ 185 0014 854B     		ldr	r3, .L15
+ 186 0016 0022     		movs	r2, #0
+ 187 0018 9A60     		str	r2, [r3, #8]
+  73:../app/keyboard.c **** 	/* Determine the switches that are at a different state than the debounced state*/
+  74:../app/keyboard.c **** 	ulDelta = ulSwitches ^ keyinfo.ulUIOnboardSwitches;
+ 188              		.loc 1 74 32
+ 189 001a 844B     		ldr	r3, .L15
+ 190 001c DB69     		ldr	r3, [r3, #28]
+ 191              		.loc 1 74 10
+ 192 001e 7A68     		ldr	r2, [r7, #4]
+ 193 0020 5340     		eors	r3, r3, r2
+ 194 0022 BB60     		str	r3, [r7, #8]
+  75:../app/keyboard.c **** 
+  76:../app/keyboard.c **** 	/* Increment the clocks by one.*/
+  77:../app/keyboard.c **** 	keyinfo.ulUIOnboardClockA ^= keyinfo.ulUIOnboardClockB;
+ 195              		.loc 1 77 28
+ 196 0024 814B     		ldr	r3, .L15
+ 197 0026 5A69     		ldr	r2, [r3, #20]
+ 198              		.loc 1 77 38
+ 199 0028 804B     		ldr	r3, .L15
+ 200 002a 9B69     		ldr	r3, [r3, #24]
+ 201              		.loc 1 77 28
+ 202 002c 5340     		eors	r3, r3, r2
+ 203 002e 7F4A     		ldr	r2, .L15
+ 204 0030 5361     		str	r3, [r2, #20]
+  78:../app/keyboard.c **** 	keyinfo.ulUIOnboardClockB = ~keyinfo.ulUIOnboardClockB;
+ 205              		.loc 1 78 38
+ 206 0032 7E4B     		ldr	r3, .L15
+ 207 0034 9B69     		ldr	r3, [r3, #24]
+ 208              		.loc 1 78 30
+ 209 0036 DB43     		mvns	r3, r3
+ 210              		.loc 1 78 28
+ 211 0038 7C4A     		ldr	r2, .L15
+ 212 003a 9361     		str	r3, [r2, #24]
+  79:../app/keyboard.c **** 
+  80:../app/keyboard.c **** 	/* Reset the clocks corresponding to switches that have not changed state.*/
+  81:../app/keyboard.c **** 	keyinfo.ulUIOnboardClockA &= ulDelta;
+ 213              		.loc 1 81 28
+ 214 003c 7B4B     		ldr	r3, .L15
+ 215 003e 5A69     		ldr	r2, [r3, #20]
+ 216 0040 BB68     		ldr	r3, [r7, #8]
+ 217 0042 1340     		ands	r3, r3, r2
+ 218 0044 794A     		ldr	r2, .L15
+ 219 0046 5361     		str	r3, [r2, #20]
+  82:../app/keyboard.c **** 	keyinfo.ulUIOnboardClockB &= ulDelta;
+ 220              		.loc 1 82 28
+ 221 0048 784B     		ldr	r3, .L15
+ 222 004a 9A69     		ldr	r2, [r3, #24]
+ 223 004c BB68     		ldr	r3, [r7, #8]
+ 224 004e 1340     		ands	r3, r3, r2
+ 225 0050 764A     		ldr	r2, .L15
+ 226 0052 9361     		str	r3, [r2, #24]
+  83:../app/keyboard.c **** 
+  84:../app/keyboard.c **** 	/* Get the new debounced switch state.*/
+  85:../app/keyboard.c **** 	keyinfo.ulUIOnboardSwitches &= (keyinfo.ulUIOnboardClockA |	keyinfo.ulUIOnboardClockB);
+ 227              		.loc 1 85 30
+ 228 0054 754B     		ldr	r3, .L15
+ 229 0056 DA69     		ldr	r2, [r3, #28]
+ 230              		.loc 1 85 41
+ 231 0058 744B     		ldr	r3, .L15
+ 232 005a 5969     		ldr	r1, [r3, #20]
+ 233              		.loc 1 85 69
+ 234 005c 734B     		ldr	r3, .L15
+ 235 005e 9B69     		ldr	r3, [r3, #24]
+ 236              		.loc 1 85 60
+ 237 0060 0B43     		orrs	r3, r3, r1
+ 238              		.loc 1 85 30
+ 239 0062 1340     		ands	r3, r3, r2
+ 240 0064 714A     		ldr	r2, .L15
+ 241 0066 D361     		str	r3, [r2, #28]
+  86:../app/keyboard.c **** 	keyinfo.ulUIOnboardSwitches |= ((~(keyinfo.ulUIOnboardClockA |keyinfo.ulUIOnboardClockB)) & ulSwit
+ 242              		.loc 1 86 30
+ 243 0068 704B     		ldr	r3, .L15
+ 244 006a DA69     		ldr	r2, [r3, #28]
+ 245              		.loc 1 86 44
+ 246 006c 6F4B     		ldr	r3, .L15
+ 247 006e 5969     		ldr	r1, [r3, #20]
+ 248              		.loc 1 86 71
+ 249 0070 6E4B     		ldr	r3, .L15
+ 250 0072 9B69     		ldr	r3, [r3, #24]
+ 251              		.loc 1 86 63
+ 252 0074 0B43     		orrs	r3, r3, r1
+ 253              		.loc 1 86 35
+ 254 0076 D943     		mvns	r1, r3
+ 255              		.loc 1 86 92
+ 256 0078 7B68     		ldr	r3, [r7, #4]
+ 257 007a 0B40     		ands	r3, r3, r1
+ 258              		.loc 1 86 30
+ 259 007c 1343     		orrs	r3, r3, r2
+ 260 007e 6B4A     		ldr	r2, .L15
+ 261 0080 D361     		str	r3, [r2, #28]
+  87:../app/keyboard.c **** 
+  88:../app/keyboard.c **** 	/* Determine the switches that just changed debounced state.*/
+  89:../app/keyboard.c **** 	ulDelta ^= (keyinfo.ulUIOnboardClockA | keyinfo.ulUIOnboardClockB);
+ 262              		.loc 1 89 21
+ 263 0082 6A4B     		ldr	r3, .L15
+ 264 0084 5A69     		ldr	r2, [r3, #20]
+ 265              		.loc 1 89 49
+ 266 0086 694B     		ldr	r3, .L15
+ 267 0088 9B69     		ldr	r3, [r3, #24]
+ 268              		.loc 1 89 40
+ 269 008a 1343     		orrs	r3, r3, r2
+ 270              		.loc 1 89 10
+ 271 008c BA68     		ldr	r2, [r7, #8]
+ 272 008e 5340     		eors	r3, r3, r2
+ 273 0090 BB60     		str	r3, [r7, #8]
+  90:../app/keyboard.c **** 
+  91:../app/keyboard.c **** 	/* Loop through all of the switches.*/
+  92:../app/keyboard.c **** 	for(ulIdx = 0; ulIdx < MAX_KEY_NUMBER; ulIdx++)
+ 274              		.loc 1 92 12
+ 275 0092 0023     		movs	r3, #0
+ 276 0094 FB60     		str	r3, [r7, #12]
+ 277              		.loc 1 92 2
+ 278 0096 A4E0     		b	.L5
+ 279              	.L11:
+  93:../app/keyboard.c **** 	{
+  94:../app/keyboard.c **** 		/* See if this switch just changed state.*/
+  95:../app/keyboard.c **** 		if(ulDelta & (1 << ulIdx))
+ 280              		.loc 1 95 19
+ 281 0098 0122     		movs	r2, #1
+ 282 009a FB68     		ldr	r3, [r7, #12]
+ 283 009c 02FA03F3 		lsl	r3, r2, r3
+ 284 00a0 1A46     		mov	r2, r3
+ 285              		.loc 1 95 14
+ 286 00a2 BB68     		ldr	r3, [r7, #8]
+ 287 00a4 1340     		ands	r3, r3, r2
+ 288              		.loc 1 95 5
+ 289 00a6 002B     		cmp	r3, #0
+ 290 00a8 29D0     		beq	.L6
+  96:../app/keyboard.c **** 		{
+  97:../app/keyboard.c **** 			/* See if the switch was just pressed or released. */
+  98:../app/keyboard.c **** 			if(!(keyinfo.ulUIOnboardSwitches & (1u << ulIdx)))
+ 291              		.loc 1 98 16
+ 292 00aa 604B     		ldr	r3, .L15
+ 293 00ac DA69     		ldr	r2, [r3, #28]
+ 294              		.loc 1 98 43
+ 295 00ae 0121     		movs	r1, #1
+ 296 00b0 FB68     		ldr	r3, [r7, #12]
+ 297 00b2 01FA03F3 		lsl	r3, r1, r3
+ 298              		.loc 1 98 37
+ 299 00b6 1340     		ands	r3, r3, r2
+ 300              		.loc 1 98 6
+ 301 00b8 002B     		cmp	r3, #0
+ 302 00ba 17D1     		bne	.L7
+  99:../app/keyboard.c **** 			{
+ 100:../app/keyboard.c **** 			#ifdef KEY_HOLD_FUNCTION_ENABLE
+ 101:../app/keyboard.c **** 				keyinfo.pulUIHoldCount[ulIdx] = 0;	//first_time[ulIdx]; 
+ 303              		.loc 1 101 35
+ 304 00bc 5B4A     		ldr	r2, .L15
+ 305 00be FB68     		ldr	r3, [r7, #12]
+ 306 00c0 2033     		adds	r3, r3, #32
+ 307 00c2 5B00     		lsls	r3, r3, #1
+ 308 00c4 1344     		add	r3, r3, r2
+ 309 00c6 0022     		movs	r2, #0
+ 310 00c8 5A80     		strh	r2, [r3, #2]	@ movhi
+ 102:../app/keyboard.c **** 				if ( !keyinfo.ulHoldTime[ulIdx] ) {
+ 311              		.loc 1 102 29
+ 312 00ca 584A     		ldr	r2, .L15
+ 313 00cc FB68     		ldr	r3, [r7, #12]
+ 314 00ce 1033     		adds	r3, r3, #16
+ 315 00d0 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+ 316              		.loc 1 102 8
+ 317 00d4 002B     		cmp	r3, #0
+ 318 00d6 12D1     		bne	.L6
+ 103:../app/keyboard.c **** 					keyinfo.ulPressF |= (1 << ulIdx);
+ 319              		.loc 1 103 23
+ 320 00d8 544B     		ldr	r3, .L15
+ 321 00da 1B68     		ldr	r3, [r3]
+ 322              		.loc 1 103 29
+ 323 00dc 0121     		movs	r1, #1
+ 324 00de FA68     		ldr	r2, [r7, #12]
+ 325 00e0 01FA02F2 		lsl	r2, r1, r2
+ 326              		.loc 1 103 23
+ 327 00e4 1343     		orrs	r3, r3, r2
+ 328 00e6 514A     		ldr	r2, .L15
+ 329 00e8 1360     		str	r3, [r2]
+ 330 00ea 08E0     		b	.L6
+ 331              	.L7:
+ 104:../app/keyboard.c **** 				}
+ 105:../app/keyboard.c **** 			#else
+ 106:../app/keyboard.c **** 				keyinfo.ulPressF |= (1 << ulIdx);
+ 107:../app/keyboard.c **** 			#endif
+ 108:../app/keyboard.c **** 			}
+ 109:../app/keyboard.c **** 			else
+ 110:../app/keyboard.c **** 			{
+ 111:../app/keyboard.c **** 				keyinfo.ulReleaseF |= (1 << ulIdx);
+ 332              		.loc 1 111 24
+ 333 00ec 4F4B     		ldr	r3, .L15
+ 334 00ee 9B68     		ldr	r3, [r3, #8]
+ 335              		.loc 1 111 30
+ 336 00f0 0121     		movs	r1, #1
+ 337 00f2 FA68     		ldr	r2, [r7, #12]
+ 338 00f4 01FA02F2 		lsl	r2, r1, r2
+ 339              		.loc 1 111 24
+ 340 00f8 1343     		orrs	r3, r3, r2
+ 341 00fa 4C4A     		ldr	r2, .L15
+ 342 00fc 9360     		str	r3, [r2, #8]
+ 343              	.L6:
+ 112:../app/keyboard.c **** 			}
+ 113:../app/keyboard.c **** 		}
+ 114:../app/keyboard.c **** 		/* See if there is a hold defined for this switch and the switch is pressed.*/
+ 115:../app/keyboard.c **** 	#ifdef KEY_HOLD_FUNCTION_ENABLE
+ 116:../app/keyboard.c **** 		if (keyinfo.ulHoldTime[ulIdx] != 0)
+ 344              		.loc 1 116 25
+ 345 00fe 4B4A     		ldr	r2, .L15
+ 346 0100 FB68     		ldr	r3, [r7, #12]
+ 347 0102 1033     		adds	r3, r3, #16
+ 348 0104 32F81330 		ldrh	r3, [r2, r3, lsl #1]
+ 349              		.loc 1 116 6
+ 350 0108 002B     		cmp	r3, #0
+ 351 010a 67D0     		beq	.L8
+ 117:../app/keyboard.c **** 		{
+ 118:../app/keyboard.c **** 			if (keyinfo.ulUIOnboardSwitches & (1 << ulIdx)){
+ 352              		.loc 1 118 15
+ 353 010c 474B     		ldr	r3, .L15
+ 354 010e DB69     		ldr	r3, [r3, #28]
+ 355              		.loc 1 118 41
+ 356 0110 0121     		movs	r1, #1
+ 357 0112 FA68     		ldr	r2, [r7, #12]
+ 358 0114 01FA02F2 		lsl	r2, r1, r2
+ 359              		.loc 1 118 36
+ 360 0118 1340     		ands	r3, r3, r2
+ 361              		.loc 1 118 7
+ 362 011a 002B     		cmp	r3, #0
+ 363 011c 1ED0     		beq	.L9
+ 119:../app/keyboard.c **** 				if (keyinfo.pulUIHoldCount[ulIdx] < keyinfo.ulHoldTime[ulIdx])
+ 364              		.loc 1 119 31
+ 365 011e 434A     		ldr	r2, .L15
+ 366 0120 FB68     		ldr	r3, [r7, #12]
+ 367 0122 2033     		adds	r3, r3, #32
+ 368 0124 5B00     		lsls	r3, r3, #1
+ 369 0126 1344     		add	r3, r3, r2
+ 370 0128 5A88     		ldrh	r2, [r3, #2]
+ 371              		.loc 1 119 59
+ 372 012a 4049     		ldr	r1, .L15
+ 373 012c FB68     		ldr	r3, [r7, #12]
+ 374 012e 1033     		adds	r3, r3, #16
+ 375 0130 31F81330 		ldrh	r3, [r1, r3, lsl #1]
+ 376              		.loc 1 119 8
+ 377 0134 9A42     		cmp	r2, r3
+ 378 0136 51D2     		bcs	.L8
+ 120:../app/keyboard.c **** 				{
+ 121:../app/keyboard.c **** 					keyinfo.pulUIHoldCount[ulIdx] = 0xFFFF;
+ 379              		.loc 1 121 36
+ 380 0138 3C4A     		ldr	r2, .L15
+ 381 013a FB68     		ldr	r3, [r7, #12]
+ 382 013c 2033     		adds	r3, r3, #32
+ 383 013e 5B00     		lsls	r3, r3, #1
+ 384 0140 1344     		add	r3, r3, r2
+ 385 0142 4FF6FF72 		movw	r2, #65535
+ 386 0146 5A80     		strh	r2, [r3, #2]	@ movhi
+ 122:../app/keyboard.c **** 					keyinfo.ulPressF |= 1 << ulIdx;
+ 387              		.loc 1 122 23
+ 388 0148 384B     		ldr	r3, .L15
+ 389 014a 1B68     		ldr	r3, [r3]
+ 390              		.loc 1 122 28
+ 391 014c 0121     		movs	r1, #1
+ 392 014e FA68     		ldr	r2, [r7, #12]
+ 393 0150 01FA02F2 		lsl	r2, r1, r2
+ 394              		.loc 1 122 23
+ 395 0154 1343     		orrs	r3, r3, r2
+ 396 0156 354A     		ldr	r2, .L15
+ 397 0158 1360     		str	r3, [r2]
+ 398 015a 3FE0     		b	.L8
+ 399              	.L9:
+ 123:../app/keyboard.c **** 				}
+ 124:../app/keyboard.c **** 			}
+ 125:../app/keyboard.c **** 			else {
+ 126:../app/keyboard.c **** 				/* Increment the hold count if it is not maxed out.*/
+ 127:../app/keyboard.c **** 				if (keyinfo.pulUIHoldCount[ulIdx] < 0xFFFF)
+ 400              		.loc 1 127 31
+ 401 015c 334A     		ldr	r2, .L15
+ 402 015e FB68     		ldr	r3, [r7, #12]
+ 403 0160 2033     		adds	r3, r3, #32
+ 404 0162 5B00     		lsls	r3, r3, #1
+ 405 0164 1344     		add	r3, r3, r2
+ 406 0166 5B88     		ldrh	r3, [r3, #2]
+ 407              		.loc 1 127 8
+ 408 0168 4FF6FF72 		movw	r2, #65535
+ 409 016c 9342     		cmp	r3, r2
+ 410 016e 0ED0     		beq	.L10
+ 128:../app/keyboard.c **** 				{
+ 129:../app/keyboard.c **** 					keyinfo.pulUIHoldCount[ulIdx]++;
+ 411              		.loc 1 129 28
+ 412 0170 2E4A     		ldr	r2, .L15
+ 413 0172 FB68     		ldr	r3, [r7, #12]
+ 414 0174 2033     		adds	r3, r3, #32
+ 415 0176 5B00     		lsls	r3, r3, #1
+ 416 0178 1344     		add	r3, r3, r2
+ 417 017a 5B88     		ldrh	r3, [r3, #2]
+ 418              		.loc 1 129 35
+ 419 017c 0133     		adds	r3, r3, #1
+ 420 017e 99B2     		uxth	r1, r3
+ 421 0180 2A4A     		ldr	r2, .L15
+ 422 0182 FB68     		ldr	r3, [r7, #12]
+ 423 0184 2033     		adds	r3, r3, #32
+ 424 0186 5B00     		lsls	r3, r3, #1
+ 425 0188 1344     		add	r3, r3, r2
+ 426 018a 0A46     		mov	r2, r1	@ movhi
+ 427 018c 5A80     		strh	r2, [r3, #2]	@ movhi
+ 428              	.L10:
+ 130:../app/keyboard.c **** 				}
+ 131:../app/keyboard.c **** 				if (keyinfo.pulUIHoldCount[ulIdx] == keyinfo.ulHoldTime[ulIdx])
+ 429              		.loc 1 131 31
+ 430 018e 274A     		ldr	r2, .L15
+ 431 0190 FB68     		ldr	r3, [r7, #12]
+ 432 0192 2033     		adds	r3, r3, #32
+ 433 0194 5B00     		lsls	r3, r3, #1
+ 434 0196 1344     		add	r3, r3, r2
+ 435 0198 5A88     		ldrh	r2, [r3, #2]
+ 436              		.loc 1 131 60
+ 437 019a 2449     		ldr	r1, .L15
+ 438 019c FB68     		ldr	r3, [r7, #12]
+ 439 019e 1033     		adds	r3, r3, #16
+ 440 01a0 31F81330 		ldrh	r3, [r1, r3, lsl #1]
+ 441              		.loc 1 131 8
+ 442 01a4 9A42     		cmp	r2, r3
+ 443 01a6 19D1     		bne	.L8
+ 132:../app/keyboard.c **** 				{
+ 133:../app/keyboard.c **** 					keyinfo.pulUIHoldCount[ulIdx] = 0xFFFF;
+ 444              		.loc 1 133 36
+ 445 01a8 204A     		ldr	r2, .L15
+ 446 01aa FB68     		ldr	r3, [r7, #12]
+ 447 01ac 2033     		adds	r3, r3, #32
+ 448 01ae 5B00     		lsls	r3, r3, #1
+ 449 01b0 1344     		add	r3, r3, r2
+ 450 01b2 4FF6FF72 		movw	r2, #65535
+ 451 01b6 5A80     		strh	r2, [r3, #2]	@ movhi
+ 134:../app/keyboard.c **** 					keyinfo.ulLPressMaskF |= 1 << ulIdx;
+ 452              		.loc 1 134 28
+ 453 01b8 1C4B     		ldr	r3, .L15
+ 454 01ba 1B69     		ldr	r3, [r3, #16]
+ 455              		.loc 1 134 33
+ 456 01bc 0121     		movs	r1, #1
+ 457 01be FA68     		ldr	r2, [r7, #12]
+ 458 01c0 01FA02F2 		lsl	r2, r1, r2
+ 459              		.loc 1 134 28
+ 460 01c4 1343     		orrs	r3, r3, r2
+ 461 01c6 194A     		ldr	r2, .L15
+ 462 01c8 1361     		str	r3, [r2, #16]
+ 135:../app/keyboard.c **** 					keyinfo.ulLPressF |= 1 << ulIdx;
+ 463              		.loc 1 135 24
+ 464 01ca 184B     		ldr	r3, .L15
+ 465 01cc 5B68     		ldr	r3, [r3, #4]
+ 466              		.loc 1 135 29
+ 467 01ce 0121     		movs	r1, #1
+ 468 01d0 FA68     		ldr	r2, [r7, #12]
+ 469 01d2 01FA02F2 		lsl	r2, r1, r2
+ 470              		.loc 1 135 24
+ 471 01d6 1343     		orrs	r3, r3, r2
+ 472 01d8 144A     		ldr	r2, .L15
+ 473 01da 5360     		str	r3, [r2, #4]
+ 474              	.L8:
+  92:../app/keyboard.c **** 	{
+ 475              		.loc 1 92 46 discriminator 2
+ 476 01dc FB68     		ldr	r3, [r7, #12]
+ 477 01de 0133     		adds	r3, r3, #1
+ 478 01e0 FB60     		str	r3, [r7, #12]
+ 479              	.L5:
+  92:../app/keyboard.c **** 	{
+ 480              		.loc 1 92 2 discriminator 1
+ 481 01e2 FB68     		ldr	r3, [r7, #12]
+ 482 01e4 102B     		cmp	r3, #16
+ 483 01e6 7FF657AF 		bls	.L11
+ 136:../app/keyboard.c **** 				}
+ 137:../app/keyboard.c **** 			}
+ 138:../app/keyboard.c **** 		}
+ 139:../app/keyboard.c **** 	#endif
+ 140:../app/keyboard.c **** 	}
+ 141:../app/keyboard.c **** 
+ 142:../app/keyboard.c **** 	key_prohibit_mask();
+ 484              		.loc 1 142 2
+ 485 01ea FFF7FEFF 		bl	key_prohibit_mask
+ 143:../app/keyboard.c **** 	if (keyinfo.ulPressF || keyinfo.ulReleaseF || keyinfo.ulLPressF)
+ 486              		.loc 1 143 13
+ 487 01ee 0F4B     		ldr	r3, .L15
+ 488 01f0 1B68     		ldr	r3, [r3]
+ 489              		.loc 1 143 5
+ 490 01f2 002B     		cmp	r3, #0
+ 491 01f4 07D1     		bne	.L12
+ 492              		.loc 1 143 33 discriminator 1
+ 493 01f6 0D4B     		ldr	r3, .L15
+ 494 01f8 9B68     		ldr	r3, [r3, #8]
+ 495              		.loc 1 143 23 discriminator 1
+ 496 01fa 002B     		cmp	r3, #0
+ 497 01fc 03D1     		bne	.L12
+ 498              		.loc 1 143 55 discriminator 2
+ 499 01fe 0B4B     		ldr	r3, .L15
+ 500 0200 5B68     		ldr	r3, [r3, #4]
+ 501              		.loc 1 143 45 discriminator 2
+ 502 0202 002B     		cmp	r3, #0
+ 503 0204 0DD0     		beq	.L14
+ 504              	.L12:
+ 144:../app/keyboard.c **** 	{
+ 145:../app/keyboard.c **** 		osal_lyh_set_event(app_id, APP_KEY_CHANGE_EVENT);
+ 505              		.loc 1 145 3
+ 506 0206 0A4B     		ldr	r3, .L15+4
+ 507 0208 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 508 020a 1A46     		mov	r2, r3
+ 509 020c 094B     		ldr	r3, .L15+8
+ 510 020e 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 511 0212 074A     		ldr	r2, .L15+4
+ 512 0214 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 513 0216 1146     		mov	r1, r2
+ 514 0218 43F00103 		orr	r3, r3, #1
+ 515 021c 054A     		ldr	r2, .L15+8
+ 516 021e 42F82130 		str	r3, [r2, r1, lsl #2]
+ 517              	.L14:
+ 146:../app/keyboard.c **** 	}
+ 147:../app/keyboard.c **** }
+ 518              		.loc 1 147 1
+ 519 0222 00BF     		nop
+ 520 0224 1037     		adds	r7, r7, #16
+ 521              		.cfi_def_cfa_offset 8
+ 522 0226 BD46     		mov	sp, r7
+ 523              		.cfi_def_cfa_register 13
+ 524              		@ sp needed
+ 525 0228 80BD     		pop	{r7, pc}
+ 526              	.L16:
+ 527 022a 00BF     		.align	2
+ 528              	.L15:
+ 529 022c 00000000 		.word	keyinfo
+ 530 0230 00000000 		.word	app_id
+ 531 0234 00000000 		.word	eventMap
+ 532              		.cfi_endproc
+ 533              	.LFE117:
+ 535              		.section	.text.key_scan_process,"ax",%progbits
+ 536              		.align	1
+ 537              		.global	key_scan_process
+ 538              		.syntax unified
+ 539              		.thumb
+ 540              		.thumb_func
+ 541              		.fpu softvfp
+ 543              	key_scan_process:
+ 544              	.LFB118:
+ 148:../app/keyboard.c **** 
+ 149:../app/keyboard.c **** void key_scan_process(void)
+ 150:../app/keyboard.c **** {
+ 545              		.loc 1 150 1
+ 546              		.cfi_startproc
+ 547              		@ args = 0, pretend = 0, frame = 8
+ 548              		@ frame_needed = 1, uses_anonymous_args = 0
+ 549 0000 80B5     		push	{r7, lr}
+ 550              		.cfi_def_cfa_offset 8
+ 551              		.cfi_offset 7, -8
+ 552              		.cfi_offset 14, -4
+ 553 0002 82B0     		sub	sp, sp, #8
+ 554              		.cfi_def_cfa_offset 16
+ 555 0004 00AF     		add	r7, sp, #0
+ 556              		.cfi_def_cfa_register 7
+ 151:../app/keyboard.c **** 	uint32_t ulSwitches = 0xFFFFFFFF;
+ 557              		.loc 1 151 11
+ 558 0006 4FF0FF33 		mov	r3, #-1
+ 559 000a 7B60     		str	r3, [r7, #4]
+ 152:../app/keyboard.c **** 
+ 153:../app/keyboard.c **** 	if (TOUCH_START_KEY()){
+ 560              		.loc 1 153 6
+ 561 000c 5C4B     		ldr	r3, .L35
+ 562 000e 1B88     		ldrh	r3, [r3]
+ 563 0010 03F01003 		and	r3, r3, #16
+ 564              		.loc 1 153 5
+ 565 0014 002B     		cmp	r3, #0
+ 566 0016 03D0     		beq	.L18
+ 154:../app/keyboard.c **** 		ulSwitches &= ~KEY_START_MASK; 
+ 567              		.loc 1 154 14
+ 568 0018 7B68     		ldr	r3, [r7, #4]
+ 569 001a 23F01003 		bic	r3, r3, #16
+ 570 001e 7B60     		str	r3, [r7, #4]
+ 571              	.L18:
+ 155:../app/keyboard.c **** 	}
+ 156:../app/keyboard.c **** 	if (TOUCH_ONOFF_KEY()){
+ 572              		.loc 1 156 6
+ 573 0020 574B     		ldr	r3, .L35
+ 574 0022 1B88     		ldrh	r3, [r3]
+ 575 0024 03F00103 		and	r3, r3, #1
+ 576              		.loc 1 156 5
+ 577 0028 002B     		cmp	r3, #0
+ 578 002a 03D0     		beq	.L19
+ 157:../app/keyboard.c **** 		ulSwitches &= ~KEY_ONOFF_MASK; 
+ 579              		.loc 1 157 14
+ 580 002c 7B68     		ldr	r3, [r7, #4]
+ 581 002e 23F00103 		bic	r3, r3, #1
+ 582 0032 7B60     		str	r3, [r7, #4]
+ 583              	.L19:
+ 158:../app/keyboard.c **** 	}
+ 159:../app/keyboard.c **** 	if (TOUCH_HOTWATER_KEY()){
+ 584              		.loc 1 159 6
+ 585 0034 524B     		ldr	r3, .L35
+ 586 0036 1B88     		ldrh	r3, [r3]
+ 587 0038 03F00203 		and	r3, r3, #2
+ 588              		.loc 1 159 5
+ 589 003c 002B     		cmp	r3, #0
+ 590 003e 03D0     		beq	.L20
+ 160:../app/keyboard.c **** 		ulSwitches &= ~KEY_HOTWATER_MASK; 
+ 591              		.loc 1 160 14
+ 592 0040 7B68     		ldr	r3, [r7, #4]
+ 593 0042 23F00203 		bic	r3, r3, #2
+ 594 0046 7B60     		str	r3, [r7, #4]
+ 595              	.L20:
+ 161:../app/keyboard.c **** 	}
+ 162:../app/keyboard.c **** 	if (TOUCH_ESPRESSO_KEY()){
+ 596              		.loc 1 162 6
+ 597 0048 4D4B     		ldr	r3, .L35
+ 598 004a 1B88     		ldrh	r3, [r3]
+ 599 004c 03F00403 		and	r3, r3, #4
+ 600              		.loc 1 162 5
+ 601 0050 002B     		cmp	r3, #0
+ 602 0052 03D0     		beq	.L21
+ 163:../app/keyboard.c **** 		ulSwitches &= ~KEY_ESPRESSO_MASK; 
+ 603              		.loc 1 163 14
+ 604 0054 7B68     		ldr	r3, [r7, #4]
+ 605 0056 23F00403 		bic	r3, r3, #4
+ 606 005a 7B60     		str	r3, [r7, #4]
+ 607              	.L21:
+ 164:../app/keyboard.c **** 	}
+ 165:../app/keyboard.c **** 	if (TOUCH_STEAM_KEY()){
+ 608              		.loc 1 165 6
+ 609 005c 484B     		ldr	r3, .L35
+ 610 005e 1B88     		ldrh	r3, [r3]
+ 611 0060 03F00803 		and	r3, r3, #8
+ 612              		.loc 1 165 5
+ 613 0064 002B     		cmp	r3, #0
+ 614 0066 03D0     		beq	.L22
+ 166:../app/keyboard.c **** 		ulSwitches &= ~KEY_STEAM_MASK; 
+ 615              		.loc 1 166 14
+ 616 0068 7B68     		ldr	r3, [r7, #4]
+ 617 006a 23F00803 		bic	r3, r3, #8
+ 618 006e 7B60     		str	r3, [r7, #4]
+ 619              	.L22:
+ 167:../app/keyboard.c **** 	}
+ 168:../app/keyboard.c **** 	if (TOUCH_AMERICANO_KEY()){
+ 620              		.loc 1 168 6
+ 621 0070 434B     		ldr	r3, .L35
+ 622 0072 1B88     		ldrh	r3, [r3]
+ 623 0074 03F02003 		and	r3, r3, #32
+ 624              		.loc 1 168 5
+ 625 0078 002B     		cmp	r3, #0
+ 626 007a 03D0     		beq	.L23
+ 169:../app/keyboard.c **** 		ulSwitches &= ~KEY_AMERICANO_MASK; 
+ 627              		.loc 1 169 14
+ 628 007c 7B68     		ldr	r3, [r7, #4]
+ 629 007e 23F02003 		bic	r3, r3, #32
+ 630 0082 7B60     		str	r3, [r7, #4]
+ 631              	.L23:
+ 170:../app/keyboard.c **** 	}
+ 171:../app/keyboard.c **** 	if (TOUCH_AQUA_KEY()){
+ 632              		.loc 1 171 6
+ 633 0084 3E4B     		ldr	r3, .L35
+ 634 0086 1B88     		ldrh	r3, [r3]
+ 635 0088 03F48073 		and	r3, r3, #256
+ 636              		.loc 1 171 5
+ 637 008c 002B     		cmp	r3, #0
+ 638 008e 03D0     		beq	.L24
+ 172:../app/keyboard.c **** 		ulSwitches &= ~KEY_AQUA_MASK; 
+ 639              		.loc 1 172 14
+ 640 0090 7B68     		ldr	r3, [r7, #4]
+ 641 0092 23F48073 		bic	r3, r3, #256
+ 642 0096 7B60     		str	r3, [r7, #4]
+ 643              	.L24:
+ 173:../app/keyboard.c **** 	}
+ 174:../app/keyboard.c **** 	if (TOUCH_COFFE_KEY()){
+ 644              		.loc 1 174 6
+ 645 0098 394B     		ldr	r3, .L35
+ 646 009a 1B88     		ldrh	r3, [r3]
+ 647 009c 03F04003 		and	r3, r3, #64
+ 648              		.loc 1 174 5
+ 649 00a0 002B     		cmp	r3, #0
+ 650 00a2 03D0     		beq	.L25
+ 175:../app/keyboard.c **** 		ulSwitches &= ~KEY_COFFE_MASK; 
+ 651              		.loc 1 175 14
+ 652 00a4 7B68     		ldr	r3, [r7, #4]
+ 653 00a6 23F04003 		bic	r3, r3, #64
+ 654 00aa 7B60     		str	r3, [r7, #4]
+ 655              	.L25:
+ 176:../app/keyboard.c **** 	}
+ 177:../app/keyboard.c **** 	if (TOUCH_CALC_KEY()){
+ 656              		.loc 1 177 6
+ 657 00ac 344B     		ldr	r3, .L35
+ 658 00ae 1B88     		ldrh	r3, [r3]
+ 659 00b0 03F40073 		and	r3, r3, #512
+ 660              		.loc 1 177 5
+ 661 00b4 002B     		cmp	r3, #0
+ 662 00b6 03D0     		beq	.L26
+ 178:../app/keyboard.c **** 		ulSwitches &= ~KEY_CALC_MASK; 
+ 663              		.loc 1 178 14
+ 664 00b8 7B68     		ldr	r3, [r7, #4]
+ 665 00ba 23F40073 		bic	r3, r3, #512
+ 666 00be 7B60     		str	r3, [r7, #4]
+ 667              	.L26:
+ 179:../app/keyboard.c **** 	}
+ 180:../app/keyboard.c **** 	if (TOUCH_WATER_KEY()){
+ 668              		.loc 1 180 6
+ 669 00c0 2F4B     		ldr	r3, .L35
+ 670 00c2 1B88     		ldrh	r3, [r3]
+ 671 00c4 03F48063 		and	r3, r3, #1024
+ 672              		.loc 1 180 5
+ 673 00c8 002B     		cmp	r3, #0
+ 674 00ca 03D0     		beq	.L27
+ 181:../app/keyboard.c **** 		ulSwitches &= ~KEY_WATER_MASK; 
+ 675              		.loc 1 181 14
+ 676 00cc 7B68     		ldr	r3, [r7, #4]
+ 677 00ce 23F48063 		bic	r3, r3, #1024
+ 678 00d2 7B60     		str	r3, [r7, #4]
+ 679              	.L27:
+ 182:../app/keyboard.c **** 	}
+ 183:../app/keyboard.c **** 	if (TOUCH_PAD_KEY()){
+ 680              		.loc 1 183 6
+ 681 00d4 2A4B     		ldr	r3, .L35
+ 682 00d6 1B88     		ldrh	r3, [r3]
+ 683 00d8 03F08003 		and	r3, r3, #128
+ 684              		.loc 1 183 5
+ 685 00dc 002B     		cmp	r3, #0
+ 686 00de 03D0     		beq	.L28
+ 184:../app/keyboard.c **** 		ulSwitches &= ~KEY_PAD_MASK; 
+ 687              		.loc 1 184 14
+ 688 00e0 7B68     		ldr	r3, [r7, #4]
+ 689 00e2 23F08003 		bic	r3, r3, #128
+ 690 00e6 7B60     		str	r3, [r7, #4]
+ 691              	.L28:
+ 185:../app/keyboard.c **** 	}
+ 186:../app/keyboard.c **** 	// input signal detect
+ 187:../app/keyboard.c **** 	if (!PALLET_DET_STATE()){
+ 692              		.loc 1 187 7
+ 693 00e8 4FF40051 		mov	r1, #8192
+ 694 00ec 2548     		ldr	r0, .L35+4
+ 695 00ee FFF7FEFF 		bl	gpio_input_bit_get
+ 696 00f2 0346     		mov	r3, r0
+ 697              		.loc 1 187 5
+ 698 00f4 002B     		cmp	r3, #0
+ 699 00f6 03D1     		bne	.L29
+ 188:../app/keyboard.c **** 		ulSwitches &= ~PALLET_DET_MASK; 
+ 700              		.loc 1 188 14
+ 701 00f8 7B68     		ldr	r3, [r7, #4]
+ 702 00fa 23F40063 		bic	r3, r3, #2048
+ 703 00fe 7B60     		str	r3, [r7, #4]
+ 704              	.L29:
+ 189:../app/keyboard.c **** 	}
+ 190:../app/keyboard.c **** 	if (P3V_DET_STATE()){
+ 705              		.loc 1 190 6
+ 706 0100 2021     		movs	r1, #32
+ 707 0102 2048     		ldr	r0, .L35+4
+ 708 0104 FFF7FEFF 		bl	gpio_input_bit_get
+ 709 0108 0346     		mov	r3, r0
+ 710              		.loc 1 190 5
+ 711 010a 002B     		cmp	r3, #0
+ 712 010c 03D0     		beq	.L30
+ 191:../app/keyboard.c **** 		ulSwitches &= ~PW3P3V_DET_MASK; 
+ 713              		.loc 1 191 14
+ 714 010e 7B68     		ldr	r3, [r7, #4]
+ 715 0110 23F48053 		bic	r3, r3, #4096
+ 716 0114 7B60     		str	r3, [r7, #4]
+ 717              	.L30:
+ 192:../app/keyboard.c **** 	}
+ 193:../app/keyboard.c **** 	if (!WKUP_STATE()){
+ 718              		.loc 1 193 7
+ 719 0116 0121     		movs	r1, #1
+ 720 0118 1B48     		ldr	r0, .L35+8
+ 721 011a FFF7FEFF 		bl	gpio_input_bit_get
+ 722 011e 0346     		mov	r3, r0
+ 723              		.loc 1 193 5
+ 724 0120 002B     		cmp	r3, #0
+ 725 0122 03D1     		bne	.L31
+ 194:../app/keyboard.c **** 		ulSwitches &= ~WKUP_DET_MASK; 
+ 726              		.loc 1 194 14
+ 727 0124 7B68     		ldr	r3, [r7, #4]
+ 728 0126 23F40053 		bic	r3, r3, #8192
+ 729 012a 7B60     		str	r3, [r7, #4]
+ 730              	.L31:
+ 195:../app/keyboard.c **** 	}
+ 196:../app/keyboard.c **** 	if (!METER_DET_STATE()){
+ 731              		.loc 1 196 7
+ 732 012c 1021     		movs	r1, #16
+ 733 012e 1548     		ldr	r0, .L35+4
+ 734 0130 FFF7FEFF 		bl	gpio_input_bit_get
+ 735 0134 0346     		mov	r3, r0
+ 736              		.loc 1 196 5
+ 737 0136 002B     		cmp	r3, #0
+ 738 0138 03D1     		bne	.L32
+ 197:../app/keyboard.c **** 		ulSwitches &= ~METER_DET_MASK; 
+ 739              		.loc 1 197 14
+ 740 013a 7B68     		ldr	r3, [r7, #4]
+ 741 013c 23F48043 		bic	r3, r3, #16384
+ 742 0140 7B60     		str	r3, [r7, #4]
+ 743              	.L32:
+ 198:../app/keyboard.c **** 	}
+ 199:../app/keyboard.c **** 	if (!MOTOR_DET_STATE()){
+ 744              		.loc 1 199 7
+ 745 0142 4FF48071 		mov	r1, #256
+ 746 0146 1048     		ldr	r0, .L35+8
+ 747 0148 FFF7FEFF 		bl	gpio_input_bit_get
+ 748 014c 0346     		mov	r3, r0
+ 749              		.loc 1 199 5
+ 750 014e 002B     		cmp	r3, #0
+ 751 0150 03D1     		bne	.L33
+ 200:../app/keyboard.c **** 		ulSwitches &= ~MOTOR_DET_MASK; 
+ 752              		.loc 1 200 14
+ 753 0152 7B68     		ldr	r3, [r7, #4]
+ 754 0154 23F40043 		bic	r3, r3, #32768
+ 755 0158 7B60     		str	r3, [r7, #4]
+ 756              	.L33:
+ 201:../app/keyboard.c **** 	}
+ 202:../app/keyboard.c **** 	if (WATER_DET_STATE()){
+ 757              		.loc 1 202 6
+ 758 015a 4FF48051 		mov	r1, #4096
+ 759 015e 0A48     		ldr	r0, .L35+8
+ 760 0160 FFF7FEFF 		bl	gpio_input_bit_get
+ 761 0164 0346     		mov	r3, r0
+ 762              		.loc 1 202 5
+ 763 0166 002B     		cmp	r3, #0
+ 764 0168 03D0     		beq	.L34
+ 203:../app/keyboard.c **** 		ulSwitches &= ~WATER_DET_MASK; 
+ 765              		.loc 1 203 14
+ 766 016a 7B68     		ldr	r3, [r7, #4]
+ 767 016c 23F48033 		bic	r3, r3, #65536
+ 768 0170 7B60     		str	r3, [r7, #4]
+ 769              	.L34:
+ 204:../app/keyboard.c **** 	}
+ 205:../app/keyboard.c **** 
+ 206:../app/keyboard.c **** 	key_switch_debouncer(ulSwitches);
+ 770              		.loc 1 206 2
+ 771 0172 7868     		ldr	r0, [r7, #4]
+ 772 0174 FFF7FEFF 		bl	key_switch_debouncer
+ 207:../app/keyboard.c **** }
+ 773              		.loc 1 207 1
+ 774 0178 00BF     		nop
+ 775 017a 0837     		adds	r7, r7, #8
+ 776              		.cfi_def_cfa_offset 8
+ 777 017c BD46     		mov	sp, r7
+ 778              		.cfi_def_cfa_register 13
+ 779              		@ sp needed
+ 780 017e 80BD     		pop	{r7, pc}
+ 781              	.L36:
+ 782              		.align	2
+ 783              	.L35:
+ 784 0180 00000000 		.word	keyTouch_in
+ 785 0184 000C0140 		.word	1073810432
+ 786 0188 00080140 		.word	1073809408
+ 787              		.cfi_endproc
+ 788              	.LFE118:
+ 790              		.section	.text.init_key_task,"ax",%progbits
+ 791              		.align	1
+ 792              		.global	init_key_task
+ 793              		.syntax unified
+ 794              		.thumb
+ 795              		.thumb_func
+ 796              		.fpu softvfp
+ 798              	init_key_task:
+ 799              	.LFB119:
+ 208:../app/keyboard.c **** 
+ 209:../app/keyboard.c **** /************************************************************************
+ 210:../app/keyboard.c **** * function name: init_key
+ 211:../app/keyboard.c **** * input: non
+ 212:../app/keyboard.c **** * output: non
+ 213:../app/keyboard.c **** * description: object thread
+ 214:../app/keyboard.c **** *************************************************************************/
+ 215:../app/keyboard.c **** void init_key_task(uint8_t id)
+ 216:../app/keyboard.c **** {
+ 800              		.loc 1 216 1
+ 801              		.cfi_startproc
+ 802              		@ args = 0, pretend = 0, frame = 8
+ 803              		@ frame_needed = 1, uses_anonymous_args = 0
+ 804              		@ link register save eliminated.
+ 805 0000 80B4     		push	{r7}
+ 806              		.cfi_def_cfa_offset 4
+ 807              		.cfi_offset 7, -4
+ 808 0002 83B0     		sub	sp, sp, #12
+ 809              		.cfi_def_cfa_offset 16
+ 810 0004 00AF     		add	r7, sp, #0
+ 811              		.cfi_def_cfa_register 7
+ 812 0006 0346     		mov	r3, r0
+ 813 0008 FB71     		strb	r3, [r7, #7]
+ 217:../app/keyboard.c **** 	keyboard_id = id;
+ 814              		.loc 1 217 14
+ 815 000a 054A     		ldr	r2, .L38
+ 816 000c FB79     		ldrb	r3, [r7, #7]
+ 817 000e 1370     		strb	r3, [r2]
+ 218:../app/keyboard.c **** 	keyboard_task_step = KEY_INIT_STATE;
+ 818              		.loc 1 218 21
+ 819 0010 044B     		ldr	r3, .L38+4
+ 820 0012 0022     		movs	r2, #0
+ 821 0014 1A70     		strb	r2, [r3]
+ 219:../app/keyboard.c **** }
+ 822              		.loc 1 219 1
+ 823 0016 00BF     		nop
+ 824 0018 0C37     		adds	r7, r7, #12
+ 825              		.cfi_def_cfa_offset 4
+ 826 001a BD46     		mov	sp, r7
+ 827              		.cfi_def_cfa_register 13
+ 828              		@ sp needed
+ 829 001c 80BC     		pop	{r7}
+ 830              		.cfi_restore 7
+ 831              		.cfi_def_cfa_offset 0
+ 832 001e 7047     		bx	lr
+ 833              	.L39:
+ 834              		.align	2
+ 835              	.L38:
+ 836 0020 00000000 		.word	keyboard_id
+ 837 0024 00000000 		.word	keyboard_task_step
+ 838              		.cfi_endproc
+ 839              	.LFE119:
+ 841              		.section	.text.key_task_handler,"ax",%progbits
+ 842              		.align	1
+ 843              		.global	key_task_handler
+ 844              		.syntax unified
+ 845              		.thumb
+ 846              		.thumb_func
+ 847              		.fpu softvfp
+ 849              	key_task_handler:
+ 850              	.LFB120:
+ 220:../app/keyboard.c **** 
+ 221:../app/keyboard.c **** /************************************************************************
+ 222:../app/keyboard.c **** * function name: key_task_handler
+ 223:../app/keyboard.c **** * input: non
+ 224:../app/keyboard.c **** * output: non
+ 225:../app/keyboard.c **** * description: object thread
+ 226:../app/keyboard.c **** *************************************************************************/
+ 227:../app/keyboard.c **** void key_task_handler(void)
+ 228:../app/keyboard.c **** {
+ 851              		.loc 1 228 1
+ 852              		.cfi_startproc
+ 853              		@ args = 0, pretend = 0, frame = 0
+ 854              		@ frame_needed = 1, uses_anonymous_args = 0
+ 855 0000 80B5     		push	{r7, lr}
+ 856              		.cfi_def_cfa_offset 8
+ 857              		.cfi_offset 7, -8
+ 858              		.cfi_offset 14, -4
+ 859 0002 00AF     		add	r7, sp, #0
+ 860              		.cfi_def_cfa_register 7
+ 229:../app/keyboard.c **** 	switch(keyboard_task_step)
+ 861              		.loc 1 229 2
+ 862 0004 0F4B     		ldr	r3, .L49
+ 863 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 864 0008 022B     		cmp	r3, #2
+ 865 000a 0FD0     		beq	.L41
+ 866 000c 022B     		cmp	r3, #2
+ 867 000e 13DC     		bgt	.L46
+ 868 0010 002B     		cmp	r3, #0
+ 869 0012 02D0     		beq	.L43
+ 870 0014 012B     		cmp	r3, #1
+ 871 0016 11D0     		beq	.L47
+ 230:../app/keyboard.c **** 	{
+ 231:../app/keyboard.c **** 		case KEY_INIT_STATE:
+ 232:../app/keyboard.c **** 			ini_keys_value();
+ 233:../app/keyboard.c **** 			osal_lyh_delay_task(Ms_50);
+ 234:../app/keyboard.c **** 			keyboard_task_step = KEY_RUN_STATE;
+ 235:../app/keyboard.c **** 			break;
+ 236:../app/keyboard.c **** 		case KEY_RUN_STATE:
+ 237:../app/keyboard.c **** 			key_scan_process();
+ 238:../app/keyboard.c **** 			osal_lyh_delay_task(Ms_10);
+ 239:../app/keyboard.c **** 			break;
+ 240:../app/keyboard.c **** 		case KEY_IDLE_STATE:
+ 241:../app/keyboard.c **** 			break;
+ 242:../app/keyboard.c **** 		default:
+ 243:../app/keyboard.c **** 			break;
+ 872              		.loc 1 243 4
+ 873 0018 0EE0     		b	.L46
+ 874              	.L43:
+ 232:../app/keyboard.c **** 			osal_lyh_delay_task(Ms_50);
+ 875              		.loc 1 232 4
+ 876 001a FFF7FEFF 		bl	ini_keys_value
+ 233:../app/keyboard.c **** 			keyboard_task_step = KEY_RUN_STATE;
+ 877              		.loc 1 233 4
+ 878 001e 3220     		movs	r0, #50
+ 879 0020 FFF7FEFF 		bl	osal_lyh_delay_task
+ 234:../app/keyboard.c **** 			break;
+ 880              		.loc 1 234 23
+ 881 0024 074B     		ldr	r3, .L49
+ 882 0026 0222     		movs	r2, #2
+ 883 0028 1A70     		strb	r2, [r3]
+ 235:../app/keyboard.c **** 		case KEY_RUN_STATE:
+ 884              		.loc 1 235 4
+ 885 002a 08E0     		b	.L45
+ 886              	.L41:
+ 237:../app/keyboard.c **** 			osal_lyh_delay_task(Ms_10);
+ 887              		.loc 1 237 4
+ 888 002c FFF7FEFF 		bl	key_scan_process
+ 238:../app/keyboard.c **** 			break;
+ 889              		.loc 1 238 4
+ 890 0030 0A20     		movs	r0, #10
+ 891 0032 FFF7FEFF 		bl	osal_lyh_delay_task
+ 239:../app/keyboard.c **** 		case KEY_IDLE_STATE:
+ 892              		.loc 1 239 4
+ 893 0036 02E0     		b	.L45
+ 894              	.L46:
+ 895              		.loc 1 243 4
+ 896 0038 00BF     		nop
+ 897 003a 00E0     		b	.L48
+ 898              	.L47:
+ 241:../app/keyboard.c **** 		default:
+ 899              		.loc 1 241 4
+ 900 003c 00BF     		nop
+ 901              	.L45:
+ 902              	.L48:
+ 244:../app/keyboard.c **** 	}
+ 245:../app/keyboard.c **** }
+ 903              		.loc 1 245 1
+ 904 003e 00BF     		nop
+ 905 0040 80BD     		pop	{r7, pc}
+ 906              	.L50:
+ 907 0042 00BF     		.align	2
+ 908              	.L49:
+ 909 0044 00000000 		.word	keyboard_task_step
+ 910              		.cfi_endproc
+ 911              	.LFE120:
+ 913              		.section	.text.key_event_handler,"ax",%progbits
+ 914              		.align	1
+ 915              		.global	key_event_handler
+ 916              		.syntax unified
+ 917              		.thumb
+ 918              		.thumb_func
+ 919              		.fpu softvfp
+ 921              	key_event_handler:
+ 922              	.LFB121:
+ 246:../app/keyboard.c **** 
+ 247:../app/keyboard.c **** /************************************************************************
+ 248:../app/keyboard.c **** * function name: key_processEvent
+ 249:../app/keyboard.c **** * input: non
+ 250:../app/keyboard.c **** * output: non
+ 251:../app/keyboard.c **** * description: this object's message loop
+ 252:../app/keyboard.c **** *************************************************************************/
+ 253:../app/keyboard.c **** uint32_t key_event_handler( uint8_t task_id, uint32_t events)
+ 254:../app/keyboard.c **** {
+ 923              		.loc 1 254 1
+ 924              		.cfi_startproc
+ 925              		@ args = 0, pretend = 0, frame = 8
+ 926              		@ frame_needed = 1, uses_anonymous_args = 0
+ 927              		@ link register save eliminated.
+ 928 0000 80B4     		push	{r7}
+ 929              		.cfi_def_cfa_offset 4
+ 930              		.cfi_offset 7, -4
+ 931 0002 83B0     		sub	sp, sp, #12
+ 932              		.cfi_def_cfa_offset 16
+ 933 0004 00AF     		add	r7, sp, #0
+ 934              		.cfi_def_cfa_register 7
+ 935 0006 0346     		mov	r3, r0
+ 936 0008 3960     		str	r1, [r7]
+ 937 000a FB71     		strb	r3, [r7, #7]
+ 255:../app/keyboard.c **** 	if (keyboard_id != task_id){
+ 938              		.loc 1 255 18
+ 939 000c 064B     		ldr	r3, .L54
+ 940 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 941              		.loc 1 255 5
+ 942 0010 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 943 0012 9A42     		cmp	r2, r3
+ 944 0014 01D0     		beq	.L52
+ 256:../app/keyboard.c **** 		return events;
+ 945              		.loc 1 256 10
+ 946 0016 3B68     		ldr	r3, [r7]
+ 947 0018 00E0     		b	.L53
+ 948              	.L52:
+ 257:../app/keyboard.c **** 	}
+ 258:../app/keyboard.c **** 
+ 259:../app/keyboard.c **** 	return events;
+ 949              		.loc 1 259 9
+ 950 001a 3B68     		ldr	r3, [r7]
+ 951              	.L53:
+ 260:../app/keyboard.c **** }
+ 952              		.loc 1 260 1
+ 953 001c 1846     		mov	r0, r3
+ 954 001e 0C37     		adds	r7, r7, #12
+ 955              		.cfi_def_cfa_offset 4
+ 956 0020 BD46     		mov	sp, r7
+ 957              		.cfi_def_cfa_register 13
+ 958              		@ sp needed
+ 959 0022 80BC     		pop	{r7}
+ 960              		.cfi_restore 7
+ 961              		.cfi_def_cfa_offset 0
+ 962 0024 7047     		bx	lr
+ 963              	.L55:
+ 964 0026 00BF     		.align	2
+ 965              	.L54:
+ 966 0028 00000000 		.word	keyboard_id
+ 967              		.cfi_endproc
+ 968              	.LFE121:
+ 970              		.section	.text.key_prohibit_mask,"ax",%progbits
+ 971              		.align	1
+ 972              		.global	key_prohibit_mask
+ 973              		.syntax unified
+ 974              		.thumb
+ 975              		.thumb_func
+ 976              		.fpu softvfp
+ 978              	key_prohibit_mask:
+ 979              	.LFB122:
+ 261:../app/keyboard.c **** 
+ 262:../app/keyboard.c **** void key_prohibit_mask(void)
+ 263:../app/keyboard.c **** {
+ 980              		.loc 1 263 1
+ 981              		.cfi_startproc
+ 982              		@ args = 0, pretend = 0, frame = 8
+ 983              		@ frame_needed = 1, uses_anonymous_args = 0
+ 984              		@ link register save eliminated.
+ 985 0000 80B4     		push	{r7}
+ 986              		.cfi_def_cfa_offset 4
+ 987              		.cfi_offset 7, -4
+ 988 0002 83B0     		sub	sp, sp, #12
+ 989              		.cfi_def_cfa_offset 16
+ 990 0004 00AF     		add	r7, sp, #0
+ 991              		.cfi_def_cfa_register 7
+ 264:../app/keyboard.c **** 	uint32_t keyMask = ~keyinfo.ulProhibitkF;
+ 992              		.loc 1 264 29
+ 993 0006 0D4B     		ldr	r3, .L57
+ 994 0008 DB68     		ldr	r3, [r3, #12]
+ 995              		.loc 1 264 11
+ 996 000a DB43     		mvns	r3, r3
+ 997 000c 7B60     		str	r3, [r7, #4]
+ 265:../app/keyboard.c **** 	
+ 266:../app/keyboard.c **** 	keyinfo.ulPressF &= keyMask;
+ 998              		.loc 1 266 19
+ 999 000e 0B4B     		ldr	r3, .L57
+ 1000 0010 1A68     		ldr	r2, [r3]
+ 1001 0012 7B68     		ldr	r3, [r7, #4]
+ 1002 0014 1340     		ands	r3, r3, r2
+ 1003 0016 094A     		ldr	r2, .L57
+ 1004 0018 1360     		str	r3, [r2]
+ 267:../app/keyboard.c **** 	keyinfo.ulLPressF &= keyMask;
+ 1005              		.loc 1 267 20
+ 1006 001a 084B     		ldr	r3, .L57
+ 1007 001c 5A68     		ldr	r2, [r3, #4]
+ 1008 001e 7B68     		ldr	r3, [r7, #4]
+ 1009 0020 1340     		ands	r3, r3, r2
+ 1010 0022 064A     		ldr	r2, .L57
+ 1011 0024 5360     		str	r3, [r2, #4]
+ 268:../app/keyboard.c **** 	keyinfo.ulReleaseF &= keyMask;
+ 1012              		.loc 1 268 21
+ 1013 0026 054B     		ldr	r3, .L57
+ 1014 0028 9A68     		ldr	r2, [r3, #8]
+ 1015 002a 7B68     		ldr	r3, [r7, #4]
+ 1016 002c 1340     		ands	r3, r3, r2
+ 1017 002e 034A     		ldr	r2, .L57
+ 1018 0030 9360     		str	r3, [r2, #8]
+ 269:../app/keyboard.c **** }
+ 1019              		.loc 1 269 1
+ 1020 0032 00BF     		nop
+ 1021 0034 0C37     		adds	r7, r7, #12
+ 1022              		.cfi_def_cfa_offset 4
+ 1023 0036 BD46     		mov	sp, r7
+ 1024              		.cfi_def_cfa_register 13
+ 1025              		@ sp needed
+ 1026 0038 80BC     		pop	{r7}
+ 1027              		.cfi_restore 7
+ 1028              		.cfi_def_cfa_offset 0
+ 1029 003a 7047     		bx	lr
+ 1030              	.L58:
+ 1031              		.align	2
+ 1032              	.L57:
+ 1033 003c 00000000 		.word	keyinfo
+ 1034              		.cfi_endproc
+ 1035              	.LFE122:
+ 1037              		.section	.text.key_prohibit_setup,"ax",%progbits
+ 1038              		.align	1
+ 1039              		.global	key_prohibit_setup
+ 1040              		.syntax unified
+ 1041              		.thumb
+ 1042              		.thumb_func
+ 1043              		.fpu softvfp
+ 1045              	key_prohibit_setup:
+ 1046              	.LFB123:
+ 270:../app/keyboard.c **** 
+ 271:../app/keyboard.c **** void key_prohibit_setup(uint32_t key, uint8_t status)
+ 272:../app/keyboard.c **** {
+ 1047              		.loc 1 272 1
+ 1048              		.cfi_startproc
+ 1049              		@ args = 0, pretend = 0, frame = 8
+ 1050              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1051 0000 80B5     		push	{r7, lr}
+ 1052              		.cfi_def_cfa_offset 8
+ 1053              		.cfi_offset 7, -8
+ 1054              		.cfi_offset 14, -4
+ 1055 0002 82B0     		sub	sp, sp, #8
+ 1056              		.cfi_def_cfa_offset 16
+ 1057 0004 00AF     		add	r7, sp, #0
+ 1058              		.cfi_def_cfa_register 7
+ 1059 0006 7860     		str	r0, [r7, #4]
+ 1060 0008 0B46     		mov	r3, r1
+ 1061 000a FB70     		strb	r3, [r7, #3]
+ 273:../app/keyboard.c **** 	keyinfo.ulProhibitkF &= ~key;
+ 1062              		.loc 1 273 23
+ 1063 000c 0B4B     		ldr	r3, .L62
+ 1064 000e DA68     		ldr	r2, [r3, #12]
+ 1065              		.loc 1 273 26
+ 1066 0010 7B68     		ldr	r3, [r7, #4]
+ 1067 0012 DB43     		mvns	r3, r3
+ 1068              		.loc 1 273 23
+ 1069 0014 1340     		ands	r3, r3, r2
+ 1070 0016 094A     		ldr	r2, .L62
+ 1071 0018 D360     		str	r3, [r2, #12]
+ 274:../app/keyboard.c **** 	keyinfo.ulProhibitkF |= (status==TRUE)? key:0u;
+ 1072              		.loc 1 274 23
+ 1073 001a 084B     		ldr	r3, .L62
+ 1074 001c DA68     		ldr	r2, [r3, #12]
+ 1075              		.loc 1 274 45
+ 1076 001e FB78     		ldrb	r3, [r7, #3]	@ zero_extendqisi2
+ 1077 0020 012B     		cmp	r3, #1
+ 1078 0022 01D1     		bne	.L60
+ 1079              		.loc 1 274 45 is_stmt 0 discriminator 1
+ 1080 0024 7B68     		ldr	r3, [r7, #4]
+ 1081 0026 00E0     		b	.L61
+ 1082              	.L60:
+ 1083              		.loc 1 274 45 discriminator 2
+ 1084 0028 0023     		movs	r3, #0
+ 1085              	.L61:
+ 1086              		.loc 1 274 23 is_stmt 1 discriminator 4
+ 1087 002a 1343     		orrs	r3, r3, r2
+ 1088 002c 034A     		ldr	r2, .L62
+ 1089 002e D360     		str	r3, [r2, #12]
+ 275:../app/keyboard.c **** 	key_prohibit_mask();
+ 1090              		.loc 1 275 2 discriminator 4
+ 1091 0030 FFF7FEFF 		bl	key_prohibit_mask
+ 276:../app/keyboard.c **** }
+ 1092              		.loc 1 276 1 discriminator 4
+ 1093 0034 00BF     		nop
+ 1094 0036 0837     		adds	r7, r7, #8
+ 1095              		.cfi_def_cfa_offset 8
+ 1096 0038 BD46     		mov	sp, r7
+ 1097              		.cfi_def_cfa_register 13
+ 1098              		@ sp needed
+ 1099 003a 80BD     		pop	{r7, pc}
+ 1100              	.L63:
+ 1101              		.align	2
+ 1102              	.L62:
+ 1103 003c 00000000 		.word	keyinfo
+ 1104              		.cfi_endproc
+ 1105              	.LFE123:
+ 1107              		.text
+ 1108              	.Letext0:
+ 1109              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1110              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1111              		.file 4 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1112              		.file 5 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1113              		.file 6 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1114              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1115              		.file 8 "../Firmware/CMSIS/core_cm4.h"
+ 1116              		.file 9 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 1117              		.file 10 "../osal/os_lyh_core.h"
+ 1118              		.file 11 "../app/keyboard.h"
+ 1119              		.file 12 "../app/app.h"
+ 1120              		.file 13 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 keyboard.c
+                            *COM*:00000064 keyinfo
+                            *COM*:00000002 keyTouch_in
+                            *COM*:00000001 keyboard_id
+                            *COM*:00000001 keyboard_task_step
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:20     .text.ini_keys_value:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:28     .text.ini_keys_value:00000000 ini_keys_value
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:148    .text.ini_keys_value:000000d4 $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:154    .text.key_switch_debouncer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:161    .text.key_switch_debouncer:00000000 key_switch_debouncer
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:978    .text.key_prohibit_mask:00000000 key_prohibit_mask
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:529    .text.key_switch_debouncer:0000022c $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:536    .text.key_scan_process:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:543    .text.key_scan_process:00000000 key_scan_process
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:784    .text.key_scan_process:00000180 $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:791    .text.init_key_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:798    .text.init_key_task:00000000 init_key_task
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:836    .text.init_key_task:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:842    .text.key_task_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:849    .text.key_task_handler:00000000 key_task_handler
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:909    .text.key_task_handler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:914    .text.key_event_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:921    .text.key_event_handler:00000000 key_event_handler
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:966    .text.key_event_handler:00000028 $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:971    .text.key_prohibit_mask:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1033   .text.key_prohibit_mask:0000003c $d
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1038   .text.key_prohibit_setup:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1045   .text.key_prohibit_setup:00000000 key_prohibit_setup
+C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1103   .text.key_prohibit_setup:0000003c $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.features.h.22.fad1cec3bc7ff06488171438dbdcfd02
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stddef.h.39.144cf5ddcd53cbfdac30259dc1a6c87f
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.string.h.15.dab3980bf35408a4c507182805e2de3a
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
+                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.keyboard.h.3.4fe79013fc7f0052bffe12e1409d6549
+                           .group:00000000 wm4.app.h.3.cf06ebbefccdf8f9dbc3f6d932ae3362
+
+UNDEFINED SYMBOLS
+memset
+app_id
+eventMap
+gpio_input_bit_get
+osal_lyh_delay_task

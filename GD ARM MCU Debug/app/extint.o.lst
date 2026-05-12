@@ -1,0 +1,198 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"extint.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.gd_exti_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	gd_exti_Init
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	gd_exti_Init:
+  25              	.LFB116:
+  26              		.file 1 "../app/extint.c"
+   1:../app/extint.c **** /* USER CODE BEGIN Header */
+   2:../app/extint.c **** /**
+   3:../app/extint.c ****   ******************************************************************************
+   4:../app/extint.c ****   * @file    gpio.c
+   5:../app/extint.c ****   * @brief   This file provides code for the configuration
+   6:../app/extint.c ****   *          of all used GPIO pins.
+   7:../app/extint.c ****   ******************************************************************************
+   8:../app/extint.c ****   * @attention
+   9:../app/extint.c ****   *
+  10:../app/extint.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  11:../app/extint.c ****   * in the root directory of this software component.
+  12:../app/extint.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  13:../app/extint.c ****   *
+  14:../app/extint.c ****   ******************************************************************************
+  15:../app/extint.c ****   */
+  16:../app/extint.c **** /* USER CODE END Header */
+  17:../app/extint.c **** 
+  18:../app/extint.c **** /* Includes ------------------------------------------------------------------*/
+  19:../app/extint.c **** #include "gd32f30x.h"
+  20:../app/extint.c **** #include "configboard.h"
+  21:../app/extint.c **** #include "extint.h"
+  22:../app/extint.c **** 
+  23:../app/extint.c **** /* USER CODE BEGIN 0 */
+  24:../app/extint.c **** 
+  25:../app/extint.c **** /* USER CODE END 0 */
+  26:../app/extint.c **** 
+  27:../app/extint.c **** /*----------------------------------------------------------------------------*/
+  28:../app/extint.c **** /* Configure GPIO                                                             */
+  29:../app/extint.c **** /*----------------------------------------------------------------------------*/
+  30:../app/extint.c **** /* USER CODE BEGIN 1 */
+  31:../app/extint.c **** /** Configure pins as
+  32:../app/extint.c ****         * Analog
+  33:../app/extint.c ****         * Input
+  34:../app/extint.c ****         * Output
+  35:../app/extint.c ****         * EVENT_OUT
+  36:../app/extint.c ****         * EXTI
+  37:../app/extint.c **** */
+  38:../app/extint.c **** void gd_exti_Init(void)
+  39:../app/extint.c **** {
+  27              		.loc 1 39 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+  40:../app/extint.c ****     /* enable the key clock */
+  41:../app/extint.c ****     rcu_periph_clock_enable(RCU_AF);
+  37              		.loc 1 41 5
+  38 0004 4FF4C060 		mov	r0, #1536
+  39 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+  42:../app/extint.c **** 
+  43:../app/extint.c ****     /* connect zero EXTI line to key GPIO pin */
+  44:../app/extint.c ****     gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_0);
+  40              		.loc 1 44 5
+  41 000c 0021     		movs	r1, #0
+  42 000e 0020     		movs	r0, #0
+  43 0010 FFF7FEFF 		bl	gpio_exti_source_select
+  45:../app/extint.c **** 
+  46:../app/extint.c ****     /* configure zero EXTI line */
+  47:../app/extint.c ****     exti_init(EXTI_0, EXTI_INTERRUPT, EXTI_TRIG_BOTH);
+  44              		.loc 1 47 5
+  45 0014 0222     		movs	r2, #2
+  46 0016 0021     		movs	r1, #0
+  47 0018 0120     		movs	r0, #1
+  48 001a FFF7FEFF 		bl	exti_init
+  48:../app/extint.c ****     exti_interrupt_flag_clear(EXTI_0);
+  49              		.loc 1 48 5
+  50 001e 0120     		movs	r0, #1
+  51 0020 FFF7FEFF 		bl	exti_interrupt_flag_clear
+  49:../app/extint.c **** 
+  50:../app/extint.c ****     /* enable and set zero EXTI interrupt to the lowest priority */
+  51:../app/extint.c ****     nvic_irq_enable(EXTI0_IRQn, 2U, 0U);
+  52              		.loc 1 51 5
+  53 0024 0022     		movs	r2, #0
+  54 0026 0221     		movs	r1, #2
+  55 0028 0620     		movs	r0, #6
+  56 002a FFF7FEFF 		bl	nvic_irq_enable
+  52:../app/extint.c **** 
+  53:../app/extint.c ****     /* connect 8 EXTI line to key GPIO pin */
+  54:../app/extint.c ****     gpio_exti_source_select(GPIO_PORT_SOURCE_GPIOA, GPIO_PIN_SOURCE_8);
+  57              		.loc 1 54 5
+  58 002e 0821     		movs	r1, #8
+  59 0030 0020     		movs	r0, #0
+  60 0032 FFF7FEFF 		bl	gpio_exti_source_select
+  55:../app/extint.c **** 
+  56:../app/extint.c ****     /* configure 8 EXTI line */
+  57:../app/extint.c ****     exti_init(EXTI_0, EXTI_INTERRUPT, EXTI_TRIG_FALLING);
+  61              		.loc 1 57 5
+  62 0036 0122     		movs	r2, #1
+  63 0038 0021     		movs	r1, #0
+  64 003a 0120     		movs	r0, #1
+  65 003c FFF7FEFF 		bl	exti_init
+  58:../app/extint.c ****     exti_interrupt_flag_clear(EXTI_8);
+  66              		.loc 1 58 5
+  67 0040 4FF48070 		mov	r0, #256
+  68 0044 FFF7FEFF 		bl	exti_interrupt_flag_clear
+  59:../app/extint.c **** 
+  60:../app/extint.c ****     /* enable and set zero EXTI interrupt to the lowest priority */
+  61:../app/extint.c ****     nvic_irq_enable(EXTI5_9_IRQn, 0U, 0U);
+  69              		.loc 1 61 5
+  70 0048 0022     		movs	r2, #0
+  71 004a 0021     		movs	r1, #0
+  72 004c 1720     		movs	r0, #23
+  73 004e FFF7FEFF 		bl	nvic_irq_enable
+  62:../app/extint.c **** }
+  74              		.loc 1 62 1
+  75 0052 00BF     		nop
+  76 0054 80BD     		pop	{r7, pc}
+  77              		.cfi_endproc
+  78              	.LFE116:
+  80              		.text
+  81              	.Letext0:
+  82              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+  83              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+  84              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+  85              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+  86              		.file 6 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
+  87              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_exti.h"
+  88              		.file 8 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 extint.c
+C:\Users\user001\AppData\Local\Temp\ccIZ0Nfc.s:16     .text.gd_exti_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccIZ0Nfc.s:24     .text.gd_exti_Init:00000000 gd_exti_Init
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_exti_source_select
+exti_init
+exti_interrupt_flag_clear
+nvic_irq_enable

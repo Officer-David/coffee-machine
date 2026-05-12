@@ -1,0 +1,862 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"adc.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	ac_max_value,2,2
+  16              		.comm	adc_value,12,4
+  17              		.section	.text.rcu_config,"ax",%progbits
+  18              		.align	1
+  19              		.global	rcu_config
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu softvfp
+  26              	rcu_config:
+  27              	.LFB116:
+  28              		.file 1 "../app/adc.c"
+   1:../app/adc.c  **** /* USER CODE BEGIN Header */
+   2:../app/adc.c  **** /**
+   3:../app/adc.c  ****   ******************************************************************************
+   4:../app/adc.c  ****   * @file    adc.c
+   5:../app/adc.c  ****   * @brief   This file provides code for the configuration
+   6:../app/adc.c  ****   *          of all used GPIO pins.
+   7:../app/adc.c  ****   ******************************************************************************
+   8:../app/adc.c  ****   * @attention
+   9:../app/adc.c  ****   *
+  10:../app/adc.c  ****   * This software is licensed under terms that can be found in the LICENSE file
+  11:../app/adc.c  ****   * in the root directory of this software component.
+  12:../app/adc.c  ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  13:../app/adc.c  ****   *
+  14:../app/adc.c  ****   ******************************************************************************
+  15:../app/adc.c  ****   */
+  16:../app/adc.c  **** /* USER CODE END Header */
+  17:../app/adc.c  **** #define _ADC_C_
+  18:../app/adc.c  **** /* Includes ------------------------------------------------------------------*/
+  19:../app/adc.c  **** #include "gd32f30x.h"
+  20:../app/adc.c  **** #include "configboard.h"
+  21:../app/adc.c  **** #include "systick.h"
+  22:../app/adc.c  **** #include "adc.h"
+  23:../app/adc.c  **** 
+  24:../app/adc.c  **** #define CHANNEL_NUM		3
+  25:../app/adc.c  **** 
+  26:../app/adc.c  **** uint32_t adc_value[CHANNEL_NUM];
+  27:../app/adc.c  **** 
+  28:../app/adc.c  **** /*!
+  29:../app/adc.c  ****     \brief      configure the different system clocks
+  30:../app/adc.c  ****     \param[in]  none
+  31:../app/adc.c  ****     \param[out] none
+  32:../app/adc.c  ****     \retval     none
+  33:../app/adc.c  **** */
+  34:../app/adc.c  **** void rcu_config(void)
+  35:../app/adc.c  **** {
+  29              		.loc 1 35 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 00AF     		add	r7, sp, #0
+  38              		.cfi_def_cfa_register 7
+  36:../app/adc.c  ****     /* enable GPIOB clock */
+  37:../app/adc.c  ****     rcu_periph_clock_enable(RCU_GPIOB);
+  39              		.loc 1 37 5
+  40 0004 40F20360 		movw	r0, #1539
+  41 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+  38:../app/adc.c  ****     /* enable GPIOA clock */
+  39:../app/adc.c  ****     rcu_periph_clock_enable(RCU_GPIOA);  
+  42              		.loc 1 39 5
+  43 000c 40F20260 		movw	r0, #1538
+  44 0010 FFF7FEFF 		bl	rcu_periph_clock_enable
+  40:../app/adc.c  ****     /* enable DMA clock */
+  41:../app/adc.c  ****     rcu_periph_clock_enable(RCU_DMA0);
+  45              		.loc 1 41 5
+  46 0014 4FF4A060 		mov	r0, #1280
+  47 0018 FFF7FEFF 		bl	rcu_periph_clock_enable
+  42:../app/adc.c  ****     /* enable ADC0 clock */
+  43:../app/adc.c  ****     rcu_periph_clock_enable(RCU_ADC0);
+  48              		.loc 1 43 5
+  49 001c 40F20960 		movw	r0, #1545
+  50 0020 FFF7FEFF 		bl	rcu_periph_clock_enable
+  44:../app/adc.c  ****     /* enable ADC1 clock */
+  45:../app/adc.c  ****     rcu_periph_clock_enable(RCU_ADC1);
+  51              		.loc 1 45 5
+  52 0024 40F20A60 		movw	r0, #1546
+  53 0028 FFF7FEFF 		bl	rcu_periph_clock_enable
+  46:../app/adc.c  ****     /* config ADC clock */
+  47:../app/adc.c  ****     rcu_adc_clock_config(RCU_CKADC_CKAPB2_DIV6);
+  54              		.loc 1 47 5
+  55 002c 0220     		movs	r0, #2
+  56 002e FFF7FEFF 		bl	rcu_adc_clock_config
+  48:../app/adc.c  **** }
+  57              		.loc 1 48 1
+  58 0032 00BF     		nop
+  59 0034 80BD     		pop	{r7, pc}
+  60              		.cfi_endproc
+  61              	.LFE116:
+  63              		.section	.text.gpio_config,"ax",%progbits
+  64              		.align	1
+  65              		.global	gpio_config
+  66              		.syntax unified
+  67              		.thumb
+  68              		.thumb_func
+  69              		.fpu softvfp
+  71              	gpio_config:
+  72              	.LFB117:
+  49:../app/adc.c  **** 
+  50:../app/adc.c  **** /*!
+  51:../app/adc.c  ****     \brief      configure the GPIO peripheral
+  52:../app/adc.c  ****     \param[in]  none
+  53:../app/adc.c  ****     \param[out] none
+  54:../app/adc.c  ****     \retval     none
+  55:../app/adc.c  **** */
+  56:../app/adc.c  **** void gpio_config(void)
+  57:../app/adc.c  **** {
+  73              		.loc 1 57 1
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 0
+  76              		@ frame_needed = 1, uses_anonymous_args = 0
+  77 0000 80B5     		push	{r7, lr}
+  78              		.cfi_def_cfa_offset 8
+  79              		.cfi_offset 7, -8
+  80              		.cfi_offset 14, -4
+  81 0002 00AF     		add	r7, sp, #0
+  82              		.cfi_def_cfa_register 7
+  58:../app/adc.c  ****     /* config the GPIO as analog mode */  
+  59:../app/adc.c  ****     ISEN_ADC_CONFIG();
+  83              		.loc 1 59 5
+  84 0004 0123     		movs	r3, #1
+  85 0006 0422     		movs	r2, #4
+  86 0008 0021     		movs	r1, #0
+  87 000a 0848     		ldr	r0, .L3
+  88 000c FFF7FEFF 		bl	gpio_init
+  60:../app/adc.c  ****     NTC_ADC_CONFIG();
+  89              		.loc 1 60 5
+  90 0010 0223     		movs	r3, #2
+  91 0012 0422     		movs	r2, #4
+  92 0014 0021     		movs	r1, #0
+  93 0016 0548     		ldr	r0, .L3
+  94 0018 FFF7FEFF 		bl	gpio_init
+  61:../app/adc.c  ****     AC_ADC_CONFIG();
+  95              		.loc 1 61 5
+  96 001c 1023     		movs	r3, #16
+  97 001e 0422     		movs	r2, #4
+  98 0020 0021     		movs	r1, #0
+  99 0022 0348     		ldr	r0, .L3+4
+ 100 0024 FFF7FEFF 		bl	gpio_init
+  62:../app/adc.c  **** }
+ 101              		.loc 1 62 1
+ 102 0028 00BF     		nop
+ 103 002a 80BD     		pop	{r7, pc}
+ 104              	.L4:
+ 105              		.align	2
+ 106              	.L3:
+ 107 002c 000C0140 		.word	1073810432
+ 108 0030 00080140 		.word	1073809408
+ 109              		.cfi_endproc
+ 110              	.LFE117:
+ 112              		.section	.text.dma_config,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	dma_config
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 118              		.fpu softvfp
+ 120              	dma_config:
+ 121              	.LFB118:
+  63:../app/adc.c  **** 
+  64:../app/adc.c  **** /*!
+  65:../app/adc.c  ****     \brief      configure the DMA peripheral
+  66:../app/adc.c  ****     \param[in]  none
+  67:../app/adc.c  ****     \param[out] none
+  68:../app/adc.c  ****     \retval     none
+  69:../app/adc.c  **** */
+  70:../app/adc.c  **** void dma_config(void)
+  71:../app/adc.c  **** {
+ 122              		.loc 1 71 1
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 32
+ 125              		@ frame_needed = 1, uses_anonymous_args = 0
+ 126 0000 80B5     		push	{r7, lr}
+ 127              		.cfi_def_cfa_offset 8
+ 128              		.cfi_offset 7, -8
+ 129              		.cfi_offset 14, -4
+ 130 0002 88B0     		sub	sp, sp, #32
+ 131              		.cfi_def_cfa_offset 40
+ 132 0004 00AF     		add	r7, sp, #0
+ 133              		.cfi_def_cfa_register 7
+  72:../app/adc.c  ****     /* ADC_DMA_channel configuration */
+  73:../app/adc.c  ****     dma_parameter_struct dma_data_parameter;
+  74:../app/adc.c  ****     
+  75:../app/adc.c  ****     /* ADC_DMA_channel deinit */
+  76:../app/adc.c  ****     dma_deinit(DMA0, DMA_CH0);
+ 134              		.loc 1 76 5
+ 135 0006 0021     		movs	r1, #0
+ 136 0008 1448     		ldr	r0, .L6
+ 137 000a FFF7FEFF 		bl	dma_deinit
+  77:../app/adc.c  ****     
+  78:../app/adc.c  ****     /* initialize DMA single data mode */
+  79:../app/adc.c  ****     dma_data_parameter.periph_addr = (uint32_t)(&ADC_RDATA(ADC0));
+ 138              		.loc 1 79 36
+ 139 000e 144B     		ldr	r3, .L6+4
+ 140 0010 7B60     		str	r3, [r7, #4]
+  80:../app/adc.c  ****     dma_data_parameter.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 141              		.loc 1 80 35
+ 142 0012 0023     		movs	r3, #0
+ 143 0014 3B77     		strb	r3, [r7, #28]
+  81:../app/adc.c  ****     dma_data_parameter.memory_addr = (uint32_t)(adc_value);
+ 144              		.loc 1 81 38
+ 145 0016 134B     		ldr	r3, .L6+8
+ 146              		.loc 1 81 36
+ 147 0018 FB60     		str	r3, [r7, #12]
+  82:../app/adc.c  ****     dma_data_parameter.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 148              		.loc 1 82 35
+ 149 001a 0123     		movs	r3, #1
+ 150 001c 7B77     		strb	r3, [r7, #29]
+  83:../app/adc.c  ****     dma_data_parameter.periph_width = DMA_PERIPHERAL_WIDTH_32BIT;
+ 151              		.loc 1 83 37
+ 152 001e 4FF40073 		mov	r3, #512
+ 153 0022 BB60     		str	r3, [r7, #8]
+  84:../app/adc.c  ****     dma_data_parameter.memory_width = DMA_MEMORY_WIDTH_32BIT;
+ 154              		.loc 1 84 37
+ 155 0024 4FF40063 		mov	r3, #2048
+ 156 0028 3B61     		str	r3, [r7, #16]
+  85:../app/adc.c  ****     dma_data_parameter.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 157              		.loc 1 85 34
+ 158 002a 0023     		movs	r3, #0
+ 159 002c BB77     		strb	r3, [r7, #30]
+  86:../app/adc.c  ****     dma_data_parameter.number = CHANNEL_NUM;
+ 160              		.loc 1 86 31
+ 161 002e 0323     		movs	r3, #3
+ 162 0030 7B61     		str	r3, [r7, #20]
+  87:../app/adc.c  ****     dma_data_parameter.priority = DMA_PRIORITY_HIGH;  
+ 163              		.loc 1 87 33
+ 164 0032 4FF40053 		mov	r3, #8192
+ 165 0036 BB61     		str	r3, [r7, #24]
+  88:../app/adc.c  ****     dma_init(DMA0, DMA_CH0, &dma_data_parameter);
+ 166              		.loc 1 88 5
+ 167 0038 3B1D     		adds	r3, r7, #4
+ 168 003a 1A46     		mov	r2, r3
+ 169 003c 0021     		movs	r1, #0
+ 170 003e 0748     		ldr	r0, .L6
+ 171 0040 FFF7FEFF 		bl	dma_init
+  89:../app/adc.c  ****   
+  90:../app/adc.c  ****     dma_circulation_enable(DMA0, DMA_CH0);
+ 172              		.loc 1 90 5
+ 173 0044 0021     		movs	r1, #0
+ 174 0046 0548     		ldr	r0, .L6
+ 175 0048 FFF7FEFF 		bl	dma_circulation_enable
+  91:../app/adc.c  ****   
+  92:../app/adc.c  ****     /* enable DMA channel */
+  93:../app/adc.c  ****     dma_channel_enable(DMA0, DMA_CH0);  
+ 176              		.loc 1 93 5
+ 177 004c 0021     		movs	r1, #0
+ 178 004e 0348     		ldr	r0, .L6
+ 179 0050 FFF7FEFF 		bl	dma_channel_enable
+  94:../app/adc.c  **** }
+ 180              		.loc 1 94 1
+ 181 0054 00BF     		nop
+ 182 0056 2037     		adds	r7, r7, #32
+ 183              		.cfi_def_cfa_offset 8
+ 184 0058 BD46     		mov	sp, r7
+ 185              		.cfi_def_cfa_register 13
+ 186              		@ sp needed
+ 187 005a 80BD     		pop	{r7, pc}
+ 188              	.L7:
+ 189              		.align	2
+ 190              	.L6:
+ 191 005c 00000240 		.word	1073872896
+ 192 0060 4C240140 		.word	1073816652
+ 193 0064 00000000 		.word	adc_value
+ 194              		.cfi_endproc
+ 195              	.LFE118:
+ 197              		.section	.text.adc_config,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	adc_config
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 203              		.fpu softvfp
+ 205              	adc_config:
+ 206              	.LFB119:
+  95:../app/adc.c  **** 
+  96:../app/adc.c  **** /*!
+  97:../app/adc.c  ****     \brief      configure the ADC peripheral
+  98:../app/adc.c  ****     \param[in]  none
+  99:../app/adc.c  ****     \param[out] none
+ 100:../app/adc.c  ****     \retval     none
+ 101:../app/adc.c  **** */
+ 102:../app/adc.c  **** void adc_config(void)
+ 103:../app/adc.c  **** {
+ 207              		.loc 1 103 1
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 0
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211 0000 80B5     		push	{r7, lr}
+ 212              		.cfi_def_cfa_offset 8
+ 213              		.cfi_offset 7, -8
+ 214              		.cfi_offset 14, -4
+ 215 0002 00AF     		add	r7, sp, #0
+ 216              		.cfi_def_cfa_register 7
+ 104:../app/adc.c  ****     /* configure the ADC sync mode */
+ 105:../app/adc.c  ****     adc_mode_config(ADC_DAUL_REGULAL_PARALLEL);
+ 217              		.loc 1 105 5
+ 218 0004 4FF4C020 		mov	r0, #393216
+ 219 0008 FFF7FEFF 		bl	adc_mode_config
+ 106:../app/adc.c  ****     /* ADC data alignment config */
+ 107:../app/adc.c  ****     adc_data_alignment_config(ADC0, ADC_DATAALIGN_RIGHT);
+ 220              		.loc 1 107 5
+ 221 000c 0021     		movs	r1, #0
+ 222 000e 3748     		ldr	r0, .L9
+ 223 0010 FFF7FEFF 		bl	adc_data_alignment_config
+ 108:../app/adc.c  ****     adc_data_alignment_config(ADC1, ADC_DATAALIGN_RIGHT);
+ 224              		.loc 1 108 5
+ 225 0014 0021     		movs	r1, #0
+ 226 0016 3648     		ldr	r0, .L9+4
+ 227 0018 FFF7FEFF 		bl	adc_data_alignment_config
+ 109:../app/adc.c  ****     /* ADC scan mode function enable */
+ 110:../app/adc.c  ****     adc_special_function_config(ADC0, ADC_SCAN_MODE, ENABLE);
+ 228              		.loc 1 110 5
+ 229 001c 0122     		movs	r2, #1
+ 230 001e 4FF48071 		mov	r1, #256
+ 231 0022 3248     		ldr	r0, .L9
+ 232 0024 FFF7FEFF 		bl	adc_special_function_config
+ 111:../app/adc.c  ****     adc_special_function_config(ADC1, ADC_SCAN_MODE, ENABLE);
+ 233              		.loc 1 111 5
+ 234 0028 0122     		movs	r2, #1
+ 235 002a 4FF48071 		mov	r1, #256
+ 236 002e 3048     		ldr	r0, .L9+4
+ 237 0030 FFF7FEFF 		bl	adc_special_function_config
+ 112:../app/adc.c  **** 
+ 113:../app/adc.c  ****     /* ADC channel length config */
+ 114:../app/adc.c  ****     adc_channel_length_config(ADC0, ADC_REGULAR_CHANNEL,CHANNEL_NUM);
+ 238              		.loc 1 114 5
+ 239 0034 0322     		movs	r2, #3
+ 240 0036 0121     		movs	r1, #1
+ 241 0038 2C48     		ldr	r0, .L9
+ 242 003a FFF7FEFF 		bl	adc_channel_length_config
+ 115:../app/adc.c  ****     adc_channel_length_config(ADC1, ADC_REGULAR_CHANNEL,CHANNEL_NUM);
+ 243              		.loc 1 115 5
+ 244 003e 0322     		movs	r2, #3
+ 245 0040 0121     		movs	r1, #1
+ 246 0042 2B48     		ldr	r0, .L9+4
+ 247 0044 FFF7FEFF 		bl	adc_channel_length_config
+ 116:../app/adc.c  ****     /* ADC regular channel config */
+ 117:../app/adc.c  ****     adc_regular_channel_config(ADC0, 0, ADC_CHANNEL_4, ADC_SAMPLETIME_239POINT5);
+ 248              		.loc 1 117 5
+ 249 0048 0723     		movs	r3, #7
+ 250 004a 0422     		movs	r2, #4
+ 251 004c 0021     		movs	r1, #0
+ 252 004e 2748     		ldr	r0, .L9
+ 253 0050 FFF7FEFF 		bl	adc_regular_channel_config
+ 118:../app/adc.c  ****     adc_regular_channel_config(ADC0, 1, ADC_CHANNEL_8, ADC_SAMPLETIME_239POINT5);
+ 254              		.loc 1 118 5
+ 255 0054 0723     		movs	r3, #7
+ 256 0056 0822     		movs	r2, #8
+ 257 0058 0121     		movs	r1, #1
+ 258 005a 2448     		ldr	r0, .L9
+ 259 005c FFF7FEFF 		bl	adc_regular_channel_config
+ 119:../app/adc.c  ****     adc_regular_channel_config(ADC0, 2, ADC_CHANNEL_9, ADC_SAMPLETIME_239POINT5);
+ 260              		.loc 1 119 5
+ 261 0060 0723     		movs	r3, #7
+ 262 0062 0922     		movs	r2, #9
+ 263 0064 0221     		movs	r1, #2
+ 264 0066 2148     		ldr	r0, .L9
+ 265 0068 FFF7FEFF 		bl	adc_regular_channel_config
+ 120:../app/adc.c  ****     adc_regular_channel_config(ADC1, 0, ADC_CHANNEL_8, ADC_SAMPLETIME_239POINT5);
+ 266              		.loc 1 120 5
+ 267 006c 0723     		movs	r3, #7
+ 268 006e 0822     		movs	r2, #8
+ 269 0070 0021     		movs	r1, #0
+ 270 0072 1F48     		ldr	r0, .L9+4
+ 271 0074 FFF7FEFF 		bl	adc_regular_channel_config
+ 121:../app/adc.c  ****     adc_regular_channel_config(ADC1, 1, ADC_CHANNEL_9, ADC_SAMPLETIME_239POINT5);
+ 272              		.loc 1 121 5
+ 273 0078 0723     		movs	r3, #7
+ 274 007a 0922     		movs	r2, #9
+ 275 007c 0121     		movs	r1, #1
+ 276 007e 1C48     		ldr	r0, .L9+4
+ 277 0080 FFF7FEFF 		bl	adc_regular_channel_config
+ 122:../app/adc.c  ****     adc_regular_channel_config(ADC1, 2, ADC_CHANNEL_4, ADC_SAMPLETIME_239POINT5);
+ 278              		.loc 1 122 5
+ 279 0084 0723     		movs	r3, #7
+ 280 0086 0422     		movs	r2, #4
+ 281 0088 0221     		movs	r1, #2
+ 282 008a 1948     		ldr	r0, .L9+4
+ 283 008c FFF7FEFF 		bl	adc_regular_channel_config
+ 123:../app/adc.c  **** 
+ 124:../app/adc.c  ****     /* ADC trigger config */
+ 125:../app/adc.c  ****     adc_external_trigger_source_config(ADC0, ADC_REGULAR_CHANNEL, ADC0_1_2_EXTTRIG_REGULAR_NONE);
+ 284              		.loc 1 125 5
+ 285 0090 4FF46022 		mov	r2, #917504
+ 286 0094 0121     		movs	r1, #1
+ 287 0096 1548     		ldr	r0, .L9
+ 288 0098 FFF7FEFF 		bl	adc_external_trigger_source_config
+ 126:../app/adc.c  ****     adc_external_trigger_source_config(ADC1, ADC_REGULAR_CHANNEL, ADC0_1_2_EXTTRIG_REGULAR_NONE);
+ 289              		.loc 1 126 5
+ 290 009c 4FF46022 		mov	r2, #917504
+ 291 00a0 0121     		movs	r1, #1
+ 292 00a2 1348     		ldr	r0, .L9+4
+ 293 00a4 FFF7FEFF 		bl	adc_external_trigger_source_config
+ 127:../app/adc.c  ****     /* ADC external trigger enable */
+ 128:../app/adc.c  ****     adc_external_trigger_config(ADC0, ADC_REGULAR_CHANNEL, ENABLE);
+ 294              		.loc 1 128 5
+ 295 00a8 0122     		movs	r2, #1
+ 296 00aa 0121     		movs	r1, #1
+ 297 00ac 0F48     		ldr	r0, .L9
+ 298 00ae FFF7FEFF 		bl	adc_external_trigger_config
+ 129:../app/adc.c  ****     adc_external_trigger_config(ADC1, ADC_REGULAR_CHANNEL, ENABLE);
+ 299              		.loc 1 129 5
+ 300 00b2 0122     		movs	r2, #1
+ 301 00b4 0121     		movs	r1, #1
+ 302 00b6 0E48     		ldr	r0, .L9+4
+ 303 00b8 FFF7FEFF 		bl	adc_external_trigger_config
+ 130:../app/adc.c  ****    
+ 131:../app/adc.c  ****     /* enable ADC interface */
+ 132:../app/adc.c  ****     adc_enable(ADC0);
+ 304              		.loc 1 132 5
+ 305 00bc 0B48     		ldr	r0, .L9
+ 306 00be FFF7FEFF 		bl	adc_enable
+ 133:../app/adc.c  ****     delay_1ms(1);    
+ 307              		.loc 1 133 5
+ 308 00c2 0120     		movs	r0, #1
+ 309 00c4 FFF7FEFF 		bl	delay_1ms
+ 134:../app/adc.c  ****     /* ADC calibration and reset calibration */
+ 135:../app/adc.c  ****     adc_calibration_enable(ADC0);
+ 310              		.loc 1 135 5
+ 311 00c8 0848     		ldr	r0, .L9
+ 312 00ca FFF7FEFF 		bl	adc_calibration_enable
+ 136:../app/adc.c  ****     /* enable ADC interface */
+ 137:../app/adc.c  ****     adc_enable(ADC1);    
+ 313              		.loc 1 137 5
+ 314 00ce 0848     		ldr	r0, .L9+4
+ 315 00d0 FFF7FEFF 		bl	adc_enable
+ 138:../app/adc.c  ****     delay_1ms(1);
+ 316              		.loc 1 138 5
+ 317 00d4 0120     		movs	r0, #1
+ 318 00d6 FFF7FEFF 		bl	delay_1ms
+ 139:../app/adc.c  ****     /* ADC calibration and reset calibration */
+ 140:../app/adc.c  ****     adc_calibration_enable(ADC1);
+ 319              		.loc 1 140 5
+ 320 00da 0548     		ldr	r0, .L9+4
+ 321 00dc FFF7FEFF 		bl	adc_calibration_enable
+ 141:../app/adc.c  ****     
+ 142:../app/adc.c  ****     /* ADC DMA function enable */
+ 143:../app/adc.c  ****     adc_dma_mode_enable(ADC0);
+ 322              		.loc 1 143 5
+ 323 00e0 0248     		ldr	r0, .L9
+ 324 00e2 FFF7FEFF 		bl	adc_dma_mode_enable
+ 144:../app/adc.c  **** }
+ 325              		.loc 1 144 1
+ 326 00e6 00BF     		nop
+ 327 00e8 80BD     		pop	{r7, pc}
+ 328              	.L10:
+ 329 00ea 00BF     		.align	2
+ 330              	.L9:
+ 331 00ec 00240140 		.word	1073816576
+ 332 00f0 00280140 		.word	1073817600
+ 333              		.cfi_endproc
+ 334              	.LFE119:
+ 336              		.section	.text.gd_adc_Init,"ax",%progbits
+ 337              		.align	1
+ 338              		.global	gd_adc_Init
+ 339              		.syntax unified
+ 340              		.thumb
+ 341              		.thumb_func
+ 342              		.fpu softvfp
+ 344              	gd_adc_Init:
+ 345              	.LFB120:
+ 145:../app/adc.c  **** 
+ 146:../app/adc.c  **** /* USER CODE BEGIN 1 */
+ 147:../app/adc.c  **** /*!
+ 148:../app/adc.c  ****     \brief      configure the ADC peripheral
+ 149:../app/adc.c  ****     \param[in]  none
+ 150:../app/adc.c  ****     \param[out] none
+ 151:../app/adc.c  ****     \retval     none
+ 152:../app/adc.c  **** */
+ 153:../app/adc.c  **** void gd_adc_Init(void)
+ 154:../app/adc.c  **** {
+ 346              		.loc 1 154 1
+ 347              		.cfi_startproc
+ 348              		@ args = 0, pretend = 0, frame = 0
+ 349              		@ frame_needed = 1, uses_anonymous_args = 0
+ 350 0000 80B5     		push	{r7, lr}
+ 351              		.cfi_def_cfa_offset 8
+ 352              		.cfi_offset 7, -8
+ 353              		.cfi_offset 14, -4
+ 354 0002 00AF     		add	r7, sp, #0
+ 355              		.cfi_def_cfa_register 7
+ 155:../app/adc.c  ****     /* system clocks configuration */
+ 156:../app/adc.c  ****     rcu_config();
+ 356              		.loc 1 156 5
+ 357 0004 FFF7FEFF 		bl	rcu_config
+ 157:../app/adc.c  ****     /* GPIO configuration */
+ 158:../app/adc.c  ****     gpio_config();
+ 358              		.loc 1 158 5
+ 359 0008 FFF7FEFF 		bl	gpio_config
+ 159:../app/adc.c  ****     /* DMA configuration */
+ 160:../app/adc.c  ****     dma_config();
+ 360              		.loc 1 160 5
+ 361 000c FFF7FEFF 		bl	dma_config
+ 161:../app/adc.c  ****     /* ADC configuration */
+ 162:../app/adc.c  ****     adc_config();
+ 362              		.loc 1 162 5
+ 363 0010 FFF7FEFF 		bl	adc_config
+ 163:../app/adc.c  **** }
+ 364              		.loc 1 163 1
+ 365 0014 00BF     		nop
+ 366 0016 80BD     		pop	{r7, pc}
+ 367              		.cfi_endproc
+ 368              	.LFE120:
+ 370              		.section	.text.gd_adc_get,"ax",%progbits
+ 371              		.align	1
+ 372              		.global	gd_adc_get
+ 373              		.syntax unified
+ 374              		.thumb
+ 375              		.thumb_func
+ 376              		.fpu softvfp
+ 378              	gd_adc_get:
+ 379              	.LFB121:
+ 164:../app/adc.c  **** /* USER CODE END 1 */
+ 165:../app/adc.c  **** 
+ 166:../app/adc.c  **** uint16_t gd_adc_get(uint8_t channel)
+ 167:../app/adc.c  **** {
+ 380              		.loc 1 167 1
+ 381              		.cfi_startproc
+ 382              		@ args = 0, pretend = 0, frame = 16
+ 383              		@ frame_needed = 1, uses_anonymous_args = 0
+ 384              		@ link register save eliminated.
+ 385 0000 80B4     		push	{r7}
+ 386              		.cfi_def_cfa_offset 4
+ 387              		.cfi_offset 7, -4
+ 388 0002 85B0     		sub	sp, sp, #20
+ 389              		.cfi_def_cfa_offset 24
+ 390 0004 00AF     		add	r7, sp, #0
+ 391              		.cfi_def_cfa_register 7
+ 392 0006 0346     		mov	r3, r0
+ 393 0008 FB71     		strb	r3, [r7, #7]
+ 168:../app/adc.c  **** 	uint32_t adValue = 0u;
+ 394              		.loc 1 168 11
+ 395 000a 0023     		movs	r3, #0
+ 396 000c FB60     		str	r3, [r7, #12]
+ 169:../app/adc.c  **** 
+ 170:../app/adc.c  **** 	switch (channel) {
+ 397              		.loc 1 170 2
+ 398 000e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 399 0010 022B     		cmp	r3, #2
+ 400 0012 22D0     		beq	.L13
+ 401 0014 022B     		cmp	r3, #2
+ 402 0016 2EDC     		bgt	.L19
+ 403 0018 002B     		cmp	r3, #0
+ 404 001a 02D0     		beq	.L15
+ 405 001c 012B     		cmp	r3, #1
+ 406 001e 0ED0     		beq	.L16
+ 171:../app/adc.c  **** 	case AC_VOLTAGE:
+ 172:../app/adc.c  **** 		adValue = adc_value[0] & 0xFFFF;
+ 173:../app/adc.c  **** 		adValue += (adc_value[2] >> 16);
+ 174:../app/adc.c  **** 		adValue >>= 1;
+ 175:../app/adc.c  **** 		break;
+ 176:../app/adc.c  **** 	case MOTOR_ISEN:
+ 177:../app/adc.c  **** 		adValue = adc_value[1] & 0xFFFF;
+ 178:../app/adc.c  **** 		adValue += (adc_value[0] >> 16);
+ 179:../app/adc.c  **** 		adValue >>= 1;
+ 180:../app/adc.c  **** 		break;
+ 181:../app/adc.c  **** 	case TEMPERATURE:
+ 182:../app/adc.c  **** 		adValue = adc_value[2] & 0xFFFF;
+ 183:../app/adc.c  **** 		adValue += (adc_value[1] >> 16);
+ 184:../app/adc.c  **** 		adValue >>= 1;
+ 185:../app/adc.c  **** 		break;
+ 186:../app/adc.c  **** 	default:
+ 187:../app/adc.c  **** 		break;
+ 407              		.loc 1 187 3
+ 408 0020 29E0     		b	.L19
+ 409              	.L15:
+ 172:../app/adc.c  **** 		adValue += (adc_value[2] >> 16);
+ 410              		.loc 1 172 22
+ 411 0022 1A4B     		ldr	r3, .L20
+ 412 0024 1B68     		ldr	r3, [r3]
+ 172:../app/adc.c  **** 		adValue += (adc_value[2] >> 16);
+ 413              		.loc 1 172 11
+ 414 0026 9BB2     		uxth	r3, r3
+ 415 0028 FB60     		str	r3, [r7, #12]
+ 173:../app/adc.c  **** 		adValue >>= 1;
+ 416              		.loc 1 173 24
+ 417 002a 184B     		ldr	r3, .L20
+ 418 002c 9B68     		ldr	r3, [r3, #8]
+ 173:../app/adc.c  **** 		adValue >>= 1;
+ 419              		.loc 1 173 28
+ 420 002e 1B0C     		lsrs	r3, r3, #16
+ 173:../app/adc.c  **** 		adValue >>= 1;
+ 421              		.loc 1 173 11
+ 422 0030 FA68     		ldr	r2, [r7, #12]
+ 423 0032 1344     		add	r3, r3, r2
+ 424 0034 FB60     		str	r3, [r7, #12]
+ 174:../app/adc.c  **** 		break;
+ 425              		.loc 1 174 11
+ 426 0036 FB68     		ldr	r3, [r7, #12]
+ 427 0038 5B08     		lsrs	r3, r3, #1
+ 428 003a FB60     		str	r3, [r7, #12]
+ 175:../app/adc.c  **** 	case MOTOR_ISEN:
+ 429              		.loc 1 175 3
+ 430 003c 1CE0     		b	.L17
+ 431              	.L16:
+ 177:../app/adc.c  **** 		adValue += (adc_value[0] >> 16);
+ 432              		.loc 1 177 22
+ 433 003e 134B     		ldr	r3, .L20
+ 434 0040 5B68     		ldr	r3, [r3, #4]
+ 177:../app/adc.c  **** 		adValue += (adc_value[0] >> 16);
+ 435              		.loc 1 177 11
+ 436 0042 9BB2     		uxth	r3, r3
+ 437 0044 FB60     		str	r3, [r7, #12]
+ 178:../app/adc.c  **** 		adValue >>= 1;
+ 438              		.loc 1 178 24
+ 439 0046 114B     		ldr	r3, .L20
+ 440 0048 1B68     		ldr	r3, [r3]
+ 178:../app/adc.c  **** 		adValue >>= 1;
+ 441              		.loc 1 178 28
+ 442 004a 1B0C     		lsrs	r3, r3, #16
+ 178:../app/adc.c  **** 		adValue >>= 1;
+ 443              		.loc 1 178 11
+ 444 004c FA68     		ldr	r2, [r7, #12]
+ 445 004e 1344     		add	r3, r3, r2
+ 446 0050 FB60     		str	r3, [r7, #12]
+ 179:../app/adc.c  **** 		break;
+ 447              		.loc 1 179 11
+ 448 0052 FB68     		ldr	r3, [r7, #12]
+ 449 0054 5B08     		lsrs	r3, r3, #1
+ 450 0056 FB60     		str	r3, [r7, #12]
+ 180:../app/adc.c  **** 	case TEMPERATURE:
+ 451              		.loc 1 180 3
+ 452 0058 0EE0     		b	.L17
+ 453              	.L13:
+ 182:../app/adc.c  **** 		adValue += (adc_value[1] >> 16);
+ 454              		.loc 1 182 22
+ 455 005a 0C4B     		ldr	r3, .L20
+ 456 005c 9B68     		ldr	r3, [r3, #8]
+ 182:../app/adc.c  **** 		adValue += (adc_value[1] >> 16);
+ 457              		.loc 1 182 11
+ 458 005e 9BB2     		uxth	r3, r3
+ 459 0060 FB60     		str	r3, [r7, #12]
+ 183:../app/adc.c  **** 		adValue >>= 1;
+ 460              		.loc 1 183 24
+ 461 0062 0A4B     		ldr	r3, .L20
+ 462 0064 5B68     		ldr	r3, [r3, #4]
+ 183:../app/adc.c  **** 		adValue >>= 1;
+ 463              		.loc 1 183 28
+ 464 0066 1B0C     		lsrs	r3, r3, #16
+ 183:../app/adc.c  **** 		adValue >>= 1;
+ 465              		.loc 1 183 11
+ 466 0068 FA68     		ldr	r2, [r7, #12]
+ 467 006a 1344     		add	r3, r3, r2
+ 468 006c FB60     		str	r3, [r7, #12]
+ 184:../app/adc.c  **** 		break;
+ 469              		.loc 1 184 11
+ 470 006e FB68     		ldr	r3, [r7, #12]
+ 471 0070 5B08     		lsrs	r3, r3, #1
+ 472 0072 FB60     		str	r3, [r7, #12]
+ 185:../app/adc.c  **** 	default:
+ 473              		.loc 1 185 3
+ 474 0074 00E0     		b	.L17
+ 475              	.L19:
+ 476              		.loc 1 187 3
+ 477 0076 00BF     		nop
+ 478              	.L17:
+ 188:../app/adc.c  **** 	}
+ 189:../app/adc.c  **** 	return (uint16_t)(adValue & 0x0FFF);
+ 479              		.loc 1 189 9
+ 480 0078 FB68     		ldr	r3, [r7, #12]
+ 481 007a 9BB2     		uxth	r3, r3
+ 482 007c C3F30B03 		ubfx	r3, r3, #0, #12
+ 483 0080 9BB2     		uxth	r3, r3
+ 190:../app/adc.c  **** }
+ 484              		.loc 1 190 1
+ 485 0082 1846     		mov	r0, r3
+ 486 0084 1437     		adds	r7, r7, #20
+ 487              		.cfi_def_cfa_offset 4
+ 488 0086 BD46     		mov	sp, r7
+ 489              		.cfi_def_cfa_register 13
+ 490              		@ sp needed
+ 491 0088 80BC     		pop	{r7}
+ 492              		.cfi_restore 7
+ 493              		.cfi_def_cfa_offset 0
+ 494 008a 7047     		bx	lr
+ 495              	.L21:
+ 496              		.align	2
+ 497              	.L20:
+ 498 008c 00000000 		.word	adc_value
+ 499              		.cfi_endproc
+ 500              	.LFE121:
+ 502              		.section	.text.gd_adc_trigger,"ax",%progbits
+ 503              		.align	1
+ 504              		.global	gd_adc_trigger
+ 505              		.syntax unified
+ 506              		.thumb
+ 507              		.thumb_func
+ 508              		.fpu softvfp
+ 510              	gd_adc_trigger:
+ 511              	.LFB122:
+ 191:../app/adc.c  **** 
+ 192:../app/adc.c  **** /* USER CODE BEGIN 2 */
+ 193:../app/adc.c  **** void gd_adc_trigger(void)
+ 194:../app/adc.c  **** {
+ 512              		.loc 1 194 1
+ 513              		.cfi_startproc
+ 514              		@ args = 0, pretend = 0, frame = 8
+ 515              		@ frame_needed = 1, uses_anonymous_args = 0
+ 516 0000 80B5     		push	{r7, lr}
+ 517              		.cfi_def_cfa_offset 8
+ 518              		.cfi_offset 7, -8
+ 519              		.cfi_offset 14, -4
+ 520 0002 82B0     		sub	sp, sp, #8
+ 521              		.cfi_def_cfa_offset 16
+ 522 0004 00AF     		add	r7, sp, #0
+ 523              		.cfi_def_cfa_register 7
+ 195:../app/adc.c  ****     uint16_t ac_cur_value = gd_adc_get(AC_VOLTAGE);
+ 524              		.loc 1 195 29
+ 525 0006 0020     		movs	r0, #0
+ 526 0008 FFF7FEFF 		bl	gd_adc_get
+ 527 000c 0346     		mov	r3, r0
+ 528 000e FB80     		strh	r3, [r7, #6]	@ movhi
+ 196:../app/adc.c  ****     ac_max_value = (ac_cur_value > ac_max_value)? ac_cur_value:ac_max_value;
+ 529              		.loc 1 196 63
+ 530 0010 084B     		ldr	r3, .L23
+ 531 0012 1B88     		ldrh	r3, [r3]
+ 532 0014 FA88     		ldrh	r2, [r7, #6]
+ 533 0016 9342     		cmp	r3, r2
+ 534 0018 38BF     		it	cc
+ 535 001a 1346     		movcc	r3, r2
+ 536 001c 9AB2     		uxth	r2, r3
+ 537              		.loc 1 196 18
+ 538 001e 054B     		ldr	r3, .L23
+ 539 0020 1A80     		strh	r2, [r3]	@ movhi
+ 197:../app/adc.c  ****     /* ADC software trigger enable */
+ 198:../app/adc.c  ****     adc_software_trigger_enable(ADC0, ADC_REGULAR_CHANNEL);
+ 540              		.loc 1 198 5
+ 541 0022 0121     		movs	r1, #1
+ 542 0024 0448     		ldr	r0, .L23+4
+ 543 0026 FFF7FEFF 		bl	adc_software_trigger_enable
+ 199:../app/adc.c  **** }
+ 544              		.loc 1 199 1
+ 545 002a 00BF     		nop
+ 546 002c 0837     		adds	r7, r7, #8
+ 547              		.cfi_def_cfa_offset 8
+ 548 002e BD46     		mov	sp, r7
+ 549              		.cfi_def_cfa_register 13
+ 550              		@ sp needed
+ 551 0030 80BD     		pop	{r7, pc}
+ 552              	.L24:
+ 553 0032 00BF     		.align	2
+ 554              	.L23:
+ 555 0034 00000000 		.word	ac_max_value
+ 556 0038 00240140 		.word	1073816576
+ 557              		.cfi_endproc
+ 558              	.LFE122:
+ 560              		.text
+ 561              	.Letext0:
+ 562              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 563              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 564              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 565              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 566              		.file 6 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
+ 567              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
+ 568              		.file 8 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dma.h"
+ 569              		.file 9 "../inc/systick.h"
+ 570              		.file 10 "../app/adc.h"
+ 571              		.file 11 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 adc.c
+                            *COM*:00000002 ac_max_value
+                            *COM*:0000000c adc_value
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:18     .text.rcu_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:26     .text.rcu_config:00000000 rcu_config
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:64     .text.gpio_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:71     .text.gpio_config:00000000 gpio_config
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:107    .text.gpio_config:0000002c $d
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:113    .text.dma_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:120    .text.dma_config:00000000 dma_config
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:191    .text.dma_config:0000005c $d
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:198    .text.adc_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:205    .text.adc_config:00000000 adc_config
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:331    .text.adc_config:000000ec $d
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:337    .text.gd_adc_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:344    .text.gd_adc_Init:00000000 gd_adc_Init
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:371    .text.gd_adc_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:378    .text.gd_adc_get:00000000 gd_adc_get
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:498    .text.gd_adc_get:0000008c $d
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:503    .text.gd_adc_trigger:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:510    .text.gd_adc_trigger:00000000 gd_adc_trigger
+C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:555    .text.gd_adc_trigger:00000034 $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.systick.h.36.4d6972f44cce074db9bfcd285bdc289e
+                           .group:00000000 wm4.adc.h.19.6fcfd12670c81c955bfbfdd8f320e0bf
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+rcu_adc_clock_config
+gpio_init
+dma_deinit
+dma_init
+dma_circulation_enable
+dma_channel_enable
+adc_mode_config
+adc_data_alignment_config
+adc_special_function_config
+adc_channel_length_config
+adc_regular_channel_config
+adc_external_trigger_source_config
+adc_external_trigger_config
+adc_enable
+delay_1ms
+adc_calibration_enable
+adc_dma_mode_enable
+adc_software_trigger_enable

@@ -1,0 +1,1859 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"os_lyh_core.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	thisTask,1,1
+  16              		.comm	thisPt,2,2
+  17              		.comm	tasksPendMask,2,2
+  18              		.comm	PreTicks,4,4
+  19              		.comm	tasksArr,12,4
+  20              		.comm	eventMap,12,4
+  21              		.comm	taskDelayCounter,12,4
+  22              		.comm	taskseventArr,12,4
+  23              		.comm	overTimeStruct,256,4
+  24              		.section	.text.osal_SysTicks,"ax",%progbits
+  25              		.align	1
+  26              		.global	osal_SysTicks
+  27              		.arch armv7e-m
+  28              		.syntax unified
+  29              		.thumb
+  30              		.thumb_func
+  31              		.fpu softvfp
+  33              	osal_SysTicks:
+  34              	.LFB116:
+  35              		.file 1 "../osal/os_lyh_core.c"
+   1:../osal/os_lyh_core.c **** 
+   2:../osal/os_lyh_core.c **** 
+   3:../osal/os_lyh_core.c **** /**
+   4:../osal/os_lyh_core.c ****  * \os_lyh_core.c
+   5:../osal/os_lyh_core.c ****  */
+   6:../osal/os_lyh_core.c **** 
+   7:../osal/os_lyh_core.c **** #include <stdlib.h>
+   8:../osal/os_lyh_core.c **** #include "gd32f30x.h"
+   9:../osal/os_lyh_core.c **** #include "os_lyh_core.h"
+  10:../osal/os_lyh_core.c **** #include "configboard.h"
+  11:../osal/os_lyh_core.c **** #include "Systick.h" 
+  12:../osal/os_lyh_core.c **** 
+  13:../osal/os_lyh_core.c **** uint8_t thisTask;
+  14:../osal/os_lyh_core.c **** uint16_t thisPt;
+  15:../osal/os_lyh_core.c **** uint16_t tasksPendMask;
+  16:../osal/os_lyh_core.c **** 
+  17:../osal/os_lyh_core.c **** uint32_t PreTicks;
+  18:../osal/os_lyh_core.c **** /**************************************************************************************************
+  19:../osal/os_lyh_core.c **** pTask tasksArr[MAX_TASK_NUMBER];
+  20:../osal/os_lyh_core.c **** /**************************************************************************************************
+  21:../osal/os_lyh_core.c **** /* you must construct the array which it's member point to each event.*/
+  22:../osal/os_lyh_core.c **** 
+  23:../osal/os_lyh_core.c **** uint32_t eventMap[MAX_TASK_NUMBER];
+  24:../osal/os_lyh_core.c **** uint32_t taskDelayCounter[MAX_TASK_NUMBER];
+  25:../osal/os_lyh_core.c **** pTaskEventHandlerFn taskseventArr[MAX_TASK_NUMBER];
+  26:../osal/os_lyh_core.c **** 
+  27:../osal/os_lyh_core.c **** _overTimeStruct overTimeStruct[MAX_OVER_TIME_STRUCT_NUMBER];
+  28:../osal/os_lyh_core.c **** /*
+  29:../osal/os_lyh_core.c **** * time interrupt: interval time is 1ms
+  30:../osal/os_lyh_core.c **** * function description: this timer is used for overtime function and delay task
+  31:../osal/os_lyh_core.c **** * 
+  32:../osal/os_lyh_core.c **** */
+  33:../osal/os_lyh_core.c **** void osal_SysTicks(void)
+  34:../osal/os_lyh_core.c **** {
+  36              		.loc 1 34 1
+  37              		.cfi_startproc
+  38              		@ args = 0, pretend = 0, frame = 8
+  39              		@ frame_needed = 1, uses_anonymous_args = 0
+  40 0000 80B5     		push	{r7, lr}
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44 0002 82B0     		sub	sp, sp, #8
+  45              		.cfi_def_cfa_offset 16
+  46 0004 00AF     		add	r7, sp, #0
+  47              		.cfi_def_cfa_register 7
+  35:../osal/os_lyh_core.c **** 	uint8_t i = 0;
+  48              		.loc 1 35 10
+  49 0006 0023     		movs	r3, #0
+  50 0008 FB71     		strb	r3, [r7, #7]
+  36:../osal/os_lyh_core.c **** 	uint32_t u32_ticks = systick_get();
+  51              		.loc 1 36 23
+  52 000a FFF7FEFF 		bl	systick_get
+  53 000e 3860     		str	r0, [r7]
+  37:../osal/os_lyh_core.c **** 
+  38:../osal/os_lyh_core.c **** 	while ( PreTicks != u32_ticks ){
+  54              		.loc 1 38 8
+  55 0010 5BE0     		b	.L2
+  56              	.L9:
+  39:../osal/os_lyh_core.c **** 
+  40:../osal/os_lyh_core.c **** 		for(i = 0; i < sizeof(taskDelayCounter)/sizeof(taskDelayCounter[0]); i++){
+  57              		.loc 1 40 9
+  58 0012 0023     		movs	r3, #0
+  59 0014 FB71     		strb	r3, [r7, #7]
+  60              		.loc 1 40 3
+  61 0016 23E0     		b	.L3
+  62              	.L5:
+  41:../osal/os_lyh_core.c **** 			
+  42:../osal/os_lyh_core.c **** 			if(taskDelayCounter[i] != 0){
+  63              		.loc 1 42 23
+  64 0018 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  65 001a 314A     		ldr	r2, .L10
+  66 001c 52F82330 		ldr	r3, [r2, r3, lsl #2]
+  67              		.loc 1 42 6
+  68 0020 002B     		cmp	r3, #0
+  69 0022 1AD0     		beq	.L4
+  43:../osal/os_lyh_core.c **** 				
+  44:../osal/os_lyh_core.c **** 				taskDelayCounter[i]--;
+  70              		.loc 1 44 21
+  71 0024 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  72 0026 2E4A     		ldr	r2, .L10
+  73 0028 52F82320 		ldr	r2, [r2, r3, lsl #2]
+  74              		.loc 1 44 24
+  75 002c 013A     		subs	r2, r2, #1
+  76 002e 2C49     		ldr	r1, .L10
+  77 0030 41F82320 		str	r2, [r1, r3, lsl #2]
+  45:../osal/os_lyh_core.c **** 				if(taskDelayCounter[i] == 0){
+  78              		.loc 1 45 24
+  79 0034 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  80 0036 2A4A     		ldr	r2, .L10
+  81 0038 52F82330 		ldr	r3, [r2, r3, lsl #2]
+  82              		.loc 1 45 7
+  83 003c 002B     		cmp	r3, #0
+  84 003e 0CD1     		bne	.L4
+  46:../osal/os_lyh_core.c **** 					
+  47:../osal/os_lyh_core.c **** 					tasksPendMask |= 1 << i;
+  85              		.loc 1 47 25
+  86 0040 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  87 0042 0122     		movs	r2, #1
+  88 0044 02FA03F3 		lsl	r3, r2, r3
+  89              		.loc 1 47 20
+  90 0048 1AB2     		sxth	r2, r3
+  91 004a 264B     		ldr	r3, .L10+4
+  92 004c 1B88     		ldrh	r3, [r3]
+  93 004e 1BB2     		sxth	r3, r3
+  94 0050 1343     		orrs	r3, r3, r2
+  95 0052 1BB2     		sxth	r3, r3
+  96 0054 9AB2     		uxth	r2, r3
+  97 0056 234B     		ldr	r3, .L10+4
+  98 0058 1A80     		strh	r2, [r3]	@ movhi
+  99              	.L4:
+  40:../osal/os_lyh_core.c **** 			
+ 100              		.loc 1 40 73 discriminator 2
+ 101 005a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 102 005c 0133     		adds	r3, r3, #1
+ 103 005e FB71     		strb	r3, [r7, #7]
+ 104              	.L3:
+  40:../osal/os_lyh_core.c **** 			
+ 105              		.loc 1 40 3 discriminator 1
+ 106 0060 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 107 0062 022B     		cmp	r3, #2
+ 108 0064 D8D9     		bls	.L5
+  48:../osal/os_lyh_core.c **** 				}
+  49:../osal/os_lyh_core.c **** 			}
+  50:../osal/os_lyh_core.c **** 		}
+  51:../osal/os_lyh_core.c **** 		
+  52:../osal/os_lyh_core.c **** 		for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 109              		.loc 1 52 9
+ 110 0066 0023     		movs	r3, #0
+ 111 0068 FB71     		strb	r3, [r7, #7]
+ 112              		.loc 1 52 3
+ 113 006a 26E0     		b	.L6
+ 114              	.L8:
+  53:../osal/os_lyh_core.c **** 			
+  54:../osal/os_lyh_core.c **** 			if(overTimeStruct[i].time != 0){
+ 115              		.loc 1 54 24
+ 116 006c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 117 006e 1E4A     		ldr	r2, .L10+8
+ 118 0070 1B01     		lsls	r3, r3, #4
+ 119 0072 1344     		add	r3, r3, r2
+ 120 0074 0833     		adds	r3, r3, #8
+ 121 0076 1B68     		ldr	r3, [r3]
+ 122              		.loc 1 54 6
+ 123 0078 002B     		cmp	r3, #0
+ 124 007a 1BD0     		beq	.L7
+  55:../osal/os_lyh_core.c **** 				
+  56:../osal/os_lyh_core.c **** 				overTimeStruct[i].time--;
+ 125              		.loc 1 56 22
+ 126 007c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 127 007e 1A49     		ldr	r1, .L10+8
+ 128 0080 1A01     		lsls	r2, r3, #4
+ 129 0082 0A44     		add	r2, r2, r1
+ 130 0084 0832     		adds	r2, r2, #8
+ 131 0086 1268     		ldr	r2, [r2]
+ 132              		.loc 1 56 27
+ 133 0088 013A     		subs	r2, r2, #1
+ 134 008a 1749     		ldr	r1, .L10+8
+ 135 008c 1B01     		lsls	r3, r3, #4
+ 136 008e 0B44     		add	r3, r3, r1
+ 137 0090 0833     		adds	r3, r3, #8
+ 138 0092 1A60     		str	r2, [r3]
+  57:../osal/os_lyh_core.c **** 				if(overTimeStruct[i].time == 0){
+ 139              		.loc 1 57 25
+ 140 0094 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 141 0096 144A     		ldr	r2, .L10+8
+ 142 0098 1B01     		lsls	r3, r3, #4
+ 143 009a 1344     		add	r3, r3, r2
+ 144 009c 0833     		adds	r3, r3, #8
+ 145 009e 1B68     		ldr	r3, [r3]
+ 146              		.loc 1 57 7
+ 147 00a0 002B     		cmp	r3, #0
+ 148 00a2 07D1     		bne	.L7
+  58:../osal/os_lyh_core.c **** 					
+  59:../osal/os_lyh_core.c **** 					overTimeStruct[i].idandf.timeover = 1;
+ 149              		.loc 1 59 30
+ 150 00a4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 151              		.loc 1 59 40
+ 152 00a6 104A     		ldr	r2, .L10+8
+ 153 00a8 1B01     		lsls	r3, r3, #4
+ 154 00aa 1A44     		add	r2, r2, r3
+ 155 00ac 1378     		ldrb	r3, [r2]
+ 156 00ae 43F01003 		orr	r3, r3, #16
+ 157 00b2 1370     		strb	r3, [r2]
+ 158              	.L7:
+  52:../osal/os_lyh_core.c **** 			
+ 159              		.loc 1 52 69 discriminator 2
+ 160 00b4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 161 00b6 0133     		adds	r3, r3, #1
+ 162 00b8 FB71     		strb	r3, [r7, #7]
+ 163              	.L6:
+  52:../osal/os_lyh_core.c **** 			
+ 164              		.loc 1 52 3 discriminator 1
+ 165 00ba FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 166 00bc 0F2B     		cmp	r3, #15
+ 167 00be D5D9     		bls	.L8
+  60:../osal/os_lyh_core.c **** 				}
+  61:../osal/os_lyh_core.c **** 			}
+  62:../osal/os_lyh_core.c **** 		}
+  63:../osal/os_lyh_core.c **** 		PreTicks++;
+ 168              		.loc 1 63 11
+ 169 00c0 0A4B     		ldr	r3, .L10+12
+ 170 00c2 1B68     		ldr	r3, [r3]
+ 171 00c4 0133     		adds	r3, r3, #1
+ 172 00c6 094A     		ldr	r2, .L10+12
+ 173 00c8 1360     		str	r3, [r2]
+ 174              	.L2:
+  38:../osal/os_lyh_core.c **** 
+ 175              		.loc 1 38 19
+ 176 00ca 084B     		ldr	r3, .L10+12
+ 177 00cc 1B68     		ldr	r3, [r3]
+  38:../osal/os_lyh_core.c **** 
+ 178              		.loc 1 38 8
+ 179 00ce 3A68     		ldr	r2, [r7]
+ 180 00d0 9A42     		cmp	r2, r3
+ 181 00d2 9ED1     		bne	.L9
+  64:../osal/os_lyh_core.c **** 	}
+  65:../osal/os_lyh_core.c **** }
+ 182              		.loc 1 65 1
+ 183 00d4 00BF     		nop
+ 184 00d6 00BF     		nop
+ 185 00d8 0837     		adds	r7, r7, #8
+ 186              		.cfi_def_cfa_offset 8
+ 187 00da BD46     		mov	sp, r7
+ 188              		.cfi_def_cfa_register 13
+ 189              		@ sp needed
+ 190 00dc 80BD     		pop	{r7, pc}
+ 191              	.L11:
+ 192 00de 00BF     		.align	2
+ 193              	.L10:
+ 194 00e0 00000000 		.word	taskDelayCounter
+ 195 00e4 00000000 		.word	tasksPendMask
+ 196 00e8 00000000 		.word	overTimeStruct
+ 197 00ec 00000000 		.word	PreTicks
+ 198              		.cfi_endproc
+ 199              	.LFE116:
+ 201              		.section	.text.osal_start_system,"ax",%progbits
+ 202              		.align	1
+ 203              		.global	osal_start_system
+ 204              		.syntax unified
+ 205              		.thumb
+ 206              		.thumb_func
+ 207              		.fpu softvfp
+ 209              	osal_start_system:
+ 210              	.LFB117:
+  66:../osal/os_lyh_core.c **** 
+  67:../osal/os_lyh_core.c **** /*
+  68:../osal/os_lyh_core.c **** * function name:main
+  69:../osal/os_lyh_core.c **** * description: running task.
+  70:../osal/os_lyh_core.c **** * 1):handle task.
+  71:../osal/os_lyh_core.c **** * 2):running overtime function.
+  72:../osal/os_lyh_core.c **** */
+  73:../osal/os_lyh_core.c **** int osal_start_system(void){
+ 211              		.loc 1 73 28
+ 212              		.cfi_startproc
+ 213              		@ args = 0, pretend = 0, frame = 8
+ 214              		@ frame_needed = 1, uses_anonymous_args = 0
+ 215 0000 80B5     		push	{r7, lr}
+ 216              		.cfi_def_cfa_offset 8
+ 217              		.cfi_offset 7, -8
+ 218              		.cfi_offset 14, -4
+ 219 0002 82B0     		sub	sp, sp, #8
+ 220              		.cfi_def_cfa_offset 16
+ 221 0004 00AF     		add	r7, sp, #0
+ 222              		.cfi_def_cfa_register 7
+ 223              	.L20:
+  74:../osal/os_lyh_core.c **** 	uint8_t i;
+  75:../osal/os_lyh_core.c **** 
+  76:../osal/os_lyh_core.c **** 	while(1)
+  77:../osal/os_lyh_core.c **** 	{
+  78:../osal/os_lyh_core.c **** 		osal_SysTicks();
+ 224              		.loc 1 78 3
+ 225 0006 FFF7FEFF 		bl	osal_SysTicks
+  79:../osal/os_lyh_core.c **** 		/* Refresh watchdog to prevent reset */
+  80:../osal/os_lyh_core.c **** 		fwdgt_counter_reload();
+ 226              		.loc 1 80 3
+ 227 000a FFF7FEFF 		bl	fwdgt_counter_reload
+  81:../osal/os_lyh_core.c **** 		if(eventMap[thisTask] != 0)
+ 228              		.loc 1 81 14
+ 229 000e 404B     		ldr	r3, .L22
+ 230 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 231 0012 1A46     		mov	r2, r3
+ 232 0014 3F4B     		ldr	r3, .L22+4
+ 233 0016 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 234              		.loc 1 81 5
+ 235 001a 002B     		cmp	r3, #0
+ 236 001c 16D0     		beq	.L13
+  82:../osal/os_lyh_core.c **** 		{
+  83:../osal/os_lyh_core.c **** 			taskseventArr[thisTask](thisTask, eventMap[thisTask]);
+ 237              		.loc 1 83 17
+ 238 001e 3C4B     		ldr	r3, .L22
+ 239 0020 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 240 0022 1A46     		mov	r2, r3
+ 241 0024 3C4B     		ldr	r3, .L22+8
+ 242 0026 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 243              		.loc 1 83 4
+ 244 002a 394A     		ldr	r2, .L22
+ 245 002c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 246 002e 3849     		ldr	r1, .L22
+ 247 0030 0978     		ldrb	r1, [r1]	@ zero_extendqisi2
+ 248 0032 0846     		mov	r0, r1
+ 249 0034 3749     		ldr	r1, .L22+4
+ 250 0036 51F82010 		ldr	r1, [r1, r0, lsl #2]
+ 251 003a 1046     		mov	r0, r2
+ 252 003c 9847     		blx	r3
+ 253              	.LVL0:
+  84:../osal/os_lyh_core.c **** 			eventMap[thisTask] = 0;
+ 254              		.loc 1 84 12
+ 255 003e 344B     		ldr	r3, .L22
+ 256 0040 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 257 0042 1946     		mov	r1, r3
+ 258              		.loc 1 84 23
+ 259 0044 334B     		ldr	r3, .L22+4
+ 260 0046 0022     		movs	r2, #0
+ 261 0048 43F82120 		str	r2, [r3, r1, lsl #2]
+ 262              	.L13:
+  85:../osal/os_lyh_core.c **** 		}
+  86:../osal/os_lyh_core.c **** 		if(tasksPendMask &(1 << thisTask))
+ 263              		.loc 1 86 6
+ 264 004c 334B     		ldr	r3, .L22+12
+ 265 004e 1B88     		ldrh	r3, [r3]
+ 266 0050 1A46     		mov	r2, r3
+ 267 0052 2F4B     		ldr	r3, .L22
+ 268 0054 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 269 0056 42FA03F3 		asr	r3, r2, r3
+ 270 005a 03F00103 		and	r3, r3, #1
+ 271              		.loc 1 86 5
+ 272 005e 002B     		cmp	r3, #0
+ 273 0060 06D0     		beq	.L14
+  87:../osal/os_lyh_core.c **** 		{
+  88:../osal/os_lyh_core.c **** 		    tasksArr[thisTask]();
+ 274              		.loc 1 88 15
+ 275 0062 2B4B     		ldr	r3, .L22
+ 276 0064 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 277 0066 1A46     		mov	r2, r3
+ 278 0068 2D4B     		ldr	r3, .L22+16
+ 279 006a 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 280              		.loc 1 88 7
+ 281 006e 9847     		blx	r3
+ 282              	.LVL1:
+ 283              	.L14:
+  89:../osal/os_lyh_core.c **** 		}
+  90:../osal/os_lyh_core.c **** 		for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++)
+ 284              		.loc 1 90 9
+ 285 0070 0023     		movs	r3, #0
+ 286 0072 FB71     		strb	r3, [r7, #7]
+ 287              		.loc 1 90 3
+ 288 0074 3AE0     		b	.L15
+ 289              	.L18:
+  91:../osal/os_lyh_core.c **** 		{
+  92:../osal/os_lyh_core.c **** 			if(overTimeStruct[i].idandf.taskid != thisTask)
+ 290              		.loc 1 92 31
+ 291 0076 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 292 0078 2A4A     		ldr	r2, .L22+20
+ 293 007a 1B01     		lsls	r3, r3, #4
+ 294 007c 1344     		add	r3, r3, r2
+ 295 007e 1B78     		ldrb	r3, [r3]
+ 296 0080 C3F30303 		ubfx	r3, r3, #0, #4
+ 297 0084 DBB2     		uxtb	r3, r3
+ 298 0086 1A46     		mov	r2, r3
+ 299              		.loc 1 92 39
+ 300 0088 214B     		ldr	r3, .L22
+ 301 008a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 302              		.loc 1 92 6
+ 303 008c 9A42     		cmp	r2, r3
+ 304 008e 29D1     		bne	.L21
+  93:../osal/os_lyh_core.c **** 			    continue;
+  94:../osal/os_lyh_core.c **** 			if(overTimeStruct[i].idandf.timeover)
+ 305              		.loc 1 94 31
+ 306 0090 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 307 0092 244A     		ldr	r2, .L22+20
+ 308 0094 1B01     		lsls	r3, r3, #4
+ 309 0096 1344     		add	r3, r3, r2
+ 310 0098 1B78     		ldrb	r3, [r3]
+ 311 009a C3F30013 		ubfx	r3, r3, #4, #1
+ 312 009e DBB2     		uxtb	r3, r3
+ 313              		.loc 1 94 6
+ 314 00a0 002B     		cmp	r3, #0
+ 315 00a2 20D0     		beq	.L17
+  95:../osal/os_lyh_core.c **** 			{
+  96:../osal/os_lyh_core.c **** 				overTimeStruct[i].idandf.taskid = INVALID_ID;
+ 316              		.loc 1 96 29
+ 317 00a4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 318              		.loc 1 96 37
+ 319 00a6 1F4A     		ldr	r2, .L22+20
+ 320 00a8 1B01     		lsls	r3, r3, #4
+ 321 00aa 1A44     		add	r2, r2, r3
+ 322 00ac 1378     		ldrb	r3, [r2]
+ 323 00ae 43F00F03 		orr	r3, r3, #15
+ 324 00b2 1370     		strb	r3, [r2]
+  97:../osal/os_lyh_core.c **** 				overTimeStruct[i].idandf.timeover = 0;
+ 325              		.loc 1 97 29
+ 326 00b4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 327              		.loc 1 97 39
+ 328 00b6 1B4A     		ldr	r2, .L22+20
+ 329 00b8 1B01     		lsls	r3, r3, #4
+ 330 00ba 1A44     		add	r2, r2, r3
+ 331 00bc 1378     		ldrb	r3, [r2]
+ 332 00be 6FF30413 		bfc	r3, #4, #1
+ 333 00c2 1370     		strb	r3, [r2]
+  98:../osal/os_lyh_core.c **** 				if(overTimeStruct[i].func != NULL)
+ 334              		.loc 1 98 25
+ 335 00c4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 336 00c6 174A     		ldr	r2, .L22+20
+ 337 00c8 1B01     		lsls	r3, r3, #4
+ 338 00ca 1344     		add	r3, r3, r2
+ 339 00cc 0C33     		adds	r3, r3, #12
+ 340 00ce 1B68     		ldr	r3, [r3]
+ 341              		.loc 1 98 7
+ 342 00d0 002B     		cmp	r3, #0
+ 343 00d2 08D0     		beq	.L17
+  99:../osal/os_lyh_core.c **** 				    overTimeStruct[i].func();
+ 344              		.loc 1 99 26
+ 345 00d4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 346 00d6 134A     		ldr	r2, .L22+20
+ 347 00d8 1B01     		lsls	r3, r3, #4
+ 348 00da 1344     		add	r3, r3, r2
+ 349 00dc 0C33     		adds	r3, r3, #12
+ 350 00de 1B68     		ldr	r3, [r3]
+ 351              		.loc 1 99 9
+ 352 00e0 9847     		blx	r3
+ 353              	.LVL2:
+ 354 00e2 00E0     		b	.L17
+ 355              	.L21:
+  93:../osal/os_lyh_core.c **** 			if(overTimeStruct[i].idandf.timeover)
+ 356              		.loc 1 93 8
+ 357 00e4 00BF     		nop
+ 358              	.L17:
+  90:../osal/os_lyh_core.c **** 		{
+ 359              		.loc 1 90 69 discriminator 2
+ 360 00e6 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 361 00e8 0133     		adds	r3, r3, #1
+ 362 00ea FB71     		strb	r3, [r7, #7]
+ 363              	.L15:
+  90:../osal/os_lyh_core.c **** 		{
+ 364              		.loc 1 90 3 discriminator 1
+ 365 00ec FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 366 00ee 0F2B     		cmp	r3, #15
+ 367 00f0 C1D9     		bls	.L18
+ 100:../osal/os_lyh_core.c **** 			}
+ 101:../osal/os_lyh_core.c **** 		}
+ 102:../osal/os_lyh_core.c **** 		if ( ++thisTask == MAX_TASK_NUMBER ){
+ 368              		.loc 1 102 8
+ 369 00f2 074B     		ldr	r3, .L22
+ 370 00f4 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 371 00f6 0133     		adds	r3, r3, #1
+ 372 00f8 DAB2     		uxtb	r2, r3
+ 373              		.loc 1 102 6
+ 374 00fa 054B     		ldr	r3, .L22
+ 375 00fc 1A70     		strb	r2, [r3]
+ 376              		.loc 1 102 8
+ 377 00fe 044B     		ldr	r3, .L22
+ 378 0100 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 379              		.loc 1 102 6
+ 380 0102 032B     		cmp	r3, #3
+ 381 0104 7FF47FAF 		bne	.L20
+ 103:../osal/os_lyh_core.c **** 			thisTask= 0;
+ 382              		.loc 1 103 12
+ 383 0108 014B     		ldr	r3, .L22
+ 384 010a 0022     		movs	r2, #0
+ 385 010c 1A70     		strb	r2, [r3]
+  78:../osal/os_lyh_core.c **** 		/* Refresh watchdog to prevent reset */
+ 386              		.loc 1 78 3
+ 387 010e 7AE7     		b	.L20
+ 388              	.L23:
+ 389              		.align	2
+ 390              	.L22:
+ 391 0110 00000000 		.word	thisTask
+ 392 0114 00000000 		.word	eventMap
+ 393 0118 00000000 		.word	taskseventArr
+ 394 011c 00000000 		.word	tasksPendMask
+ 395 0120 00000000 		.word	tasksArr
+ 396 0124 00000000 		.word	overTimeStruct
+ 397              		.cfi_endproc
+ 398              	.LFE117:
+ 400              		.section	.text.osal_lyh_core_init,"ax",%progbits
+ 401              		.align	1
+ 402              		.global	osal_lyh_core_init
+ 403              		.syntax unified
+ 404              		.thumb
+ 405              		.thumb_func
+ 406              		.fpu softvfp
+ 408              	osal_lyh_core_init:
+ 409              	.LFB118:
+ 104:../osal/os_lyh_core.c **** 		}
+ 105:../osal/os_lyh_core.c **** 	}
+ 106:../osal/os_lyh_core.c **** }
+ 107:../osal/os_lyh_core.c **** 
+ 108:../osal/os_lyh_core.c **** void osal_lyh_core_init(void){
+ 410              		.loc 1 108 30
+ 411              		.cfi_startproc
+ 412              		@ args = 0, pretend = 0, frame = 8
+ 413              		@ frame_needed = 1, uses_anonymous_args = 0
+ 414 0000 80B5     		push	{r7, lr}
+ 415              		.cfi_def_cfa_offset 8
+ 416              		.cfi_offset 7, -8
+ 417              		.cfi_offset 14, -4
+ 418 0002 82B0     		sub	sp, sp, #8
+ 419              		.cfi_def_cfa_offset 16
+ 420 0004 00AF     		add	r7, sp, #0
+ 421              		.cfi_def_cfa_register 7
+ 109:../osal/os_lyh_core.c **** 	uint8_t i;
+ 110:../osal/os_lyh_core.c **** 
+ 111:../osal/os_lyh_core.c **** 	thisTask = 0;
+ 422              		.loc 1 111 11
+ 423 0006 324B     		ldr	r3, .L31
+ 424 0008 0022     		movs	r2, #0
+ 425 000a 1A70     		strb	r2, [r3]
+ 112:../osal/os_lyh_core.c **** 	tasksPendMask = 0;
+ 426              		.loc 1 112 16
+ 427 000c 314B     		ldr	r3, .L31+4
+ 428 000e 0022     		movs	r2, #0
+ 429 0010 1A80     		strh	r2, [r3]	@ movhi
+ 113:../osal/os_lyh_core.c **** 	PreTicks = systick_get();
+ 430              		.loc 1 113 13
+ 431 0012 FFF7FEFF 		bl	systick_get
+ 432 0016 0346     		mov	r3, r0
+ 433              		.loc 1 113 11
+ 434 0018 2F4A     		ldr	r2, .L31+8
+ 435 001a 1360     		str	r3, [r2]
+ 114:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(taskDelayCounter)/sizeof(taskDelayCounter[0]); i++)
+ 436              		.loc 1 114 8
+ 437 001c 0023     		movs	r3, #0
+ 438 001e FB71     		strb	r3, [r7, #7]
+ 439              		.loc 1 114 2
+ 440 0020 0CE0     		b	.L25
+ 441              	.L26:
+ 115:../osal/os_lyh_core.c **** 	{
+ 116:../osal/os_lyh_core.c **** 		eventMap[i] = 0;
+ 442              		.loc 1 116 11 discriminator 3
+ 443 0022 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 444              		.loc 1 116 15 discriminator 3
+ 445 0024 2D4A     		ldr	r2, .L31+12
+ 446 0026 0021     		movs	r1, #0
+ 447 0028 42F82310 		str	r1, [r2, r3, lsl #2]
+ 117:../osal/os_lyh_core.c **** 		taskDelayCounter[i] = 0;
+ 448              		.loc 1 117 19 discriminator 3
+ 449 002c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 450              		.loc 1 117 23 discriminator 3
+ 451 002e 2C4A     		ldr	r2, .L31+16
+ 452 0030 0021     		movs	r1, #0
+ 453 0032 42F82310 		str	r1, [r2, r3, lsl #2]
+ 114:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(taskDelayCounter)/sizeof(taskDelayCounter[0]); i++)
+ 454              		.loc 1 114 72 discriminator 3
+ 455 0036 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 456 0038 0133     		adds	r3, r3, #1
+ 457 003a FB71     		strb	r3, [r7, #7]
+ 458              	.L25:
+ 114:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(taskDelayCounter)/sizeof(taskDelayCounter[0]); i++)
+ 459              		.loc 1 114 2 discriminator 1
+ 460 003c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 461 003e 022B     		cmp	r3, #2
+ 462 0040 EFD9     		bls	.L26
+ 118:../osal/os_lyh_core.c **** 	}
+ 119:../osal/os_lyh_core.c **** 
+ 120:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++)
+ 463              		.loc 1 120 8
+ 464 0042 0023     		movs	r3, #0
+ 465 0044 FB71     		strb	r3, [r7, #7]
+ 466              		.loc 1 120 2
+ 467 0046 28E0     		b	.L27
+ 468              	.L28:
+ 121:../osal/os_lyh_core.c **** 	{
+ 122:../osal/os_lyh_core.c **** 		overTimeStruct[i].idandf.taskid = INVALID_ID;
+ 469              		.loc 1 122 27 discriminator 3
+ 470 0048 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 471              		.loc 1 122 35 discriminator 3
+ 472 004a 264A     		ldr	r2, .L31+20
+ 473 004c 1B01     		lsls	r3, r3, #4
+ 474 004e 1A44     		add	r2, r2, r3
+ 475 0050 1378     		ldrb	r3, [r2]
+ 476 0052 43F00F03 		orr	r3, r3, #15
+ 477 0056 1370     		strb	r3, [r2]
+ 123:../osal/os_lyh_core.c **** 		overTimeStruct[i].idandf.timeover = 0;
+ 478              		.loc 1 123 27 discriminator 3
+ 479 0058 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 480              		.loc 1 123 37 discriminator 3
+ 481 005a 224A     		ldr	r2, .L31+20
+ 482 005c 1B01     		lsls	r3, r3, #4
+ 483 005e 1A44     		add	r2, r2, r3
+ 484 0060 1378     		ldrb	r3, [r2]
+ 485 0062 6FF30413 		bfc	r3, #4, #1
+ 486 0066 1370     		strb	r3, [r2]
+ 124:../osal/os_lyh_core.c **** 		overTimeStruct[i].event = INVALID_EVENT;
+ 487              		.loc 1 124 20 discriminator 3
+ 488 0068 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 489              		.loc 1 124 27 discriminator 3
+ 490 006a 1E4A     		ldr	r2, .L31+20
+ 491 006c 1B01     		lsls	r3, r3, #4
+ 492 006e 1344     		add	r3, r3, r2
+ 493 0070 0433     		adds	r3, r3, #4
+ 494 0072 4FF0FF32 		mov	r2, #-1
+ 495 0076 1A60     		str	r2, [r3]
+ 125:../osal/os_lyh_core.c **** 		overTimeStruct[i].time  = 0;
+ 496              		.loc 1 125 20 discriminator 3
+ 497 0078 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 498              		.loc 1 125 27 discriminator 3
+ 499 007a 1A4A     		ldr	r2, .L31+20
+ 500 007c 1B01     		lsls	r3, r3, #4
+ 501 007e 1344     		add	r3, r3, r2
+ 502 0080 0833     		adds	r3, r3, #8
+ 503 0082 0022     		movs	r2, #0
+ 504 0084 1A60     		str	r2, [r3]
+ 126:../osal/os_lyh_core.c **** 		overTimeStruct[i].func = NULL;
+ 505              		.loc 1 126 20 discriminator 3
+ 506 0086 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 507              		.loc 1 126 26 discriminator 3
+ 508 0088 164A     		ldr	r2, .L31+20
+ 509 008a 1B01     		lsls	r3, r3, #4
+ 510 008c 1344     		add	r3, r3, r2
+ 511 008e 0C33     		adds	r3, r3, #12
+ 512 0090 0022     		movs	r2, #0
+ 513 0092 1A60     		str	r2, [r3]
+ 120:../osal/os_lyh_core.c **** 	{
+ 514              		.loc 1 120 68 discriminator 3
+ 515 0094 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 516 0096 0133     		adds	r3, r3, #1
+ 517 0098 FB71     		strb	r3, [r7, #7]
+ 518              	.L27:
+ 120:../osal/os_lyh_core.c **** 	{
+ 519              		.loc 1 120 2 discriminator 1
+ 520 009a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 521 009c 0F2B     		cmp	r3, #15
+ 522 009e D3D9     		bls	.L28
+ 127:../osal/os_lyh_core.c **** 	}
+ 128:../osal/os_lyh_core.c **** 	
+ 129:../osal/os_lyh_core.c **** 	for(i = 0; i < MAX_TASK_NUMBER; i++)
+ 523              		.loc 1 129 8
+ 524 00a0 0023     		movs	r3, #0
+ 525 00a2 FB71     		strb	r3, [r7, #7]
+ 526              		.loc 1 129 2
+ 527 00a4 0CE0     		b	.L29
+ 528              	.L30:
+ 130:../osal/os_lyh_core.c **** 	{	
+ 131:../osal/os_lyh_core.c **** 		tasksArr[i] = ((pTask)0);
+ 529              		.loc 1 131 11 discriminator 3
+ 530 00a6 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 531              		.loc 1 131 15 discriminator 3
+ 532 00a8 0F4A     		ldr	r2, .L31+24
+ 533 00aa 0021     		movs	r1, #0
+ 534 00ac 42F82310 		str	r1, [r2, r3, lsl #2]
+ 132:../osal/os_lyh_core.c **** 		taskseventArr[i] = ((pTaskEventHandlerFn)0);
+ 535              		.loc 1 132 16 discriminator 3
+ 536 00b0 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 537              		.loc 1 132 20 discriminator 3
+ 538 00b2 0E4A     		ldr	r2, .L31+28
+ 539 00b4 0021     		movs	r1, #0
+ 540 00b6 42F82310 		str	r1, [r2, r3, lsl #2]
+ 129:../osal/os_lyh_core.c **** 	{	
+ 541              		.loc 1 129 35 discriminator 3
+ 542 00ba FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 543 00bc 0133     		adds	r3, r3, #1
+ 544 00be FB71     		strb	r3, [r7, #7]
+ 545              	.L29:
+ 129:../osal/os_lyh_core.c **** 	{	
+ 546              		.loc 1 129 2 discriminator 1
+ 547 00c0 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 548 00c2 022B     		cmp	r3, #2
+ 549 00c4 EFD9     		bls	.L30
+ 133:../osal/os_lyh_core.c **** 	}
+ 134:../osal/os_lyh_core.c **** }
+ 550              		.loc 1 134 1
+ 551 00c6 00BF     		nop
+ 552 00c8 00BF     		nop
+ 553 00ca 0837     		adds	r7, r7, #8
+ 554              		.cfi_def_cfa_offset 8
+ 555 00cc BD46     		mov	sp, r7
+ 556              		.cfi_def_cfa_register 13
+ 557              		@ sp needed
+ 558 00ce 80BD     		pop	{r7, pc}
+ 559              	.L32:
+ 560              		.align	2
+ 561              	.L31:
+ 562 00d0 00000000 		.word	thisTask
+ 563 00d4 00000000 		.word	tasksPendMask
+ 564 00d8 00000000 		.word	PreTicks
+ 565 00dc 00000000 		.word	eventMap
+ 566 00e0 00000000 		.word	taskDelayCounter
+ 567 00e4 00000000 		.word	overTimeStruct
+ 568 00e8 00000000 		.word	tasksArr
+ 569 00ec 00000000 		.word	taskseventArr
+ 570              		.cfi_endproc
+ 571              	.LFE118:
+ 573              		.section	.text.osal_create_task,"ax",%progbits
+ 574              		.align	1
+ 575              		.global	osal_create_task
+ 576              		.syntax unified
+ 577              		.thumb
+ 578              		.thumb_func
+ 579              		.fpu softvfp
+ 581              	osal_create_task:
+ 582              	.LFB119:
+ 135:../osal/os_lyh_core.c **** 
+ 136:../osal/os_lyh_core.c **** uint8_t osal_create_task(pInitTask init, pTask ta, pTaskEventHandlerFn ev){
+ 583              		.loc 1 136 75
+ 584              		.cfi_startproc
+ 585              		@ args = 0, pretend = 0, frame = 24
+ 586              		@ frame_needed = 1, uses_anonymous_args = 0
+ 587 0000 80B5     		push	{r7, lr}
+ 588              		.cfi_def_cfa_offset 8
+ 589              		.cfi_offset 7, -8
+ 590              		.cfi_offset 14, -4
+ 591 0002 86B0     		sub	sp, sp, #24
+ 592              		.cfi_def_cfa_offset 32
+ 593 0004 00AF     		add	r7, sp, #0
+ 594              		.cfi_def_cfa_register 7
+ 595 0006 F860     		str	r0, [r7, #12]
+ 596 0008 B960     		str	r1, [r7, #8]
+ 597 000a 7A60     		str	r2, [r7, #4]
+ 137:../osal/os_lyh_core.c **** 	uint8_t i = 0;
+ 598              		.loc 1 137 10
+ 599 000c 0023     		movs	r3, #0
+ 600 000e FB75     		strb	r3, [r7, #23]
+ 138:../osal/os_lyh_core.c **** 
+ 139:../osal/os_lyh_core.c **** 	while(i < sizeof(tasksArr)/sizeof(tasksArr[0]))
+ 601              		.loc 1 139 7
+ 602 0010 08E0     		b	.L34
+ 603              	.L37:
+ 140:../osal/os_lyh_core.c **** 	{
+ 141:../osal/os_lyh_core.c **** 		if(tasksArr[i] == NULL)
+ 604              		.loc 1 141 14
+ 605 0012 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 606 0014 184A     		ldr	r2, .L41
+ 607 0016 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 608              		.loc 1 141 5
+ 609 001a 002B     		cmp	r3, #0
+ 610 001c 06D0     		beq	.L40
+ 142:../osal/os_lyh_core.c **** 			break;
+ 143:../osal/os_lyh_core.c **** 		i++;
+ 611              		.loc 1 143 4
+ 612 001e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 613 0020 0133     		adds	r3, r3, #1
+ 614 0022 FB75     		strb	r3, [r7, #23]
+ 615              	.L34:
+ 139:../osal/os_lyh_core.c **** 	{
+ 616              		.loc 1 139 7
+ 617 0024 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 618 0026 022B     		cmp	r3, #2
+ 619 0028 F3D9     		bls	.L37
+ 620 002a 00E0     		b	.L36
+ 621              	.L40:
+ 142:../osal/os_lyh_core.c **** 			break;
+ 622              		.loc 1 142 4
+ 623 002c 00BF     		nop
+ 624              	.L36:
+ 144:../osal/os_lyh_core.c **** 	}
+ 145:../osal/os_lyh_core.c **** 	if(i == sizeof(tasksArr)/sizeof(tasksArr[0]))
+ 625              		.loc 1 145 4
+ 626 002e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 627 0030 032B     		cmp	r3, #3
+ 628 0032 01D1     		bne	.L38
+ 146:../osal/os_lyh_core.c **** 	    return 0;
+ 629              		.loc 1 146 13
+ 630 0034 0023     		movs	r3, #0
+ 631 0036 1BE0     		b	.L39
+ 632              	.L38:
+ 147:../osal/os_lyh_core.c **** 	// load task
+ 148:../osal/os_lyh_core.c **** 	tasksArr[i] = ta;
+ 633              		.loc 1 148 10
+ 634 0038 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 635              		.loc 1 148 14
+ 636 003a 0F49     		ldr	r1, .L41
+ 637 003c BA68     		ldr	r2, [r7, #8]
+ 638 003e 41F82320 		str	r2, [r1, r3, lsl #2]
+ 149:../osal/os_lyh_core.c **** 	// load messge loop.
+ 150:../osal/os_lyh_core.c **** 	taskseventArr[i] = ev;
+ 639              		.loc 1 150 15
+ 640 0042 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 641              		.loc 1 150 19
+ 642 0044 0D49     		ldr	r1, .L41+4
+ 643 0046 7A68     		ldr	r2, [r7, #4]
+ 644 0048 41F82320 		str	r2, [r1, r3, lsl #2]
+ 151:../osal/os_lyh_core.c **** 	// initializing this task.
+ 152:../osal/os_lyh_core.c **** 	init(i);
+ 645              		.loc 1 152 2
+ 646 004c FA7D     		ldrb	r2, [r7, #23]	@ zero_extendqisi2
+ 647 004e FB68     		ldr	r3, [r7, #12]
+ 648 0050 1046     		mov	r0, r2
+ 649 0052 9847     		blx	r3
+ 650              	.LVL3:
+ 153:../osal/os_lyh_core.c **** 	// enable this task.
+ 154:../osal/os_lyh_core.c **** 	tasksPendMask |= 1 << i;
+ 651              		.loc 1 154 21
+ 652 0054 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 653 0056 0122     		movs	r2, #1
+ 654 0058 02FA03F3 		lsl	r3, r2, r3
+ 655              		.loc 1 154 16
+ 656 005c 1AB2     		sxth	r2, r3
+ 657 005e 084B     		ldr	r3, .L41+8
+ 658 0060 1B88     		ldrh	r3, [r3]
+ 659 0062 1BB2     		sxth	r3, r3
+ 660 0064 1343     		orrs	r3, r3, r2
+ 661 0066 1BB2     		sxth	r3, r3
+ 662 0068 9AB2     		uxth	r2, r3
+ 663 006a 054B     		ldr	r3, .L41+8
+ 664 006c 1A80     		strh	r2, [r3]	@ movhi
+ 155:../osal/os_lyh_core.c **** 	return 1;
+ 665              		.loc 1 155 9
+ 666 006e 0123     		movs	r3, #1
+ 667              	.L39:
+ 156:../osal/os_lyh_core.c **** }
+ 668              		.loc 1 156 1
+ 669 0070 1846     		mov	r0, r3
+ 670 0072 1837     		adds	r7, r7, #24
+ 671              		.cfi_def_cfa_offset 8
+ 672 0074 BD46     		mov	sp, r7
+ 673              		.cfi_def_cfa_register 13
+ 674              		@ sp needed
+ 675 0076 80BD     		pop	{r7, pc}
+ 676              	.L42:
+ 677              		.align	2
+ 678              	.L41:
+ 679 0078 00000000 		.word	tasksArr
+ 680 007c 00000000 		.word	taskseventArr
+ 681 0080 00000000 		.word	tasksPendMask
+ 682              		.cfi_endproc
+ 683              	.LFE119:
+ 685              		.section	.text.osal_lyh_suspend_task,"ax",%progbits
+ 686              		.align	1
+ 687              		.global	osal_lyh_suspend_task
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 691              		.fpu softvfp
+ 693              	osal_lyh_suspend_task:
+ 694              	.LFB120:
+ 157:../osal/os_lyh_core.c **** 
+ 158:../osal/os_lyh_core.c **** void osal_lyh_suspend_task(uint8_t task){
+ 695              		.loc 1 158 41
+ 696              		.cfi_startproc
+ 697              		@ args = 0, pretend = 0, frame = 8
+ 698              		@ frame_needed = 1, uses_anonymous_args = 0
+ 699              		@ link register save eliminated.
+ 700 0000 80B4     		push	{r7}
+ 701              		.cfi_def_cfa_offset 4
+ 702              		.cfi_offset 7, -4
+ 703 0002 83B0     		sub	sp, sp, #12
+ 704              		.cfi_def_cfa_offset 16
+ 705 0004 00AF     		add	r7, sp, #0
+ 706              		.cfi_def_cfa_register 7
+ 707 0006 0346     		mov	r3, r0
+ 708 0008 FB71     		strb	r3, [r7, #7]
+ 159:../osal/os_lyh_core.c **** 	
+ 160:../osal/os_lyh_core.c **** 	tasksPendMask &= ~(1 << task);  
+ 709              		.loc 1 160 23
+ 710 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 711 000c 0122     		movs	r2, #1
+ 712 000e 02FA03F3 		lsl	r3, r2, r3
+ 713              		.loc 1 160 16
+ 714 0012 1BB2     		sxth	r3, r3
+ 715 0014 DB43     		mvns	r3, r3
+ 716 0016 1AB2     		sxth	r2, r3
+ 717 0018 064B     		ldr	r3, .L44
+ 718 001a 1B88     		ldrh	r3, [r3]
+ 719 001c 1BB2     		sxth	r3, r3
+ 720 001e 1340     		ands	r3, r3, r2
+ 721 0020 1BB2     		sxth	r3, r3
+ 722 0022 9AB2     		uxth	r2, r3
+ 723 0024 034B     		ldr	r3, .L44
+ 724 0026 1A80     		strh	r2, [r3]	@ movhi
+ 161:../osal/os_lyh_core.c **** }
+ 725              		.loc 1 161 1
+ 726 0028 00BF     		nop
+ 727 002a 0C37     		adds	r7, r7, #12
+ 728              		.cfi_def_cfa_offset 4
+ 729 002c BD46     		mov	sp, r7
+ 730              		.cfi_def_cfa_register 13
+ 731              		@ sp needed
+ 732 002e 80BC     		pop	{r7}
+ 733              		.cfi_restore 7
+ 734              		.cfi_def_cfa_offset 0
+ 735 0030 7047     		bx	lr
+ 736              	.L45:
+ 737 0032 00BF     		.align	2
+ 738              	.L44:
+ 739 0034 00000000 		.word	tasksPendMask
+ 740              		.cfi_endproc
+ 741              	.LFE120:
+ 743              		.section	.text.osal_lyh_restore_task,"ax",%progbits
+ 744              		.align	1
+ 745              		.global	osal_lyh_restore_task
+ 746              		.syntax unified
+ 747              		.thumb
+ 748              		.thumb_func
+ 749              		.fpu softvfp
+ 751              	osal_lyh_restore_task:
+ 752              	.LFB121:
+ 162:../osal/os_lyh_core.c **** 
+ 163:../osal/os_lyh_core.c **** void osal_lyh_restore_task(uint8_t task){
+ 753              		.loc 1 163 41
+ 754              		.cfi_startproc
+ 755              		@ args = 0, pretend = 0, frame = 8
+ 756              		@ frame_needed = 1, uses_anonymous_args = 0
+ 757              		@ link register save eliminated.
+ 758 0000 80B4     		push	{r7}
+ 759              		.cfi_def_cfa_offset 4
+ 760              		.cfi_offset 7, -4
+ 761 0002 83B0     		sub	sp, sp, #12
+ 762              		.cfi_def_cfa_offset 16
+ 763 0004 00AF     		add	r7, sp, #0
+ 764              		.cfi_def_cfa_register 7
+ 765 0006 0346     		mov	r3, r0
+ 766 0008 FB71     		strb	r3, [r7, #7]
+ 164:../osal/os_lyh_core.c **** 	
+ 165:../osal/os_lyh_core.c **** 	tasksPendMask |= (1 << task);  
+ 767              		.loc 1 165 22
+ 768 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 769 000c 0122     		movs	r2, #1
+ 770 000e 02FA03F3 		lsl	r3, r2, r3
+ 771              		.loc 1 165 16
+ 772 0012 1AB2     		sxth	r2, r3
+ 773 0014 064B     		ldr	r3, .L47
+ 774 0016 1B88     		ldrh	r3, [r3]
+ 775 0018 1BB2     		sxth	r3, r3
+ 776 001a 1343     		orrs	r3, r3, r2
+ 777 001c 1BB2     		sxth	r3, r3
+ 778 001e 9AB2     		uxth	r2, r3
+ 779 0020 034B     		ldr	r3, .L47
+ 780 0022 1A80     		strh	r2, [r3]	@ movhi
+ 166:../osal/os_lyh_core.c **** }
+ 781              		.loc 1 166 1
+ 782 0024 00BF     		nop
+ 783 0026 0C37     		adds	r7, r7, #12
+ 784              		.cfi_def_cfa_offset 4
+ 785 0028 BD46     		mov	sp, r7
+ 786              		.cfi_def_cfa_register 13
+ 787              		@ sp needed
+ 788 002a 80BC     		pop	{r7}
+ 789              		.cfi_restore 7
+ 790              		.cfi_def_cfa_offset 0
+ 791 002c 7047     		bx	lr
+ 792              	.L48:
+ 793 002e 00BF     		.align	2
+ 794              	.L47:
+ 795 0030 00000000 		.word	tasksPendMask
+ 796              		.cfi_endproc
+ 797              	.LFE121:
+ 799              		.section	.text.osal_lyh_delay_task,"ax",%progbits
+ 800              		.align	1
+ 801              		.global	osal_lyh_delay_task
+ 802              		.syntax unified
+ 803              		.thumb
+ 804              		.thumb_func
+ 805              		.fpu softvfp
+ 807              	osal_lyh_delay_task:
+ 808              	.LFB122:
+ 167:../osal/os_lyh_core.c **** 
+ 168:../osal/os_lyh_core.c **** void osal_lyh_delay_task(uint32_t t){
+ 809              		.loc 1 168 37
+ 810              		.cfi_startproc
+ 811              		@ args = 0, pretend = 0, frame = 8
+ 812              		@ frame_needed = 1, uses_anonymous_args = 0
+ 813              		@ link register save eliminated.
+ 814 0000 80B4     		push	{r7}
+ 815              		.cfi_def_cfa_offset 4
+ 816              		.cfi_offset 7, -4
+ 817 0002 83B0     		sub	sp, sp, #12
+ 818              		.cfi_def_cfa_offset 16
+ 819 0004 00AF     		add	r7, sp, #0
+ 820              		.cfi_def_cfa_register 7
+ 821 0006 7860     		str	r0, [r7, #4]
+ 169:../osal/os_lyh_core.c **** 	
+ 170:../osal/os_lyh_core.c **** 	if(t == 0)
+ 822              		.loc 1 170 4
+ 823 0008 7B68     		ldr	r3, [r7, #4]
+ 824 000a 002B     		cmp	r3, #0
+ 825 000c 17D0     		beq	.L52
+ 171:../osal/os_lyh_core.c **** 	    return;
+ 172:../osal/os_lyh_core.c **** 	
+ 173:../osal/os_lyh_core.c **** 	tasksPendMask &= ~(1 << thisTask);
+ 826              		.loc 1 173 23
+ 827 000e 0E4B     		ldr	r3, .L53
+ 828 0010 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 829 0012 1A46     		mov	r2, r3
+ 830 0014 0123     		movs	r3, #1
+ 831 0016 9340     		lsls	r3, r3, r2
+ 832              		.loc 1 173 16
+ 833 0018 1BB2     		sxth	r3, r3
+ 834 001a DB43     		mvns	r3, r3
+ 835 001c 1AB2     		sxth	r2, r3
+ 836 001e 0B4B     		ldr	r3, .L53+4
+ 837 0020 1B88     		ldrh	r3, [r3]
+ 838 0022 1BB2     		sxth	r3, r3
+ 839 0024 1340     		ands	r3, r3, r2
+ 840 0026 1BB2     		sxth	r3, r3
+ 841 0028 9AB2     		uxth	r2, r3
+ 842 002a 084B     		ldr	r3, .L53+4
+ 843 002c 1A80     		strh	r2, [r3]	@ movhi
+ 174:../osal/os_lyh_core.c **** 	taskDelayCounter[thisTask] = t;
+ 844              		.loc 1 174 18
+ 845 002e 064B     		ldr	r3, .L53
+ 846 0030 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 847 0032 1946     		mov	r1, r3
+ 848              		.loc 1 174 29
+ 849 0034 064A     		ldr	r2, .L53+8
+ 850 0036 7B68     		ldr	r3, [r7, #4]
+ 851 0038 42F82130 		str	r3, [r2, r1, lsl #2]
+ 852 003c 00E0     		b	.L49
+ 853              	.L52:
+ 171:../osal/os_lyh_core.c **** 	    return;
+ 854              		.loc 1 171 6
+ 855 003e 00BF     		nop
+ 856              	.L49:
+ 175:../osal/os_lyh_core.c **** }
+ 857              		.loc 1 175 1
+ 858 0040 0C37     		adds	r7, r7, #12
+ 859              		.cfi_def_cfa_offset 4
+ 860 0042 BD46     		mov	sp, r7
+ 861              		.cfi_def_cfa_register 13
+ 862              		@ sp needed
+ 863 0044 80BC     		pop	{r7}
+ 864              		.cfi_restore 7
+ 865              		.cfi_def_cfa_offset 0
+ 866 0046 7047     		bx	lr
+ 867              	.L54:
+ 868              		.align	2
+ 869              	.L53:
+ 870 0048 00000000 		.word	thisTask
+ 871 004c 00000000 		.word	tasksPendMask
+ 872 0050 00000000 		.word	taskDelayCounter
+ 873              		.cfi_endproc
+ 874              	.LFE122:
+ 876              		.section	.text.osal_lyh_delay_over_timer,"ax",%progbits
+ 877              		.align	1
+ 878              		.global	osal_lyh_delay_over_timer
+ 879              		.syntax unified
+ 880              		.thumb
+ 881              		.thumb_func
+ 882              		.fpu softvfp
+ 884              	osal_lyh_delay_over_timer:
+ 885              	.LFB123:
+ 176:../osal/os_lyh_core.c **** 
+ 177:../osal/os_lyh_core.c **** void osal_lyh_delay_over_timer(uint32_t event, uint32_t t, toOverTimeFunction func){
+ 886              		.loc 1 177 84
+ 887              		.cfi_startproc
+ 888              		@ args = 0, pretend = 0, frame = 24
+ 889              		@ frame_needed = 1, uses_anonymous_args = 0
+ 890              		@ link register save eliminated.
+ 891 0000 80B4     		push	{r7}
+ 892              		.cfi_def_cfa_offset 4
+ 893              		.cfi_offset 7, -4
+ 894 0002 87B0     		sub	sp, sp, #28
+ 895              		.cfi_def_cfa_offset 32
+ 896 0004 00AF     		add	r7, sp, #0
+ 897              		.cfi_def_cfa_register 7
+ 898 0006 F860     		str	r0, [r7, #12]
+ 899 0008 B960     		str	r1, [r7, #8]
+ 900 000a 7A60     		str	r2, [r7, #4]
+ 178:../osal/os_lyh_core.c **** 	
+ 179:../osal/os_lyh_core.c **** 	uint8_t i;
+ 180:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 901              		.loc 1 180 8
+ 902 000c 0023     		movs	r3, #0
+ 903 000e FB75     		strb	r3, [r7, #23]
+ 904              		.loc 1 180 2
+ 905 0010 46E0     		b	.L56
+ 906              	.L59:
+ 181:../osal/os_lyh_core.c **** 		
+ 182:../osal/os_lyh_core.c **** 		if(overTimeStruct[i].event == event){
+ 907              		.loc 1 182 23
+ 908 0012 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 909 0014 4C4A     		ldr	r2, .L63
+ 910 0016 1B01     		lsls	r3, r3, #4
+ 911 0018 1344     		add	r3, r3, r2
+ 912 001a 0433     		adds	r3, r3, #4
+ 913 001c 1B68     		ldr	r3, [r3]
+ 914              		.loc 1 182 5
+ 915 001e FA68     		ldr	r2, [r7, #12]
+ 916 0020 9A42     		cmp	r2, r3
+ 917 0022 3AD1     		bne	.L57
+ 183:../osal/os_lyh_core.c **** 			
+ 184:../osal/os_lyh_core.c **** 			tasksPendMask &= ~(1 << thisTask);
+ 918              		.loc 1 184 25
+ 919 0024 494B     		ldr	r3, .L63+4
+ 920 0026 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 921 0028 1A46     		mov	r2, r3
+ 922 002a 0123     		movs	r3, #1
+ 923 002c 9340     		lsls	r3, r3, r2
+ 924              		.loc 1 184 18
+ 925 002e 1BB2     		sxth	r3, r3
+ 926 0030 DB43     		mvns	r3, r3
+ 927 0032 1AB2     		sxth	r2, r3
+ 928 0034 464B     		ldr	r3, .L63+8
+ 929 0036 1B88     		ldrh	r3, [r3]
+ 930 0038 1BB2     		sxth	r3, r3
+ 931 003a 1340     		ands	r3, r3, r2
+ 932 003c 1BB2     		sxth	r3, r3
+ 933 003e 9AB2     		uxth	r2, r3
+ 934 0040 434B     		ldr	r3, .L63+8
+ 935 0042 1A80     		strh	r2, [r3]	@ movhi
+ 185:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.taskid = thisTask;
+ 936              		.loc 1 185 36
+ 937 0044 414B     		ldr	r3, .L63+4
+ 938 0046 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 939              		.loc 1 185 28
+ 940 0048 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 941              		.loc 1 185 36
+ 942 004a 02F00F02 		and	r2, r2, #15
+ 943 004e D1B2     		uxtb	r1, r2
+ 944 0050 3D4A     		ldr	r2, .L63
+ 945 0052 1B01     		lsls	r3, r3, #4
+ 946 0054 1A44     		add	r2, r2, r3
+ 947 0056 1378     		ldrb	r3, [r2]
+ 948 0058 61F30303 		bfi	r3, r1, #0, #4
+ 949 005c 1370     		strb	r3, [r2]
+ 186:../osal/os_lyh_core.c **** 			overTimeStruct[i].func = func;
+ 950              		.loc 1 186 21
+ 951 005e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 952              		.loc 1 186 27
+ 953 0060 394A     		ldr	r2, .L63
+ 954 0062 1B01     		lsls	r3, r3, #4
+ 955 0064 1344     		add	r3, r3, r2
+ 956 0066 0C33     		adds	r3, r3, #12
+ 957 0068 7A68     		ldr	r2, [r7, #4]
+ 958 006a 1A60     		str	r2, [r3]
+ 187:../osal/os_lyh_core.c **** 			overTimeStruct[i].event = event;
+ 959              		.loc 1 187 21
+ 960 006c FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 961              		.loc 1 187 28
+ 962 006e 364A     		ldr	r2, .L63
+ 963 0070 1B01     		lsls	r3, r3, #4
+ 964 0072 1344     		add	r3, r3, r2
+ 965 0074 0433     		adds	r3, r3, #4
+ 966 0076 FA68     		ldr	r2, [r7, #12]
+ 967 0078 1A60     		str	r2, [r3]
+ 188:../osal/os_lyh_core.c **** 			overTimeStruct[i].time = t;
+ 968              		.loc 1 188 21
+ 969 007a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 970              		.loc 1 188 27
+ 971 007c 324A     		ldr	r2, .L63
+ 972 007e 1B01     		lsls	r3, r3, #4
+ 973 0080 1344     		add	r3, r3, r2
+ 974 0082 0833     		adds	r3, r3, #8
+ 975 0084 BA68     		ldr	r2, [r7, #8]
+ 976 0086 1A60     		str	r2, [r3]
+ 189:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.timeover = 0;
+ 977              		.loc 1 189 28
+ 978 0088 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 979              		.loc 1 189 38
+ 980 008a 2F4A     		ldr	r2, .L63
+ 981 008c 1B01     		lsls	r3, r3, #4
+ 982 008e 1A44     		add	r2, r2, r3
+ 983 0090 1378     		ldrb	r3, [r2]
+ 984 0092 6FF30413 		bfc	r3, #4, #1
+ 985 0096 1370     		strb	r3, [r2]
+ 190:../osal/os_lyh_core.c **** 			return;
+ 986              		.loc 1 190 4
+ 987 0098 52E0     		b	.L55
+ 988              	.L57:
+ 180:../osal/os_lyh_core.c **** 		
+ 989              		.loc 1 180 68 discriminator 2
+ 990 009a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 991 009c 0133     		adds	r3, r3, #1
+ 992 009e FB75     		strb	r3, [r7, #23]
+ 993              	.L56:
+ 180:../osal/os_lyh_core.c **** 		
+ 994              		.loc 1 180 2 discriminator 1
+ 995 00a0 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 996 00a2 0F2B     		cmp	r3, #15
+ 997 00a4 B5D9     		bls	.L59
+ 191:../osal/os_lyh_core.c **** 		}
+ 192:../osal/os_lyh_core.c **** 	}
+ 193:../osal/os_lyh_core.c **** 	
+ 194:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 998              		.loc 1 194 8
+ 999 00a6 0023     		movs	r3, #0
+ 1000 00a8 FB75     		strb	r3, [r7, #23]
+ 1001              		.loc 1 194 2
+ 1002 00aa 46E0     		b	.L60
+ 1003              	.L62:
+ 195:../osal/os_lyh_core.c **** 		
+ 196:../osal/os_lyh_core.c **** 		if(overTimeStruct[i].event == INVALID_EVENT){
+ 1004              		.loc 1 196 23
+ 1005 00ac FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1006 00ae 264A     		ldr	r2, .L63
+ 1007 00b0 1B01     		lsls	r3, r3, #4
+ 1008 00b2 1344     		add	r3, r3, r2
+ 1009 00b4 0433     		adds	r3, r3, #4
+ 1010 00b6 1B68     		ldr	r3, [r3]
+ 1011              		.loc 1 196 5
+ 1012 00b8 B3F1FF3F 		cmp	r3, #-1
+ 1013 00bc 3AD1     		bne	.L61
+ 197:../osal/os_lyh_core.c **** 			
+ 198:../osal/os_lyh_core.c **** 			tasksPendMask &= ~(1 << thisTask);
+ 1014              		.loc 1 198 25
+ 1015 00be 234B     		ldr	r3, .L63+4
+ 1016 00c0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1017 00c2 1A46     		mov	r2, r3
+ 1018 00c4 0123     		movs	r3, #1
+ 1019 00c6 9340     		lsls	r3, r3, r2
+ 1020              		.loc 1 198 18
+ 1021 00c8 1BB2     		sxth	r3, r3
+ 1022 00ca DB43     		mvns	r3, r3
+ 1023 00cc 1AB2     		sxth	r2, r3
+ 1024 00ce 204B     		ldr	r3, .L63+8
+ 1025 00d0 1B88     		ldrh	r3, [r3]
+ 1026 00d2 1BB2     		sxth	r3, r3
+ 1027 00d4 1340     		ands	r3, r3, r2
+ 1028 00d6 1BB2     		sxth	r3, r3
+ 1029 00d8 9AB2     		uxth	r2, r3
+ 1030 00da 1D4B     		ldr	r3, .L63+8
+ 1031 00dc 1A80     		strh	r2, [r3]	@ movhi
+ 199:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.taskid = thisTask;
+ 1032              		.loc 1 199 36
+ 1033 00de 1B4B     		ldr	r3, .L63+4
+ 1034 00e0 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1035              		.loc 1 199 28
+ 1036 00e2 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1037              		.loc 1 199 36
+ 1038 00e4 02F00F02 		and	r2, r2, #15
+ 1039 00e8 D1B2     		uxtb	r1, r2
+ 1040 00ea 174A     		ldr	r2, .L63
+ 1041 00ec 1B01     		lsls	r3, r3, #4
+ 1042 00ee 1A44     		add	r2, r2, r3
+ 1043 00f0 1378     		ldrb	r3, [r2]
+ 1044 00f2 61F30303 		bfi	r3, r1, #0, #4
+ 1045 00f6 1370     		strb	r3, [r2]
+ 200:../osal/os_lyh_core.c **** 			overTimeStruct[i].func = func;
+ 1046              		.loc 1 200 21
+ 1047 00f8 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1048              		.loc 1 200 27
+ 1049 00fa 134A     		ldr	r2, .L63
+ 1050 00fc 1B01     		lsls	r3, r3, #4
+ 1051 00fe 1344     		add	r3, r3, r2
+ 1052 0100 0C33     		adds	r3, r3, #12
+ 1053 0102 7A68     		ldr	r2, [r7, #4]
+ 1054 0104 1A60     		str	r2, [r3]
+ 201:../osal/os_lyh_core.c **** 			overTimeStruct[i].event = event;
+ 1055              		.loc 1 201 21
+ 1056 0106 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1057              		.loc 1 201 28
+ 1058 0108 0F4A     		ldr	r2, .L63
+ 1059 010a 1B01     		lsls	r3, r3, #4
+ 1060 010c 1344     		add	r3, r3, r2
+ 1061 010e 0433     		adds	r3, r3, #4
+ 1062 0110 FA68     		ldr	r2, [r7, #12]
+ 1063 0112 1A60     		str	r2, [r3]
+ 202:../osal/os_lyh_core.c **** 			overTimeStruct[i].time = t;
+ 1064              		.loc 1 202 21
+ 1065 0114 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1066              		.loc 1 202 27
+ 1067 0116 0C4A     		ldr	r2, .L63
+ 1068 0118 1B01     		lsls	r3, r3, #4
+ 1069 011a 1344     		add	r3, r3, r2
+ 1070 011c 0833     		adds	r3, r3, #8
+ 1071 011e BA68     		ldr	r2, [r7, #8]
+ 1072 0120 1A60     		str	r2, [r3]
+ 203:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.timeover = 0;
+ 1073              		.loc 1 203 28
+ 1074 0122 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1075              		.loc 1 203 38
+ 1076 0124 084A     		ldr	r2, .L63
+ 1077 0126 1B01     		lsls	r3, r3, #4
+ 1078 0128 1A44     		add	r2, r2, r3
+ 1079 012a 1378     		ldrb	r3, [r2]
+ 1080 012c 6FF30413 		bfc	r3, #4, #1
+ 1081 0130 1370     		strb	r3, [r2]
+ 204:../osal/os_lyh_core.c **** 			return;
+ 1082              		.loc 1 204 4
+ 1083 0132 05E0     		b	.L55
+ 1084              	.L61:
+ 194:../osal/os_lyh_core.c **** 		
+ 1085              		.loc 1 194 68 discriminator 2
+ 1086 0134 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1087 0136 0133     		adds	r3, r3, #1
+ 1088 0138 FB75     		strb	r3, [r7, #23]
+ 1089              	.L60:
+ 194:../osal/os_lyh_core.c **** 		
+ 1090              		.loc 1 194 2 discriminator 1
+ 1091 013a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1092 013c 0F2B     		cmp	r3, #15
+ 1093 013e B5D9     		bls	.L62
+ 1094              	.L55:
+ 205:../osal/os_lyh_core.c **** 		}
+ 206:../osal/os_lyh_core.c **** 	}
+ 207:../osal/os_lyh_core.c **** }
+ 1095              		.loc 1 207 1
+ 1096 0140 1C37     		adds	r7, r7, #28
+ 1097              		.cfi_def_cfa_offset 4
+ 1098 0142 BD46     		mov	sp, r7
+ 1099              		.cfi_def_cfa_register 13
+ 1100              		@ sp needed
+ 1101 0144 80BC     		pop	{r7}
+ 1102              		.cfi_restore 7
+ 1103              		.cfi_def_cfa_offset 0
+ 1104 0146 7047     		bx	lr
+ 1105              	.L64:
+ 1106              		.align	2
+ 1107              	.L63:
+ 1108 0148 00000000 		.word	overTimeStruct
+ 1109 014c 00000000 		.word	thisTask
+ 1110 0150 00000000 		.word	tasksPendMask
+ 1111              		.cfi_endproc
+ 1112              	.LFE123:
+ 1114              		.section	.text.osal_lyh_over_timer,"ax",%progbits
+ 1115              		.align	1
+ 1116              		.global	osal_lyh_over_timer
+ 1117              		.syntax unified
+ 1118              		.thumb
+ 1119              		.thumb_func
+ 1120              		.fpu softvfp
+ 1122              	osal_lyh_over_timer:
+ 1123              	.LFB124:
+ 208:../osal/os_lyh_core.c **** 
+ 209:../osal/os_lyh_core.c **** void osal_lyh_over_timer(uint32_t event, uint32_t t, toOverTimeFunction func){
+ 1124              		.loc 1 209 78
+ 1125              		.cfi_startproc
+ 1126              		@ args = 0, pretend = 0, frame = 24
+ 1127              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1128              		@ link register save eliminated.
+ 1129 0000 80B4     		push	{r7}
+ 1130              		.cfi_def_cfa_offset 4
+ 1131              		.cfi_offset 7, -4
+ 1132 0002 87B0     		sub	sp, sp, #28
+ 1133              		.cfi_def_cfa_offset 32
+ 1134 0004 00AF     		add	r7, sp, #0
+ 1135              		.cfi_def_cfa_register 7
+ 1136 0006 F860     		str	r0, [r7, #12]
+ 1137 0008 B960     		str	r1, [r7, #8]
+ 1138 000a 7A60     		str	r2, [r7, #4]
+ 210:../osal/os_lyh_core.c **** 	
+ 211:../osal/os_lyh_core.c **** 	uint8_t i;
+ 212:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 1139              		.loc 1 212 8
+ 1140 000c 0023     		movs	r3, #0
+ 1141 000e FB75     		strb	r3, [r7, #23]
+ 1142              		.loc 1 212 2
+ 1143 0010 36E0     		b	.L66
+ 1144              	.L69:
+ 213:../osal/os_lyh_core.c **** 		
+ 214:../osal/os_lyh_core.c **** 		if(overTimeStruct[i].event == event){
+ 1145              		.loc 1 214 23
+ 1146 0012 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1147 0014 3C4A     		ldr	r2, .L73
+ 1148 0016 1B01     		lsls	r3, r3, #4
+ 1149 0018 1344     		add	r3, r3, r2
+ 1150 001a 0433     		adds	r3, r3, #4
+ 1151 001c 1B68     		ldr	r3, [r3]
+ 1152              		.loc 1 214 5
+ 1153 001e FA68     		ldr	r2, [r7, #12]
+ 1154 0020 9A42     		cmp	r2, r3
+ 1155 0022 2AD1     		bne	.L67
+ 215:../osal/os_lyh_core.c **** 			
+ 216:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.taskid = thisTask;
+ 1156              		.loc 1 216 36
+ 1157 0024 394B     		ldr	r3, .L73+4
+ 1158 0026 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1159              		.loc 1 216 28
+ 1160 0028 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1161              		.loc 1 216 36
+ 1162 002a 02F00F02 		and	r2, r2, #15
+ 1163 002e D1B2     		uxtb	r1, r2
+ 1164 0030 354A     		ldr	r2, .L73
+ 1165 0032 1B01     		lsls	r3, r3, #4
+ 1166 0034 1A44     		add	r2, r2, r3
+ 1167 0036 1378     		ldrb	r3, [r2]
+ 1168 0038 61F30303 		bfi	r3, r1, #0, #4
+ 1169 003c 1370     		strb	r3, [r2]
+ 217:../osal/os_lyh_core.c **** 			overTimeStruct[i].func = func;
+ 1170              		.loc 1 217 21
+ 1171 003e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1172              		.loc 1 217 27
+ 1173 0040 314A     		ldr	r2, .L73
+ 1174 0042 1B01     		lsls	r3, r3, #4
+ 1175 0044 1344     		add	r3, r3, r2
+ 1176 0046 0C33     		adds	r3, r3, #12
+ 1177 0048 7A68     		ldr	r2, [r7, #4]
+ 1178 004a 1A60     		str	r2, [r3]
+ 218:../osal/os_lyh_core.c **** 			overTimeStruct[i].event = event;
+ 1179              		.loc 1 218 21
+ 1180 004c FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1181              		.loc 1 218 28
+ 1182 004e 2E4A     		ldr	r2, .L73
+ 1183 0050 1B01     		lsls	r3, r3, #4
+ 1184 0052 1344     		add	r3, r3, r2
+ 1185 0054 0433     		adds	r3, r3, #4
+ 1186 0056 FA68     		ldr	r2, [r7, #12]
+ 1187 0058 1A60     		str	r2, [r3]
+ 219:../osal/os_lyh_core.c **** 			overTimeStruct[i].time = t;
+ 1188              		.loc 1 219 21
+ 1189 005a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1190              		.loc 1 219 27
+ 1191 005c 2A4A     		ldr	r2, .L73
+ 1192 005e 1B01     		lsls	r3, r3, #4
+ 1193 0060 1344     		add	r3, r3, r2
+ 1194 0062 0833     		adds	r3, r3, #8
+ 1195 0064 BA68     		ldr	r2, [r7, #8]
+ 1196 0066 1A60     		str	r2, [r3]
+ 220:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.timeover = 0;
+ 1197              		.loc 1 220 28
+ 1198 0068 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1199              		.loc 1 220 38
+ 1200 006a 274A     		ldr	r2, .L73
+ 1201 006c 1B01     		lsls	r3, r3, #4
+ 1202 006e 1A44     		add	r2, r2, r3
+ 1203 0070 1378     		ldrb	r3, [r2]
+ 1204 0072 6FF30413 		bfc	r3, #4, #1
+ 1205 0076 1370     		strb	r3, [r2]
+ 221:../osal/os_lyh_core.c **** 			return;
+ 1206              		.loc 1 221 4
+ 1207 0078 42E0     		b	.L65
+ 1208              	.L67:
+ 212:../osal/os_lyh_core.c **** 		
+ 1209              		.loc 1 212 68 discriminator 2
+ 1210 007a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1211 007c 0133     		adds	r3, r3, #1
+ 1212 007e FB75     		strb	r3, [r7, #23]
+ 1213              	.L66:
+ 212:../osal/os_lyh_core.c **** 		
+ 1214              		.loc 1 212 2 discriminator 1
+ 1215 0080 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1216 0082 0F2B     		cmp	r3, #15
+ 1217 0084 C5D9     		bls	.L69
+ 222:../osal/os_lyh_core.c **** 		}
+ 223:../osal/os_lyh_core.c **** 	}
+ 224:../osal/os_lyh_core.c **** 	
+ 225:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 1218              		.loc 1 225 8
+ 1219 0086 0023     		movs	r3, #0
+ 1220 0088 FB75     		strb	r3, [r7, #23]
+ 1221              		.loc 1 225 2
+ 1222 008a 36E0     		b	.L70
+ 1223              	.L72:
+ 226:../osal/os_lyh_core.c **** 		
+ 227:../osal/os_lyh_core.c **** 		if(overTimeStruct[i].event == INVALID_EVENT){
+ 1224              		.loc 1 227 23
+ 1225 008c FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1226 008e 1E4A     		ldr	r2, .L73
+ 1227 0090 1B01     		lsls	r3, r3, #4
+ 1228 0092 1344     		add	r3, r3, r2
+ 1229 0094 0433     		adds	r3, r3, #4
+ 1230 0096 1B68     		ldr	r3, [r3]
+ 1231              		.loc 1 227 5
+ 1232 0098 B3F1FF3F 		cmp	r3, #-1
+ 1233 009c 2AD1     		bne	.L71
+ 228:../osal/os_lyh_core.c **** 			
+ 229:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.taskid = thisTask;
+ 1234              		.loc 1 229 36
+ 1235 009e 1B4B     		ldr	r3, .L73+4
+ 1236 00a0 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 1237              		.loc 1 229 28
+ 1238 00a2 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1239              		.loc 1 229 36
+ 1240 00a4 02F00F02 		and	r2, r2, #15
+ 1241 00a8 D1B2     		uxtb	r1, r2
+ 1242 00aa 174A     		ldr	r2, .L73
+ 1243 00ac 1B01     		lsls	r3, r3, #4
+ 1244 00ae 1A44     		add	r2, r2, r3
+ 1245 00b0 1378     		ldrb	r3, [r2]
+ 1246 00b2 61F30303 		bfi	r3, r1, #0, #4
+ 1247 00b6 1370     		strb	r3, [r2]
+ 230:../osal/os_lyh_core.c **** 			overTimeStruct[i].func = func;
+ 1248              		.loc 1 230 21
+ 1249 00b8 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1250              		.loc 1 230 27
+ 1251 00ba 134A     		ldr	r2, .L73
+ 1252 00bc 1B01     		lsls	r3, r3, #4
+ 1253 00be 1344     		add	r3, r3, r2
+ 1254 00c0 0C33     		adds	r3, r3, #12
+ 1255 00c2 7A68     		ldr	r2, [r7, #4]
+ 1256 00c4 1A60     		str	r2, [r3]
+ 231:../osal/os_lyh_core.c **** 			overTimeStruct[i].event = event;
+ 1257              		.loc 1 231 21
+ 1258 00c6 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1259              		.loc 1 231 28
+ 1260 00c8 0F4A     		ldr	r2, .L73
+ 1261 00ca 1B01     		lsls	r3, r3, #4
+ 1262 00cc 1344     		add	r3, r3, r2
+ 1263 00ce 0433     		adds	r3, r3, #4
+ 1264 00d0 FA68     		ldr	r2, [r7, #12]
+ 1265 00d2 1A60     		str	r2, [r3]
+ 232:../osal/os_lyh_core.c **** 			overTimeStruct[i].time = t;
+ 1266              		.loc 1 232 21
+ 1267 00d4 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1268              		.loc 1 232 27
+ 1269 00d6 0C4A     		ldr	r2, .L73
+ 1270 00d8 1B01     		lsls	r3, r3, #4
+ 1271 00da 1344     		add	r3, r3, r2
+ 1272 00dc 0833     		adds	r3, r3, #8
+ 1273 00de BA68     		ldr	r2, [r7, #8]
+ 1274 00e0 1A60     		str	r2, [r3]
+ 233:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.timeover = 0;
+ 1275              		.loc 1 233 28
+ 1276 00e2 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1277              		.loc 1 233 38
+ 1278 00e4 084A     		ldr	r2, .L73
+ 1279 00e6 1B01     		lsls	r3, r3, #4
+ 1280 00e8 1A44     		add	r2, r2, r3
+ 1281 00ea 1378     		ldrb	r3, [r2]
+ 1282 00ec 6FF30413 		bfc	r3, #4, #1
+ 1283 00f0 1370     		strb	r3, [r2]
+ 234:../osal/os_lyh_core.c **** 			return;
+ 1284              		.loc 1 234 4
+ 1285 00f2 05E0     		b	.L65
+ 1286              	.L71:
+ 225:../osal/os_lyh_core.c **** 		
+ 1287              		.loc 1 225 68 discriminator 2
+ 1288 00f4 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1289 00f6 0133     		adds	r3, r3, #1
+ 1290 00f8 FB75     		strb	r3, [r7, #23]
+ 1291              	.L70:
+ 225:../osal/os_lyh_core.c **** 		
+ 1292              		.loc 1 225 2 discriminator 1
+ 1293 00fa FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 1294 00fc 0F2B     		cmp	r3, #15
+ 1295 00fe C5D9     		bls	.L72
+ 1296              	.L65:
+ 235:../osal/os_lyh_core.c **** 		}
+ 236:../osal/os_lyh_core.c **** 	}
+ 237:../osal/os_lyh_core.c **** }
+ 1297              		.loc 1 237 1
+ 1298 0100 1C37     		adds	r7, r7, #28
+ 1299              		.cfi_def_cfa_offset 4
+ 1300 0102 BD46     		mov	sp, r7
+ 1301              		.cfi_def_cfa_register 13
+ 1302              		@ sp needed
+ 1303 0104 80BC     		pop	{r7}
+ 1304              		.cfi_restore 7
+ 1305              		.cfi_def_cfa_offset 0
+ 1306 0106 7047     		bx	lr
+ 1307              	.L74:
+ 1308              		.align	2
+ 1309              	.L73:
+ 1310 0108 00000000 		.word	overTimeStruct
+ 1311 010c 00000000 		.word	thisTask
+ 1312              		.cfi_endproc
+ 1313              	.LFE124:
+ 1315              		.section	.text.osal_lyh_kill_over_timer,"ax",%progbits
+ 1316              		.align	1
+ 1317              		.global	osal_lyh_kill_over_timer
+ 1318              		.syntax unified
+ 1319              		.thumb
+ 1320              		.thumb_func
+ 1321              		.fpu softvfp
+ 1323              	osal_lyh_kill_over_timer:
+ 1324              	.LFB125:
+ 238:../osal/os_lyh_core.c **** 
+ 239:../osal/os_lyh_core.c **** void osal_lyh_kill_over_timer(uint32_t event){
+ 1325              		.loc 1 239 46
+ 1326              		.cfi_startproc
+ 1327              		@ args = 0, pretend = 0, frame = 16
+ 1328              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1329              		@ link register save eliminated.
+ 1330 0000 80B4     		push	{r7}
+ 1331              		.cfi_def_cfa_offset 4
+ 1332              		.cfi_offset 7, -4
+ 1333 0002 85B0     		sub	sp, sp, #20
+ 1334              		.cfi_def_cfa_offset 24
+ 1335 0004 00AF     		add	r7, sp, #0
+ 1336              		.cfi_def_cfa_register 7
+ 1337 0006 7860     		str	r0, [r7, #4]
+ 240:../osal/os_lyh_core.c **** 	
+ 241:../osal/os_lyh_core.c **** 	uint8_t i;
+ 242:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(overTimeStruct)/sizeof(overTimeStruct[0]); i++){
+ 1338              		.loc 1 242 8
+ 1339 0008 0023     		movs	r3, #0
+ 1340 000a FB73     		strb	r3, [r7, #15]
+ 1341              		.loc 1 242 2
+ 1342 000c 32E0     		b	.L76
+ 1343              	.L79:
+ 243:../osal/os_lyh_core.c **** 		
+ 244:../osal/os_lyh_core.c **** 		if(overTimeStruct[i].event == event){
+ 1344              		.loc 1 244 23
+ 1345 000e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1346 0010 1C4A     		ldr	r2, .L80
+ 1347 0012 1B01     		lsls	r3, r3, #4
+ 1348 0014 1344     		add	r3, r3, r2
+ 1349 0016 0433     		adds	r3, r3, #4
+ 1350 0018 1B68     		ldr	r3, [r3]
+ 1351              		.loc 1 244 5
+ 1352 001a 7A68     		ldr	r2, [r7, #4]
+ 1353 001c 9A42     		cmp	r2, r3
+ 1354 001e 26D1     		bne	.L77
+ 245:../osal/os_lyh_core.c **** 			
+ 246:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.taskid = INVALID_ID;
+ 1355              		.loc 1 246 28
+ 1356 0020 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1357              		.loc 1 246 36
+ 1358 0022 184A     		ldr	r2, .L80
+ 1359 0024 1B01     		lsls	r3, r3, #4
+ 1360 0026 1A44     		add	r2, r2, r3
+ 1361 0028 1378     		ldrb	r3, [r2]
+ 1362 002a 43F00F03 		orr	r3, r3, #15
+ 1363 002e 1370     		strb	r3, [r2]
+ 247:../osal/os_lyh_core.c **** 			overTimeStruct[i].func = 0;
+ 1364              		.loc 1 247 21
+ 1365 0030 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1366              		.loc 1 247 27
+ 1367 0032 144A     		ldr	r2, .L80
+ 1368 0034 1B01     		lsls	r3, r3, #4
+ 1369 0036 1344     		add	r3, r3, r2
+ 1370 0038 0C33     		adds	r3, r3, #12
+ 1371 003a 0022     		movs	r2, #0
+ 1372 003c 1A60     		str	r2, [r3]
+ 248:../osal/os_lyh_core.c **** 			overTimeStruct[i].event = INVALID_EVENT;			
+ 1373              		.loc 1 248 21
+ 1374 003e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1375              		.loc 1 248 28
+ 1376 0040 104A     		ldr	r2, .L80
+ 1377 0042 1B01     		lsls	r3, r3, #4
+ 1378 0044 1344     		add	r3, r3, r2
+ 1379 0046 0433     		adds	r3, r3, #4
+ 1380 0048 4FF0FF32 		mov	r2, #-1
+ 1381 004c 1A60     		str	r2, [r3]
+ 249:../osal/os_lyh_core.c **** 			overTimeStruct[i].time = 0;
+ 1382              		.loc 1 249 21
+ 1383 004e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1384              		.loc 1 249 27
+ 1385 0050 0C4A     		ldr	r2, .L80
+ 1386 0052 1B01     		lsls	r3, r3, #4
+ 1387 0054 1344     		add	r3, r3, r2
+ 1388 0056 0833     		adds	r3, r3, #8
+ 1389 0058 0022     		movs	r2, #0
+ 1390 005a 1A60     		str	r2, [r3]
+ 250:../osal/os_lyh_core.c **** 			overTimeStruct[i].idandf.timeover = 0;
+ 1391              		.loc 1 250 28
+ 1392 005c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1393              		.loc 1 250 38
+ 1394 005e 094A     		ldr	r2, .L80
+ 1395 0060 1B01     		lsls	r3, r3, #4
+ 1396 0062 1A44     		add	r2, r2, r3
+ 1397 0064 1378     		ldrb	r3, [r2]
+ 1398 0066 6FF30413 		bfc	r3, #4, #1
+ 1399 006a 1370     		strb	r3, [r2]
+ 251:../osal/os_lyh_core.c **** 			return;
+ 1400              		.loc 1 251 4
+ 1401 006c 05E0     		b	.L75
+ 1402              	.L77:
+ 242:../osal/os_lyh_core.c **** 		
+ 1403              		.loc 1 242 68 discriminator 2
+ 1404 006e FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1405 0070 0133     		adds	r3, r3, #1
+ 1406 0072 FB73     		strb	r3, [r7, #15]
+ 1407              	.L76:
+ 242:../osal/os_lyh_core.c **** 		
+ 1408              		.loc 1 242 2 discriminator 1
+ 1409 0074 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 1410 0076 0F2B     		cmp	r3, #15
+ 1411 0078 C9D9     		bls	.L79
+ 1412              	.L75:
+ 252:../osal/os_lyh_core.c **** 		}
+ 253:../osal/os_lyh_core.c **** 	}
+ 254:../osal/os_lyh_core.c **** }
+ 1413              		.loc 1 254 1
+ 1414 007a 1437     		adds	r7, r7, #20
+ 1415              		.cfi_def_cfa_offset 4
+ 1416 007c BD46     		mov	sp, r7
+ 1417              		.cfi_def_cfa_register 13
+ 1418              		@ sp needed
+ 1419 007e 80BC     		pop	{r7}
+ 1420              		.cfi_restore 7
+ 1421              		.cfi_def_cfa_offset 0
+ 1422 0080 7047     		bx	lr
+ 1423              	.L81:
+ 1424 0082 00BF     		.align	2
+ 1425              	.L80:
+ 1426 0084 00000000 		.word	overTimeStruct
+ 1427              		.cfi_endproc
+ 1428              	.LFE125:
+ 1430              		.section	.text.osal_lyh_get_event,"ax",%progbits
+ 1431              		.align	1
+ 1432              		.global	osal_lyh_get_event
+ 1433              		.syntax unified
+ 1434              		.thumb
+ 1435              		.thumb_func
+ 1436              		.fpu softvfp
+ 1438              	osal_lyh_get_event:
+ 1439              	.LFB126:
+ 255:../osal/os_lyh_core.c **** 
+ 256:../osal/os_lyh_core.c **** uint8_t  osal_lyh_get_event(void){
+ 1440              		.loc 1 256 34
+ 1441              		.cfi_startproc
+ 1442              		@ args = 0, pretend = 0, frame = 0
+ 1443              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1444              		@ link register save eliminated.
+ 1445 0000 80B4     		push	{r7}
+ 1446              		.cfi_def_cfa_offset 4
+ 1447              		.cfi_offset 7, -4
+ 1448 0002 00AF     		add	r7, sp, #0
+ 1449              		.cfi_def_cfa_register 7
+ 257:../osal/os_lyh_core.c **** 	
+ 258:../osal/os_lyh_core.c **** 	return eventMap[thisTask];
+ 1450              		.loc 1 258 17
+ 1451 0004 054B     		ldr	r3, .L84
+ 1452 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1453 0008 1A46     		mov	r2, r3
+ 1454 000a 054B     		ldr	r3, .L84+4
+ 1455 000c 53F82230 		ldr	r3, [r3, r2, lsl #2]
+ 1456 0010 DBB2     		uxtb	r3, r3
+ 259:../osal/os_lyh_core.c **** }
+ 1457              		.loc 1 259 1
+ 1458 0012 1846     		mov	r0, r3
+ 1459 0014 BD46     		mov	sp, r7
+ 1460              		.cfi_def_cfa_register 13
+ 1461              		@ sp needed
+ 1462 0016 80BC     		pop	{r7}
+ 1463              		.cfi_restore 7
+ 1464              		.cfi_def_cfa_offset 0
+ 1465 0018 7047     		bx	lr
+ 1466              	.L85:
+ 1467 001a 00BF     		.align	2
+ 1468              	.L84:
+ 1469 001c 00000000 		.word	thisTask
+ 1470 0020 00000000 		.word	eventMap
+ 1471              		.cfi_endproc
+ 1472              	.LFE126:
+ 1474              		.text
+ 1475              	.Letext0:
+ 1476              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1477              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1478              		.file 4 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1479              		.file 5 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1480              		.file 6 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1481              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1482              		.file 8 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1483              		.file 9 "../Firmware/CMSIS/core_cm4.h"
+ 1484              		.file 10 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 1485              		.file 11 "../osal/os_lyh_core.h"
+ 1486              		.file 12 "../inc/Systick.h"
+ 1487              		.file 13 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 os_lyh_core.c
+                            *COM*:00000001 thisTask
+                            *COM*:00000002 thisPt
+                            *COM*:00000002 tasksPendMask
+                            *COM*:00000004 PreTicks
+                            *COM*:0000000c tasksArr
+                            *COM*:0000000c eventMap
+                            *COM*:0000000c taskDelayCounter
+                            *COM*:0000000c taskseventArr
+                            *COM*:00000100 overTimeStruct
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:25     .text.osal_SysTicks:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:33     .text.osal_SysTicks:00000000 osal_SysTicks
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:194    .text.osal_SysTicks:000000e0 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:202    .text.osal_start_system:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:209    .text.osal_start_system:00000000 osal_start_system
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:391    .text.osal_start_system:00000110 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:401    .text.osal_lyh_core_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:408    .text.osal_lyh_core_init:00000000 osal_lyh_core_init
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:562    .text.osal_lyh_core_init:000000d0 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:574    .text.osal_create_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:581    .text.osal_create_task:00000000 osal_create_task
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:679    .text.osal_create_task:00000078 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:686    .text.osal_lyh_suspend_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:693    .text.osal_lyh_suspend_task:00000000 osal_lyh_suspend_task
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:739    .text.osal_lyh_suspend_task:00000034 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:744    .text.osal_lyh_restore_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:751    .text.osal_lyh_restore_task:00000000 osal_lyh_restore_task
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:795    .text.osal_lyh_restore_task:00000030 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:800    .text.osal_lyh_delay_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:807    .text.osal_lyh_delay_task:00000000 osal_lyh_delay_task
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:870    .text.osal_lyh_delay_task:00000048 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:877    .text.osal_lyh_delay_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:884    .text.osal_lyh_delay_over_timer:00000000 osal_lyh_delay_over_timer
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1108   .text.osal_lyh_delay_over_timer:00000148 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1115   .text.osal_lyh_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1122   .text.osal_lyh_over_timer:00000000 osal_lyh_over_timer
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1310   .text.osal_lyh_over_timer:00000108 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1316   .text.osal_lyh_kill_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1323   .text.osal_lyh_kill_over_timer:00000000 osal_lyh_kill_over_timer
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1426   .text.osal_lyh_kill_over_timer:00000084 $d
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1431   .text.osal_lyh_get_event:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1438   .text.osal_lyh_get_event:00000000 osal_lyh_get_event
+C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1469   .text.osal_lyh_get_event:0000001c $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
+                           .group:00000000 wm4.features.h.22.fad1cec3bc7ff06488171438dbdcfd02
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.181.13772e73e5434e8cc4fafaaddad2b5da
+                           .group:00000000 wm4.stddef.h.39.cf3ebec0bc8c9e3d2f276a64e0fe5e7a
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
+                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.Systick.h.36.4d6972f44cce074db9bfcd285bdc289e
+
+UNDEFINED SYMBOLS
+systick_get
+fwdgt_counter_reload

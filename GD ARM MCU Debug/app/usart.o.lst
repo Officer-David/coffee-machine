@@ -1,0 +1,1669 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usart.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	com2rx_buffer,64,4
+  16              		.comm	com2rx_frame,64,4
+  17              		.comm	com2rx_w_counter,2,2
+  18              		.comm	com2rx_r_counter,2,2
+  19              		.comm	com2rx_counter,2,2
+  20              		.comm	com1tx_buffer,16,4
+  21              		.comm	com1rx_buffer,16,4
+  22              		.comm	com1rx_frame,16,4
+  23              		.comm	com1rx_counter,2,2
+  24              		.section	.text.gd_uart_counter_init,"ax",%progbits
+  25              		.align	1
+  26              		.global	gd_uart_counter_init
+  27              		.arch armv7e-m
+  28              		.syntax unified
+  29              		.thumb
+  30              		.thumb_func
+  31              		.fpu softvfp
+  33              	gd_uart_counter_init:
+  34              	.LFB116:
+  35              		.file 1 "../app/usart.c"
+   1:../app/usart.c **** /* USER CODE BEGIN Header */
+   2:../app/usart.c **** /**
+   3:../app/usart.c ****   ******************************************************************************
+   4:../app/usart.c ****   * @file    usart.c
+   5:../app/usart.c ****   * @brief   This file provides code for the configuration
+   6:../app/usart.c ****   *          of all used GPIO pins.
+   7:../app/usart.c ****   ******************************************************************************
+   8:../app/usart.c ****   * @attention
+   9:../app/usart.c ****   *
+  10:../app/usart.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  11:../app/usart.c ****   * in the root directory of this software component.
+  12:../app/usart.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  13:../app/usart.c ****   *
+  14:../app/usart.c ****   ******************************************************************************
+  15:../app/usart.c ****   */
+  16:../app/usart.c **** /* USER CODE END Header */
+  17:../app/usart.c **** 
+  18:../app/usart.c **** /* Includes ------------------------------------------------------------------*/
+  19:../app/usart.c **** #define _USART_C_
+  20:../app/usart.c **** #include "gd32f30x.h"
+  21:../app/usart.c **** #include "os_lyh_core.h"
+  22:../app/usart.c **** #include "configboard.h"
+  23:../app/usart.c **** #include "keyboard.h"
+  24:../app/usart.c **** #include "display.h"
+  25:../app/usart.c **** #include "usart.h"
+  26:../app/usart.c **** 
+  27:../app/usart.c **** #define ARRAYNUM(arr_name)     (uint32_t)(sizeof(arr_name)/sizeof(*(arr_name)))
+  28:../app/usart.c **** #define USART0_DATA_ADDRESS(x)    ((uint32_t)(x + 0x00000004U)/*0x40013804*/)
+  29:../app/usart.c **** 
+  30:../app/usart.c **** #define HEAD_ID			0xFFAA
+  31:../app/usart.c **** 
+  32:../app/usart.c **** /* USER CODE BEGIN 0 */
+  33:../app/usart.c **** uint8_t com1tx_buffer[COM1_MAX_SIZE];
+  34:../app/usart.c **** uint8_t com1rx_buffer[COM1_MAX_SIZE];
+  35:../app/usart.c **** uint8_t com1rx_frame[COM1_MAX_SIZE];
+  36:../app/usart.c **** uint16_t com1rx_counter;
+  37:../app/usart.c **** 
+  38:../app/usart.c **** /* USER CODE END 0 */
+  39:../app/usart.c **** 
+  40:../app/usart.c **** /*----------------------------------------------------------------------------*/
+  41:../app/usart.c **** /* Configure display                                                            */
+  42:../app/usart.c **** /*----------------------------------------------------------------------------*/
+  43:../app/usart.c **** void gd_uart_counter_init(void)
+  44:../app/usart.c **** {
+  36              		.loc 1 44 1
+  37              		.cfi_startproc
+  38              		@ args = 0, pretend = 0, frame = 0
+  39              		@ frame_needed = 1, uses_anonymous_args = 0
+  40              		@ link register save eliminated.
+  41 0000 80B4     		push	{r7}
+  42              		.cfi_def_cfa_offset 4
+  43              		.cfi_offset 7, -4
+  44 0002 00AF     		add	r7, sp, #0
+  45              		.cfi_def_cfa_register 7
+  45:../app/usart.c ****     com1rx_counter = ARRAYNUM(com1rx_buffer);
+  46              		.loc 1 45 20
+  47 0004 074B     		ldr	r3, .L2
+  48 0006 1022     		movs	r2, #16
+  49 0008 1A80     		strh	r2, [r3]	@ movhi
+  46:../app/usart.c ****     com2rx_counter = 0x0000;
+  50              		.loc 1 46 20
+  51 000a 074B     		ldr	r3, .L2+4
+  52 000c 0022     		movs	r2, #0
+  53 000e 1A80     		strh	r2, [r3]	@ movhi
+  47:../app/usart.c ****     com2rx_w_counter = 0x0000;
+  54              		.loc 1 47 22
+  55 0010 064B     		ldr	r3, .L2+8
+  56 0012 0022     		movs	r2, #0
+  57 0014 1A80     		strh	r2, [r3]	@ movhi
+  48:../app/usart.c ****     com2rx_r_counter = 0x0000;	
+  58              		.loc 1 48 22
+  59 0016 064B     		ldr	r3, .L2+12
+  60 0018 0022     		movs	r2, #0
+  61 001a 1A80     		strh	r2, [r3]	@ movhi
+  49:../app/usart.c **** }
+  62              		.loc 1 49 1
+  63 001c 00BF     		nop
+  64 001e BD46     		mov	sp, r7
+  65              		.cfi_def_cfa_register 13
+  66              		@ sp needed
+  67 0020 80BC     		pop	{r7}
+  68              		.cfi_restore 7
+  69              		.cfi_def_cfa_offset 0
+  70 0022 7047     		bx	lr
+  71              	.L3:
+  72              		.align	2
+  73              	.L2:
+  74 0024 00000000 		.word	com1rx_counter
+  75 0028 00000000 		.word	com2rx_counter
+  76 002c 00000000 		.word	com2rx_w_counter
+  77 0030 00000000 		.word	com2rx_r_counter
+  78              		.cfi_endproc
+  79              	.LFE116:
+  81              		.section	.rodata
+  82              		.align	2
+  83              	.LC0:
+  84 0000 0E06     		.short	1550
+  85 0002 1107     		.short	1809
+  86              		.align	2
+  87              	.LC1:
+  88 0004 0206     		.short	1538
+  89 0006 0206     		.short	1538
+  90              		.align	2
+  91              	.LC2:
+  92 0008 00080140 		.word	1073809408
+  93 000c 00080140 		.word	1073809408
+  94              		.align	2
+  95              	.LC3:
+  96 0010 00020000 		.word	512
+  97 0014 04000000 		.word	4
+  98              		.align	2
+  99              	.LC4:
+ 100 0018 00040000 		.word	1024
+ 101 001c 08000000 		.word	8
+ 102              		.section	.text.gd_uart_com_init,"ax",%progbits
+ 103              		.align	1
+ 104              		.global	gd_uart_com_init
+ 105              		.syntax unified
+ 106              		.thumb
+ 107              		.thumb_func
+ 108              		.fpu softvfp
+ 110              	gd_uart_com_init:
+ 111              	.LFB117:
+  50:../app/usart.c **** 
+  51:../app/usart.c **** /* USER CODE BEGIN 1 */
+  52:../app/usart.c **** /*!
+  53:../app/usart.c ****     \brief      configure COM port
+  54:../app/usart.c ****     \param[in]  com: COM on the board
+  55:../app/usart.c ****       \arg        COM1: COM1 on the board
+  56:../app/usart.c ****       \arg        COM2: COM2 on the board
+  57:../app/usart.c ****     \param[out] none
+  58:../app/usart.c ****     \retval     none
+  59:../app/usart.c **** */
+  60:../app/usart.c **** void gd_uart_com_init(uint32_t com)
+  61:../app/usart.c **** {
+ 112              		.loc 1 61 1
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 48
+ 115              		@ frame_needed = 1, uses_anonymous_args = 0
+ 116 0000 80B5     		push	{r7, lr}
+ 117              		.cfi_def_cfa_offset 8
+ 118              		.cfi_offset 7, -8
+ 119              		.cfi_offset 14, -4
+ 120 0002 8CB0     		sub	sp, sp, #48
+ 121              		.cfi_def_cfa_offset 56
+ 122 0004 00AF     		add	r7, sp, #0
+ 123              		.cfi_def_cfa_register 7
+ 124 0006 7860     		str	r0, [r7, #4]
+  62:../app/usart.c ****     rcu_periph_enum COM_CLK[COMn] = {COM1_CLK, COM2_CLK};
+ 125              		.loc 1 62 21
+ 126 0008 3C4B     		ldr	r3, .L7
+ 127 000a 1B68     		ldr	r3, [r3]
+ 128 000c BB62     		str	r3, [r7, #40]
+  63:../app/usart.c ****     rcu_periph_enum COM_GPIO_CLK[COMn] = {COM1_GPIO_CLK, COM2_GPIO_CLK};
+ 129              		.loc 1 63 21
+ 130 000e 3C4B     		ldr	r3, .L7+4
+ 131 0010 1B68     		ldr	r3, [r3]
+ 132 0012 7B62     		str	r3, [r7, #36]
+  64:../app/usart.c ****     uint32_t COM_GPIO_PORT[COMn] = {COM1_GPIO_PORT, COM2_GPIO_PORT};
+ 133              		.loc 1 64 14
+ 134 0014 3B4A     		ldr	r2, .L7+8
+ 135 0016 07F11C03 		add	r3, r7, #28
+ 136 001a 92E80300 		ldm	r2, {r0, r1}
+ 137 001e 83E80300 		stm	r3, {r0, r1}
+  65:../app/usart.c ****     uint32_t COM_TX_PIN[COMn] = {COM1_TX_PIN, COM2_TX_PIN};
+ 138              		.loc 1 65 14
+ 139 0022 394A     		ldr	r2, .L7+12
+ 140 0024 07F11403 		add	r3, r7, #20
+ 141 0028 92E80300 		ldm	r2, {r0, r1}
+ 142 002c 83E80300 		stm	r3, {r0, r1}
+  66:../app/usart.c ****     uint32_t COM_RX_PIN[COMn] = {COM1_RX_PIN, COM2_RX_PIN};
+ 143              		.loc 1 66 14
+ 144 0030 364A     		ldr	r2, .L7+16
+ 145 0032 07F10C03 		add	r3, r7, #12
+ 146 0036 92E80300 		ldm	r2, {r0, r1}
+ 147 003a 83E80300 		stm	r3, {r0, r1}
+  67:../app/usart.c ****     uint32_t com_id = 0U;
+ 148              		.loc 1 67 14
+ 149 003e 0023     		movs	r3, #0
+ 150 0040 FB62     		str	r3, [r7, #44]
+  68:../app/usart.c ****     if(COM1 == com){
+ 151              		.loc 1 68 7
+ 152 0042 7B68     		ldr	r3, [r7, #4]
+ 153 0044 324A     		ldr	r2, .L7+20
+ 154 0046 9342     		cmp	r3, r2
+ 155 0048 02D1     		bne	.L5
+  69:../app/usart.c ****         com_id = 0U;
+ 156              		.loc 1 69 16
+ 157 004a 0023     		movs	r3, #0
+ 158 004c FB62     		str	r3, [r7, #44]
+ 159 004e 05E0     		b	.L6
+ 160              	.L5:
+  70:../app/usart.c ****     }else if(COM2 == com){
+ 161              		.loc 1 70 13
+ 162 0050 7B68     		ldr	r3, [r7, #4]
+ 163 0052 304A     		ldr	r2, .L7+24
+ 164 0054 9342     		cmp	r3, r2
+ 165 0056 01D1     		bne	.L6
+  71:../app/usart.c ****         com_id = 1U;
+ 166              		.loc 1 71 16
+ 167 0058 0123     		movs	r3, #1
+ 168 005a FB62     		str	r3, [r7, #44]
+ 169              	.L6:
+  72:../app/usart.c ****     }
+  73:../app/usart.c ****     
+  74:../app/usart.c ****     /* enable GPIO clock */
+  75:../app/usart.c ****     rcu_periph_clock_enable(COM_GPIO_CLK[com_id]);
+ 170              		.loc 1 75 5
+ 171 005c FB6A     		ldr	r3, [r7, #44]
+ 172 005e 5B00     		lsls	r3, r3, #1
+ 173 0060 07F13002 		add	r2, r7, #48
+ 174 0064 1344     		add	r3, r3, r2
+ 175 0066 33F80C3C 		ldrh	r3, [r3, #-12]
+ 176 006a 1846     		mov	r0, r3
+ 177 006c FFF7FEFF 		bl	rcu_periph_clock_enable
+  76:../app/usart.c **** 
+  77:../app/usart.c ****     /* enable USART clock */
+  78:../app/usart.c ****     rcu_periph_clock_enable(COM_CLK[com_id]);
+ 178              		.loc 1 78 5
+ 179 0070 FB6A     		ldr	r3, [r7, #44]
+ 180 0072 5B00     		lsls	r3, r3, #1
+ 181 0074 07F13002 		add	r2, r7, #48
+ 182 0078 1344     		add	r3, r3, r2
+ 183 007a 33F8083C 		ldrh	r3, [r3, #-8]
+ 184 007e 1846     		mov	r0, r3
+ 185 0080 FFF7FEFF 		bl	rcu_periph_clock_enable
+  79:../app/usart.c **** 
+  80:../app/usart.c ****     /* connect port to USARTx_Tx */
+  81:../app/usart.c ****     gpio_init(COM_GPIO_PORT[com_id], GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, COM_TX_PIN[com_id]);
+ 186              		.loc 1 81 5
+ 187 0084 FB6A     		ldr	r3, [r7, #44]
+ 188 0086 9B00     		lsls	r3, r3, #2
+ 189 0088 07F13002 		add	r2, r7, #48
+ 190 008c 1344     		add	r3, r3, r2
+ 191 008e 53F8140C 		ldr	r0, [r3, #-20]
+ 192 0092 FB6A     		ldr	r3, [r7, #44]
+ 193 0094 9B00     		lsls	r3, r3, #2
+ 194 0096 07F13002 		add	r2, r7, #48
+ 195 009a 1344     		add	r3, r3, r2
+ 196 009c 53F81C3C 		ldr	r3, [r3, #-28]
+ 197 00a0 0322     		movs	r2, #3
+ 198 00a2 1821     		movs	r1, #24
+ 199 00a4 FFF7FEFF 		bl	gpio_init
+  82:../app/usart.c **** 
+  83:../app/usart.c ****     /* connect port to USARTx_Rx */
+  84:../app/usart.c ****     gpio_init(COM_GPIO_PORT[com_id], GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, COM_RX_PIN[com_id]);
+ 200              		.loc 1 84 5
+ 201 00a8 FB6A     		ldr	r3, [r7, #44]
+ 202 00aa 9B00     		lsls	r3, r3, #2
+ 203 00ac 07F13002 		add	r2, r7, #48
+ 204 00b0 1344     		add	r3, r3, r2
+ 205 00b2 53F8140C 		ldr	r0, [r3, #-20]
+ 206 00b6 FB6A     		ldr	r3, [r7, #44]
+ 207 00b8 9B00     		lsls	r3, r3, #2
+ 208 00ba 07F13002 		add	r2, r7, #48
+ 209 00be 1344     		add	r3, r3, r2
+ 210 00c0 53F8243C 		ldr	r3, [r3, #-36]
+ 211 00c4 0322     		movs	r2, #3
+ 212 00c6 0421     		movs	r1, #4
+ 213 00c8 FFF7FEFF 		bl	gpio_init
+  85:../app/usart.c **** 
+  86:../app/usart.c ****     /* USART configure */
+  87:../app/usart.c ****     usart_deinit(com);
+ 214              		.loc 1 87 5
+ 215 00cc 7868     		ldr	r0, [r7, #4]
+ 216 00ce FFF7FEFF 		bl	usart_deinit
+  88:../app/usart.c ****     usart_baudrate_set(com, 115200U);
+ 217              		.loc 1 88 5
+ 218 00d2 4FF4E131 		mov	r1, #115200
+ 219 00d6 7868     		ldr	r0, [r7, #4]
+ 220 00d8 FFF7FEFF 		bl	usart_baudrate_set
+  89:../app/usart.c ****     usart_receive_config(com, USART_RECEIVE_ENABLE);
+ 221              		.loc 1 89 5
+ 222 00dc 0421     		movs	r1, #4
+ 223 00de 7868     		ldr	r0, [r7, #4]
+ 224 00e0 FFF7FEFF 		bl	usart_receive_config
+  90:../app/usart.c ****     usart_transmit_config(com, USART_TRANSMIT_ENABLE);
+ 225              		.loc 1 90 5
+ 226 00e4 0821     		movs	r1, #8
+ 227 00e6 7868     		ldr	r0, [r7, #4]
+ 228 00e8 FFF7FEFF 		bl	usart_transmit_config
+  91:../app/usart.c ****     usart_enable(com);
+ 229              		.loc 1 91 5
+ 230 00ec 7868     		ldr	r0, [r7, #4]
+ 231 00ee FFF7FEFF 		bl	usart_enable
+  92:../app/usart.c **** }
+ 232              		.loc 1 92 1
+ 233 00f2 00BF     		nop
+ 234 00f4 3037     		adds	r7, r7, #48
+ 235              		.cfi_def_cfa_offset 8
+ 236 00f6 BD46     		mov	sp, r7
+ 237              		.cfi_def_cfa_register 13
+ 238              		@ sp needed
+ 239 00f8 80BD     		pop	{r7, pc}
+ 240              	.L8:
+ 241 00fa 00BF     		.align	2
+ 242              	.L7:
+ 243 00fc 00000000 		.word	.LC0
+ 244 0100 04000000 		.word	.LC1
+ 245 0104 08000000 		.word	.LC2
+ 246 0108 10000000 		.word	.LC3
+ 247 010c 18000000 		.word	.LC4
+ 248 0110 00380140 		.word	1073821696
+ 249 0114 00440040 		.word	1073759232
+ 250              		.cfi_endproc
+ 251              	.LFE117:
+ 253              		.section	.text.gd_usart0_dma_config,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	gd_usart0_dma_config
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 259              		.fpu softvfp
+ 261              	gd_usart0_dma_config:
+ 262              	.LFB118:
+  93:../app/usart.c **** 
+  94:../app/usart.c **** /*!
+  95:../app/usart.c ****     \brief      configure USART DMA
+  96:../app/usart.c ****     \param[in]  none
+  97:../app/usart.c ****     \param[out] none
+  98:../app/usart.c ****     \retval     none
+  99:../app/usart.c **** */
+ 100:../app/usart.c **** void gd_usart0_dma_config(void)
+ 101:../app/usart.c **** {
+ 263              		.loc 1 101 1
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 32
+ 266              		@ frame_needed = 1, uses_anonymous_args = 0
+ 267 0000 80B5     		push	{r7, lr}
+ 268              		.cfi_def_cfa_offset 8
+ 269              		.cfi_offset 7, -8
+ 270              		.cfi_offset 14, -4
+ 271 0002 88B0     		sub	sp, sp, #32
+ 272              		.cfi_def_cfa_offset 40
+ 273 0004 00AF     		add	r7, sp, #0
+ 274              		.cfi_def_cfa_register 7
+ 102:../app/usart.c ****     dma_parameter_struct dma_init_struct;
+ 103:../app/usart.c ****     /* enable DMA0 */
+ 104:../app/usart.c ****     rcu_periph_clock_enable(RCU_DMA0);
+ 275              		.loc 1 104 5
+ 276 0006 4FF4A060 		mov	r0, #1280
+ 277 000a FFF7FEFF 		bl	rcu_periph_clock_enable
+ 105:../app/usart.c ****     /* deinitialize DMA channel3(USART0 tx) */
+ 106:../app/usart.c ****     dma_deinit(DMA0, DMA_CH3);
+ 278              		.loc 1 106 5
+ 279 000e 0321     		movs	r1, #3
+ 280 0010 2748     		ldr	r0, .L10
+ 281 0012 FFF7FEFF 		bl	dma_deinit
+ 107:../app/usart.c ****     dma_init_struct.direction = DMA_MEMORY_TO_PERIPHERAL;
+ 282              		.loc 1 107 31
+ 283 0016 0123     		movs	r3, #1
+ 284 0018 BB77     		strb	r3, [r7, #30]
+ 108:../app/usart.c ****     dma_init_struct.memory_addr = (uint32_t)com1tx_buffer;
+ 285              		.loc 1 108 35
+ 286 001a 264B     		ldr	r3, .L10+4
+ 287              		.loc 1 108 33
+ 288 001c FB60     		str	r3, [r7, #12]
+ 109:../app/usart.c ****     dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+ 289              		.loc 1 109 32
+ 290 001e 0123     		movs	r3, #1
+ 291 0020 7B77     		strb	r3, [r7, #29]
+ 110:../app/usart.c ****     dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+ 292              		.loc 1 110 34
+ 293 0022 0023     		movs	r3, #0
+ 294 0024 3B61     		str	r3, [r7, #16]
+ 111:../app/usart.c ****     dma_init_struct.number =  0x00U;
+ 295              		.loc 1 111 28
+ 296 0026 0023     		movs	r3, #0
+ 297 0028 7B61     		str	r3, [r7, #20]
+ 112:../app/usart.c ****     dma_init_struct.periph_addr = USART0_DATA_ADDRESS(USART0);
+ 298              		.loc 1 112 33
+ 299 002a 234B     		ldr	r3, .L10+8
+ 300 002c 7B60     		str	r3, [r7, #4]
+ 113:../app/usart.c ****     dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+ 301              		.loc 1 113 32
+ 302 002e 0023     		movs	r3, #0
+ 303 0030 3B77     		strb	r3, [r7, #28]
+ 114:../app/usart.c ****     dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+ 304              		.loc 1 114 34
+ 305 0032 0023     		movs	r3, #0
+ 306 0034 BB60     		str	r3, [r7, #8]
+ 115:../app/usart.c ****     dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+ 307              		.loc 1 115 30
+ 308 0036 4FF44053 		mov	r3, #12288
+ 309 003a BB61     		str	r3, [r7, #24]
+ 116:../app/usart.c ****     dma_init(DMA0, DMA_CH3, &dma_init_struct);
+ 310              		.loc 1 116 5
+ 311 003c 3B1D     		adds	r3, r7, #4
+ 312 003e 1A46     		mov	r2, r3
+ 313 0040 0321     		movs	r1, #3
+ 314 0042 1B48     		ldr	r0, .L10
+ 315 0044 FFF7FEFF 		bl	dma_init
+ 117:../app/usart.c ****     /* configure DMA mode */
+ 118:../app/usart.c ****     dma_circulation_disable(DMA0, DMA_CH3);
+ 316              		.loc 1 118 5
+ 317 0048 0321     		movs	r1, #3
+ 318 004a 1948     		ldr	r0, .L10
+ 319 004c FFF7FEFF 		bl	dma_circulation_disable
+ 119:../app/usart.c ****     dma_memory_to_memory_disable(DMA0, DMA_CH3);
+ 320              		.loc 1 119 5
+ 321 0050 0321     		movs	r1, #3
+ 322 0052 1748     		ldr	r0, .L10
+ 323 0054 FFF7FEFF 		bl	dma_memory_to_memory_disable
+ 120:../app/usart.c **** 
+ 121:../app/usart.c ****     dma_deinit(DMA0, DMA_CH4);
+ 324              		.loc 1 121 5
+ 325 0058 0421     		movs	r1, #4
+ 326 005a 1548     		ldr	r0, .L10
+ 327 005c FFF7FEFF 		bl	dma_deinit
+ 122:../app/usart.c ****     dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+ 328              		.loc 1 122 31
+ 329 0060 0023     		movs	r3, #0
+ 330 0062 BB77     		strb	r3, [r7, #30]
+ 123:../app/usart.c ****     dma_init_struct.number =  ARRAYNUM(com1rx_buffer);
+ 331              		.loc 1 123 28
+ 332 0064 1023     		movs	r3, #16
+ 333 0066 7B61     		str	r3, [r7, #20]
+ 124:../app/usart.c ****     dma_init_struct.memory_addr = (uint32_t)com1rx_buffer;
+ 334              		.loc 1 124 35
+ 335 0068 144B     		ldr	r3, .L10+12
+ 336              		.loc 1 124 33
+ 337 006a FB60     		str	r3, [r7, #12]
+ 125:../app/usart.c ****     dma_init(DMA0, DMA_CH4, &dma_init_struct);
+ 338              		.loc 1 125 5
+ 339 006c 3B1D     		adds	r3, r7, #4
+ 340 006e 1A46     		mov	r2, r3
+ 341 0070 0421     		movs	r1, #4
+ 342 0072 0F48     		ldr	r0, .L10
+ 343 0074 FFF7FEFF 		bl	dma_init
+ 126:../app/usart.c ****     /* configure DMA mode */
+ 127:../app/usart.c ****     dma_circulation_enable(DMA0, DMA_CH4);
+ 344              		.loc 1 127 5
+ 345 0078 0421     		movs	r1, #4
+ 346 007a 0D48     		ldr	r0, .L10
+ 347 007c FFF7FEFF 		bl	dma_circulation_enable
+ 128:../app/usart.c ****     dma_memory_to_memory_disable(DMA0, DMA_CH4);
+ 348              		.loc 1 128 5
+ 349 0080 0421     		movs	r1, #4
+ 350 0082 0B48     		ldr	r0, .L10
+ 351 0084 FFF7FEFF 		bl	dma_memory_to_memory_disable
+ 129:../app/usart.c **** 
+ 130:../app/usart.c ****     /* enable USART0 DMA channel transmission and reception */
+ 131:../app/usart.c ****     dma_channel_disable(DMA0, DMA_CH3);
+ 352              		.loc 1 131 5
+ 353 0088 0321     		movs	r1, #3
+ 354 008a 0948     		ldr	r0, .L10
+ 355 008c FFF7FEFF 		bl	dma_channel_disable
+ 132:../app/usart.c ****     dma_channel_enable(DMA0, DMA_CH4);
+ 356              		.loc 1 132 5
+ 357 0090 0421     		movs	r1, #4
+ 358 0092 0748     		ldr	r0, .L10
+ 359 0094 FFF7FEFF 		bl	dma_channel_enable
+ 133:../app/usart.c **** 
+ 134:../app/usart.c ****     /* USART DMA enable for transmission and reception */
+ 135:../app/usart.c ****     usart_dma_transmit_config(USART0, USART_TRANSMIT_DMA_ENABLE);
+ 360              		.loc 1 135 5
+ 361 0098 8021     		movs	r1, #128
+ 362 009a 0948     		ldr	r0, .L10+16
+ 363 009c FFF7FEFF 		bl	usart_dma_transmit_config
+ 136:../app/usart.c ****     usart_dma_receive_config(USART0, USART_RECEIVE_DMA_ENABLE);
+ 364              		.loc 1 136 5
+ 365 00a0 4021     		movs	r1, #64
+ 366 00a2 0748     		ldr	r0, .L10+16
+ 367 00a4 FFF7FEFF 		bl	usart_dma_receive_config
+ 137:../app/usart.c **** }
+ 368              		.loc 1 137 1
+ 369 00a8 00BF     		nop
+ 370 00aa 2037     		adds	r7, r7, #32
+ 371              		.cfi_def_cfa_offset 8
+ 372 00ac BD46     		mov	sp, r7
+ 373              		.cfi_def_cfa_register 13
+ 374              		@ sp needed
+ 375 00ae 80BD     		pop	{r7, pc}
+ 376              	.L11:
+ 377              		.align	2
+ 378              	.L10:
+ 379 00b0 00000240 		.word	1073872896
+ 380 00b4 00000000 		.word	com1tx_buffer
+ 381 00b8 04380140 		.word	1073821700
+ 382 00bc 00000000 		.word	com1rx_buffer
+ 383 00c0 00380140 		.word	1073821696
+ 384              		.cfi_endproc
+ 385              	.LFE118:
+ 387              		.section	.text.gd_usart_Init,"ax",%progbits
+ 388              		.align	1
+ 389              		.global	gd_usart_Init
+ 390              		.syntax unified
+ 391              		.thumb
+ 392              		.thumb_func
+ 393              		.fpu softvfp
+ 395              	gd_usart_Init:
+ 396              	.LFB119:
+ 138:../app/usart.c **** 
+ 139:../app/usart.c **** void gd_usart_Init(void)
+ 140:../app/usart.c **** {
+ 397              		.loc 1 140 1
+ 398              		.cfi_startproc
+ 399              		@ args = 0, pretend = 0, frame = 0
+ 400              		@ frame_needed = 1, uses_anonymous_args = 0
+ 401 0000 80B5     		push	{r7, lr}
+ 402              		.cfi_def_cfa_offset 8
+ 403              		.cfi_offset 7, -8
+ 404              		.cfi_offset 14, -4
+ 405 0002 00AF     		add	r7, sp, #0
+ 406              		.cfi_def_cfa_register 7
+ 141:../app/usart.c ****     gd_uart_com_init(COM1);
+ 407              		.loc 1 141 5
+ 408 0004 0A48     		ldr	r0, .L13
+ 409 0006 FFF7FEFF 		bl	gd_uart_com_init
+ 142:../app/usart.c ****     gd_uart_com_init(COM2);
+ 410              		.loc 1 142 5
+ 411 000a 0A48     		ldr	r0, .L13+4
+ 412 000c FFF7FEFF 		bl	gd_uart_com_init
+ 143:../app/usart.c ****     /* USART0 DMA configure */
+ 144:../app/usart.c ****     gd_usart0_dma_config();
+ 413              		.loc 1 144 5
+ 414 0010 FFF7FEFF 		bl	gd_usart0_dma_config
+ 145:../app/usart.c **** 
+ 146:../app/usart.c ****     /* USART1 interrupt configuration */
+ 147:../app/usart.c ****     nvic_irq_enable(USART1_IRQn, 0, 0);
+ 415              		.loc 1 147 5
+ 416 0014 0022     		movs	r2, #0
+ 417 0016 0021     		movs	r1, #0
+ 418 0018 2620     		movs	r0, #38
+ 419 001a FFF7FEFF 		bl	nvic_irq_enable
+ 148:../app/usart.c ****     /* enable USART1 receive interrupt */
+ 149:../app/usart.c ****     usart_interrupt_enable(USART1, USART_INT_RBNE);
+ 420              		.loc 1 149 5
+ 421 001e 40F20531 		movw	r1, #773
+ 422 0022 0448     		ldr	r0, .L13+4
+ 423 0024 FFF7FEFF 		bl	usart_interrupt_enable
+ 150:../app/usart.c ****     /* enable USART1 transmit interrupt */
+ 151:../app/usart.c ****     //usart_interrupt_enable(USART1, USART_INT_TBE);
+ 152:../app/usart.c ****     gd_uart_counter_init();	
+ 424              		.loc 1 152 5
+ 425 0028 FFF7FEFF 		bl	gd_uart_counter_init
+ 153:../app/usart.c **** }
+ 426              		.loc 1 153 1
+ 427 002c 00BF     		nop
+ 428 002e 80BD     		pop	{r7, pc}
+ 429              	.L14:
+ 430              		.align	2
+ 431              	.L13:
+ 432 0030 00380140 		.word	1073821696
+ 433 0034 00440040 		.word	1073759232
+ 434              		.cfi_endproc
+ 435              	.LFE119:
+ 437              		.section	.text.gd_usart1_upload,"ax",%progbits
+ 438              		.align	1
+ 439              		.global	gd_usart1_upload
+ 440              		.syntax unified
+ 441              		.thumb
+ 442              		.thumb_func
+ 443              		.fpu softvfp
+ 445              	gd_usart1_upload:
+ 446              	.LFB120:
+ 154:../app/usart.c **** 
+ 155:../app/usart.c **** void gd_usart1_upload(uint8_t *strframe, uint16_t size)
+ 156:../app/usart.c **** {
+ 447              		.loc 1 156 1
+ 448              		.cfi_startproc
+ 449              		@ args = 0, pretend = 0, frame = 16
+ 450              		@ frame_needed = 1, uses_anonymous_args = 0
+ 451 0000 80B5     		push	{r7, lr}
+ 452              		.cfi_def_cfa_offset 8
+ 453              		.cfi_offset 7, -8
+ 454              		.cfi_offset 14, -4
+ 455 0002 84B0     		sub	sp, sp, #16
+ 456              		.cfi_def_cfa_offset 24
+ 457 0004 00AF     		add	r7, sp, #0
+ 458              		.cfi_def_cfa_register 7
+ 459 0006 7860     		str	r0, [r7, #4]
+ 460 0008 0B46     		mov	r3, r1
+ 461 000a 7B80     		strh	r3, [r7, #2]	@ movhi
+ 157:../app/usart.c **** 	uint16_t i;
+ 158:../app/usart.c **** 	
+ 159:../app/usart.c **** 	if (!strframe || !size) {
+ 462              		.loc 1 159 5
+ 463 000c 7B68     		ldr	r3, [r7, #4]
+ 464 000e 002B     		cmp	r3, #0
+ 465 0010 1ED0     		beq	.L22
+ 466              		.loc 1 159 16 discriminator 1
+ 467 0012 7B88     		ldrh	r3, [r7, #2]
+ 468 0014 002B     		cmp	r3, #0
+ 469 0016 1BD0     		beq	.L22
+ 160:../app/usart.c **** 		return;
+ 161:../app/usart.c **** 	}
+ 162:../app/usart.c ****  	for (i=0; i<size; i++) {
+ 470              		.loc 1 162 9
+ 471 0018 0023     		movs	r3, #0
+ 472 001a FB81     		strh	r3, [r7, #14]	@ movhi
+ 473              		.loc 1 162 3
+ 474 001c 13E0     		b	.L19
+ 475              	.L21:
+ 163:../app/usart.c ****         /* write one byte to the transmit data register */
+ 164:../app/usart.c ****         usart_data_transmit(USART1, strframe[i]);
+ 476              		.loc 1 164 45
+ 477 001e FB89     		ldrh	r3, [r7, #14]
+ 478 0020 7A68     		ldr	r2, [r7, #4]
+ 479 0022 1344     		add	r3, r3, r2
+ 480 0024 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 481              		.loc 1 164 9
+ 482 0026 9BB2     		uxth	r3, r3
+ 483 0028 1946     		mov	r1, r3
+ 484 002a 0B48     		ldr	r0, .L23
+ 485 002c FFF7FEFF 		bl	usart_data_transmit
+ 165:../app/usart.c **** 		/* wait until USART1 transmit end */
+ 166:../app/usart.c ****         while(RESET == usart_flag_get(USART1, USART_FLAG_TBE));
+ 486              		.loc 1 166 14
+ 487 0030 00BF     		nop
+ 488              	.L20:
+ 489              		.loc 1 166 24 discriminator 1
+ 490 0032 0721     		movs	r1, #7
+ 491 0034 0848     		ldr	r0, .L23
+ 492 0036 FFF7FEFF 		bl	usart_flag_get
+ 493 003a 0346     		mov	r3, r0
+ 494              		.loc 1 166 14 discriminator 1
+ 495 003c 002B     		cmp	r3, #0
+ 496 003e F8D0     		beq	.L20
+ 162:../app/usart.c ****         /* write one byte to the transmit data register */
+ 497              		.loc 1 162 22 discriminator 2
+ 498 0040 FB89     		ldrh	r3, [r7, #14]
+ 499 0042 0133     		adds	r3, r3, #1
+ 500 0044 FB81     		strh	r3, [r7, #14]	@ movhi
+ 501              	.L19:
+ 162:../app/usart.c ****         /* write one byte to the transmit data register */
+ 502              		.loc 1 162 3 discriminator 1
+ 503 0046 FA89     		ldrh	r2, [r7, #14]
+ 504 0048 7B88     		ldrh	r3, [r7, #2]
+ 505 004a 9A42     		cmp	r2, r3
+ 506 004c E7D3     		bcc	.L21
+ 507 004e 00E0     		b	.L15
+ 508              	.L22:
+ 160:../app/usart.c **** 	}
+ 509              		.loc 1 160 3
+ 510 0050 00BF     		nop
+ 511              	.L15:
+ 167:../app/usart.c **** 	}
+ 168:../app/usart.c **** }
+ 512              		.loc 1 168 1
+ 513 0052 1037     		adds	r7, r7, #16
+ 514              		.cfi_def_cfa_offset 8
+ 515 0054 BD46     		mov	sp, r7
+ 516              		.cfi_def_cfa_register 13
+ 517              		@ sp needed
+ 518 0056 80BD     		pop	{r7, pc}
+ 519              	.L24:
+ 520              		.align	2
+ 521              	.L23:
+ 522 0058 00440040 		.word	1073759232
+ 523              		.cfi_endproc
+ 524              	.LFE120:
+ 526              		.section	.text.gd_usart1_rx_decode,"ax",%progbits
+ 527              		.align	1
+ 528              		.global	gd_usart1_rx_decode
+ 529              		.syntax unified
+ 530              		.thumb
+ 531              		.thumb_func
+ 532              		.fpu softvfp
+ 534              	gd_usart1_rx_decode:
+ 535              	.LFB121:
+ 169:../app/usart.c **** 
+ 170:../app/usart.c **** ErrStatus gd_usart1_rx_decode(uint8_t ch) 
+ 171:../app/usart.c **** {
+ 536              		.loc 1 171 1
+ 537              		.cfi_startproc
+ 538              		@ args = 0, pretend = 0, frame = 8
+ 539              		@ frame_needed = 1, uses_anonymous_args = 0
+ 540              		@ link register save eliminated.
+ 541 0000 80B4     		push	{r7}
+ 542              		.cfi_def_cfa_offset 4
+ 543              		.cfi_offset 7, -4
+ 544 0002 83B0     		sub	sp, sp, #12
+ 545              		.cfi_def_cfa_offset 16
+ 546 0004 00AF     		add	r7, sp, #0
+ 547              		.cfi_def_cfa_register 7
+ 548 0006 0346     		mov	r3, r0
+ 549 0008 FB71     		strb	r3, [r7, #7]
+ 172:../app/usart.c **** 	if (com2rx_counter < COM2_MAX_SIZE) {
+ 550              		.loc 1 172 21
+ 551 000a 0E4B     		ldr	r3, .L28
+ 552 000c 1B88     		ldrh	r3, [r3]
+ 553              		.loc 1 172 5
+ 554 000e 3F2B     		cmp	r3, #63
+ 555 0010 11D8     		bhi	.L26
+ 173:../app/usart.c **** 		com2rx_frame[com2rx_counter++] = ch;
+ 556              		.loc 1 173 30
+ 557 0012 0C4B     		ldr	r3, .L28
+ 558 0014 1B88     		ldrh	r3, [r3]
+ 559 0016 5A1C     		adds	r2, r3, #1
+ 560 0018 91B2     		uxth	r1, r2
+ 561 001a 0A4A     		ldr	r2, .L28
+ 562 001c 1180     		strh	r1, [r2]	@ movhi
+ 563 001e 1946     		mov	r1, r3
+ 564              		.loc 1 173 34
+ 565 0020 094A     		ldr	r2, .L28+4
+ 566 0022 FB79     		ldrb	r3, [r7, #7]
+ 567 0024 5354     		strb	r3, [r2, r1]
+ 174:../app/usart.c **** 		if (ch == '\n') {
+ 568              		.loc 1 174 6
+ 569 0026 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 570 0028 0A2B     		cmp	r3, #10
+ 571 002a 04D1     		bne	.L26
+ 175:../app/usart.c **** 			com2rx_counter = 0;
+ 572              		.loc 1 175 19
+ 573 002c 054B     		ldr	r3, .L28
+ 574 002e 0022     		movs	r2, #0
+ 575 0030 1A80     		strh	r2, [r3]	@ movhi
+ 176:../app/usart.c **** 			return SUCCESS;
+ 576              		.loc 1 176 11
+ 577 0032 0123     		movs	r3, #1
+ 578 0034 00E0     		b	.L27
+ 579              	.L26:
+ 177:../app/usart.c **** 		}
+ 178:../app/usart.c **** 	}
+ 179:../app/usart.c **** 	return ERROR;
+ 580              		.loc 1 179 9
+ 581 0036 0023     		movs	r3, #0
+ 582              	.L27:
+ 180:../app/usart.c **** }
+ 583              		.loc 1 180 1
+ 584 0038 1846     		mov	r0, r3
+ 585 003a 0C37     		adds	r7, r7, #12
+ 586              		.cfi_def_cfa_offset 4
+ 587 003c BD46     		mov	sp, r7
+ 588              		.cfi_def_cfa_register 13
+ 589              		@ sp needed
+ 590 003e 80BC     		pop	{r7}
+ 591              		.cfi_restore 7
+ 592              		.cfi_def_cfa_offset 0
+ 593 0040 7047     		bx	lr
+ 594              	.L29:
+ 595 0042 00BF     		.align	2
+ 596              	.L28:
+ 597 0044 00000000 		.word	com2rx_counter
+ 598 0048 00000000 		.word	com2rx_frame
+ 599              		.cfi_endproc
+ 600              	.LFE121:
+ 602              		.section	.text.gd_usart1_download,"ax",%progbits
+ 603              		.align	1
+ 604              		.global	gd_usart1_download
+ 605              		.syntax unified
+ 606              		.thumb
+ 607              		.thumb_func
+ 608              		.fpu softvfp
+ 610              	gd_usart1_download:
+ 611              	.LFB122:
+ 181:../app/usart.c **** 
+ 182:../app/usart.c **** void gd_usart1_download(void)
+ 183:../app/usart.c **** {
+ 612              		.loc 1 183 1
+ 613              		.cfi_startproc
+ 614              		@ args = 0, pretend = 0, frame = 8
+ 615              		@ frame_needed = 1, uses_anonymous_args = 0
+ 616 0000 80B5     		push	{r7, lr}
+ 617              		.cfi_def_cfa_offset 8
+ 618              		.cfi_offset 7, -8
+ 619              		.cfi_offset 14, -4
+ 620 0002 82B0     		sub	sp, sp, #8
+ 621              		.cfi_def_cfa_offset 16
+ 622 0004 00AF     		add	r7, sp, #0
+ 623              		.cfi_def_cfa_register 7
+ 184:../app/usart.c **** 	uint16_t com2_wcnt = com2rx_w_counter;
+ 624              		.loc 1 184 11
+ 625 0006 124B     		ldr	r3, .L34
+ 626 0008 1B88     		ldrh	r3, [r3]	@ movhi
+ 627 000a FB80     		strh	r3, [r7, #6]	@ movhi
+ 185:../app/usart.c **** 	while (com2rx_r_counter != com2_wcnt) {
+ 628              		.loc 1 185 8
+ 629 000c 16E0     		b	.L31
+ 630              	.L33:
+ 631              	.LBB2:
+ 186:../app/usart.c **** 		uint8_t ch = com2rx_buffer[com2rx_r_counter];
+ 632              		.loc 1 186 29
+ 633 000e 114B     		ldr	r3, .L34+4
+ 634 0010 1B88     		ldrh	r3, [r3]
+ 635 0012 1A46     		mov	r2, r3
+ 636              		.loc 1 186 11
+ 637 0014 104B     		ldr	r3, .L34+8
+ 638 0016 9B5C     		ldrb	r3, [r3, r2]
+ 639 0018 7B71     		strb	r3, [r7, #5]
+ 187:../app/usart.c **** 		if (++com2rx_r_counter >= COM2_MAX_SIZE) {
+ 640              		.loc 1 187 7
+ 641 001a 0E4B     		ldr	r3, .L34+4
+ 642 001c 1B88     		ldrh	r3, [r3]
+ 643 001e 0133     		adds	r3, r3, #1
+ 644 0020 9AB2     		uxth	r2, r3
+ 645              		.loc 1 187 6
+ 646 0022 0C4B     		ldr	r3, .L34+4
+ 647 0024 1A80     		strh	r2, [r3]	@ movhi
+ 648              		.loc 1 187 7
+ 649 0026 0B4B     		ldr	r3, .L34+4
+ 650 0028 1B88     		ldrh	r3, [r3]
+ 651              		.loc 1 187 6
+ 652 002a 3F2B     		cmp	r3, #63
+ 653 002c 02D9     		bls	.L32
+ 188:../app/usart.c **** 			com2rx_r_counter = 0x0000;
+ 654              		.loc 1 188 21
+ 655 002e 094B     		ldr	r3, .L34+4
+ 656 0030 0022     		movs	r2, #0
+ 657 0032 1A80     		strh	r2, [r3]	@ movhi
+ 658              	.L32:
+ 189:../app/usart.c **** 		}
+ 190:../app/usart.c **** 		if (SUCCESS ==gd_usart1_rx_decode(ch)){
+ 659              		.loc 1 190 17
+ 660 0034 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 661 0036 1846     		mov	r0, r3
+ 662 0038 FFF7FEFF 		bl	gd_usart1_rx_decode
+ 663              	.L31:
+ 664              	.LBE2:
+ 185:../app/usart.c **** 		uint8_t ch = com2rx_buffer[com2rx_r_counter];
+ 665              		.loc 1 185 26
+ 666 003c 054B     		ldr	r3, .L34+4
+ 667 003e 1B88     		ldrh	r3, [r3]
+ 185:../app/usart.c **** 		uint8_t ch = com2rx_buffer[com2rx_r_counter];
+ 668              		.loc 1 185 8
+ 669 0040 FA88     		ldrh	r2, [r7, #6]
+ 670 0042 9A42     		cmp	r2, r3
+ 671 0044 E3D1     		bne	.L33
+ 191:../app/usart.c **** 		}
+ 192:../app/usart.c **** 	}
+ 193:../app/usart.c **** }
+ 672              		.loc 1 193 1
+ 673 0046 00BF     		nop
+ 674 0048 00BF     		nop
+ 675 004a 0837     		adds	r7, r7, #8
+ 676              		.cfi_def_cfa_offset 8
+ 677 004c BD46     		mov	sp, r7
+ 678              		.cfi_def_cfa_register 13
+ 679              		@ sp needed
+ 680 004e 80BD     		pop	{r7, pc}
+ 681              	.L35:
+ 682              		.align	2
+ 683              	.L34:
+ 684 0050 00000000 		.word	com2rx_w_counter
+ 685 0054 00000000 		.word	com2rx_r_counter
+ 686 0058 00000000 		.word	com2rx_buffer
+ 687              		.cfi_endproc
+ 688              	.LFE122:
+ 690              		.section	.text.gd_usart0_rx_decode,"ax",%progbits
+ 691              		.align	1
+ 692              		.global	gd_usart0_rx_decode
+ 693              		.syntax unified
+ 694              		.thumb
+ 695              		.thumb_func
+ 696              		.fpu softvfp
+ 698              	gd_usart0_rx_decode:
+ 699              	.LFB123:
+ 194:../app/usart.c **** 
+ 195:../app/usart.c **** /*!
+ 196:../app/usart.c ****     \brief      memory decode function
+ 197:../app/usart.c ****     \param[in]  ch: source data
+ 198:../app/usart.c ****     \param[out] frame: package data
+ 199:../app/usart.c ****     \retval     ErrStatus: ERROR or SUCCESS
+ 200:../app/usart.c **** */
+ 201:../app/usart.c **** ErrStatus gd_usart0_rx_decode(uint8_t ch) 
+ 202:../app/usart.c **** {
+ 700              		.loc 1 202 1
+ 701              		.cfi_startproc
+ 702              		@ args = 0, pretend = 0, frame = 8
+ 703              		@ frame_needed = 1, uses_anonymous_args = 0
+ 704              		@ link register save eliminated.
+ 705 0000 80B4     		push	{r7}
+ 706              		.cfi_def_cfa_offset 4
+ 707              		.cfi_offset 7, -4
+ 708 0002 83B0     		sub	sp, sp, #12
+ 709              		.cfi_def_cfa_offset 16
+ 710 0004 00AF     		add	r7, sp, #0
+ 711              		.cfi_def_cfa_register 7
+ 712 0006 0346     		mov	r3, r0
+ 713 0008 FB71     		strb	r3, [r7, #7]
+ 203:../app/usart.c **** 	static uint8_t chksum, len, size, stateFlow = 0;
+ 204:../app/usart.c **** 
+ 205:../app/usart.c **** 	chksum += ch;
+ 714              		.loc 1 205 9
+ 715 000a 354B     		ldr	r3, .L53
+ 716 000c 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 717 000e FB79     		ldrb	r3, [r7, #7]
+ 718 0010 1344     		add	r3, r3, r2
+ 719 0012 DAB2     		uxtb	r2, r3
+ 720 0014 324B     		ldr	r3, .L53
+ 721 0016 1A70     		strb	r2, [r3]
+ 206:../app/usart.c **** 	switch (stateFlow){
+ 722              		.loc 1 206 2
+ 723 0018 324B     		ldr	r3, .L53+4
+ 724 001a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 725 001c 032B     		cmp	r3, #3
+ 726 001e 51D8     		bhi	.L49
+ 727 0020 01A2     		adr	r2, .L39
+ 728 0022 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 729 0026 00BF     		.p2align 2
+ 730              	.L39:
+ 731 0028 39000000 		.word	.L42+1
+ 732 002c 4D000000 		.word	.L41+1
+ 733 0030 67000000 		.word	.L40+1
+ 734 0034 87000000 		.word	.L38+1
+ 735              		.p2align 1
+ 736              	.L42:
+ 207:../app/usart.c **** 	case 0:
+ 208:../app/usart.c **** 		if (ch == HEAD_ID / 0X100){
+ 737              		.loc 1 208 6
+ 738 0038 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 739 003a FF2B     		cmp	r3, #255
+ 740 003c 44D1     		bne	.L50
+ 209:../app/usart.c **** 			stateFlow++;
+ 741              		.loc 1 209 13
+ 742 003e 294B     		ldr	r3, .L53+4
+ 743 0040 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 744 0042 0133     		adds	r3, r3, #1
+ 745 0044 DAB2     		uxtb	r2, r3
+ 746 0046 274B     		ldr	r3, .L53+4
+ 747 0048 1A70     		strb	r2, [r3]
+ 210:../app/usart.c **** 		}
+ 211:../app/usart.c **** 		break;
+ 748              		.loc 1 211 3
+ 749 004a 3DE0     		b	.L50
+ 750              	.L41:
+ 212:../app/usart.c **** 	case 1:
+ 213:../app/usart.c **** 		stateFlow++;
+ 751              		.loc 1 213 12
+ 752 004c 254B     		ldr	r3, .L53+4
+ 753 004e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 754 0050 0133     		adds	r3, r3, #1
+ 755 0052 DAB2     		uxtb	r2, r3
+ 756 0054 234B     		ldr	r3, .L53+4
+ 757 0056 1A70     		strb	r2, [r3]
+ 214:../app/usart.c **** 		if (ch != HEAD_ID % 0X100){
+ 758              		.loc 1 214 6
+ 759 0058 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 760 005a AA2B     		cmp	r3, #170
+ 761 005c 36D0     		beq	.L51
+ 215:../app/usart.c **** 			stateFlow = 0x00;
+ 762              		.loc 1 215 14
+ 763 005e 214B     		ldr	r3, .L53+4
+ 764 0060 0022     		movs	r2, #0
+ 765 0062 1A70     		strb	r2, [r3]
+ 216:../app/usart.c **** 		}
+ 217:../app/usart.c **** 		break;
+ 766              		.loc 1 217 3
+ 767 0064 32E0     		b	.L51
+ 768              	.L40:
+ 218:../app/usart.c **** 	case 2:
+ 219:../app/usart.c **** 		len = ch;
+ 769              		.loc 1 219 7
+ 770 0066 204A     		ldr	r2, .L53+8
+ 771 0068 FB79     		ldrb	r3, [r7, #7]
+ 772 006a 1370     		strb	r3, [r2]
+ 220:../app/usart.c **** 		chksum =  ch;
+ 773              		.loc 1 220 10
+ 774 006c 1C4A     		ldr	r2, .L53
+ 775 006e FB79     		ldrb	r3, [r7, #7]
+ 776 0070 1370     		strb	r3, [r2]
+ 221:../app/usart.c **** 		size = 0x00;
+ 777              		.loc 1 221 8
+ 778 0072 1E4B     		ldr	r3, .L53+12
+ 779 0074 0022     		movs	r2, #0
+ 780 0076 1A70     		strb	r2, [r3]
+ 222:../app/usart.c **** 		stateFlow++;
+ 781              		.loc 1 222 12
+ 782 0078 1A4B     		ldr	r3, .L53+4
+ 783 007a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 784 007c 0133     		adds	r3, r3, #1
+ 785 007e DAB2     		uxtb	r2, r3
+ 786 0080 184B     		ldr	r3, .L53+4
+ 787 0082 1A70     		strb	r2, [r3]
+ 223:../app/usart.c **** 		break;
+ 788              		.loc 1 223 3
+ 789 0084 25E0     		b	.L44
+ 790              	.L38:
+ 224:../app/usart.c **** 	case 3:
+ 225:../app/usart.c **** 		if (size < COM1_MAX_SIZE) {
+ 791              		.loc 1 225 12
+ 792 0086 194B     		ldr	r3, .L53+12
+ 793 0088 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 794              		.loc 1 225 6
+ 795 008a 0F2B     		cmp	r3, #15
+ 796 008c 05D8     		bhi	.L46
+ 226:../app/usart.c **** 			com1rx_frame[size]  = ch;
+ 797              		.loc 1 226 16
+ 798 008e 174B     		ldr	r3, .L53+12
+ 799 0090 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 800 0092 1946     		mov	r1, r3
+ 801              		.loc 1 226 24
+ 802 0094 164A     		ldr	r2, .L53+16
+ 803 0096 FB79     		ldrb	r3, [r7, #7]
+ 804 0098 5354     		strb	r3, [r2, r1]
+ 805              	.L46:
+ 227:../app/usart.c **** 		}
+ 228:../app/usart.c **** 		if (++size == len) {
+ 806              		.loc 1 228 7
+ 807 009a 144B     		ldr	r3, .L53+12
+ 808 009c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 809 009e 0133     		adds	r3, r3, #1
+ 810 00a0 DAB2     		uxtb	r2, r3
+ 811              		.loc 1 228 6
+ 812 00a2 124B     		ldr	r3, .L53+12
+ 813 00a4 1A70     		strb	r2, [r3]
+ 814              		.loc 1 228 7
+ 815 00a6 114B     		ldr	r3, .L53+12
+ 816 00a8 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 817              		.loc 1 228 14
+ 818 00aa 0F4B     		ldr	r3, .L53+8
+ 819 00ac 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 820              		.loc 1 228 6
+ 821 00ae 9A42     		cmp	r2, r3
+ 822 00b0 0ED1     		bne	.L52
+ 229:../app/usart.c **** 			stateFlow = 0;
+ 823              		.loc 1 229 14
+ 824 00b2 0C4B     		ldr	r3, .L53+4
+ 825 00b4 0022     		movs	r2, #0
+ 826 00b6 1A70     		strb	r2, [r3]
+ 230:../app/usart.c **** 			if (!chksum){
+ 827              		.loc 1 230 8
+ 828 00b8 094B     		ldr	r3, .L53
+ 829 00ba 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 830              		.loc 1 230 7
+ 831 00bc 002B     		cmp	r3, #0
+ 832 00be 07D1     		bne	.L52
+ 231:../app/usart.c **** 			    return SUCCESS;
+ 833              		.loc 1 231 15
+ 834 00c0 0123     		movs	r3, #1
+ 835 00c2 07E0     		b	.L48
+ 836              	.L49:
+ 232:../app/usart.c **** 			}
+ 233:../app/usart.c **** 		}
+ 234:../app/usart.c **** 		break;
+ 235:../app/usart.c **** 	default:
+ 236:../app/usart.c **** 		break;
+ 837              		.loc 1 236 3
+ 838 00c4 00BF     		nop
+ 839 00c6 04E0     		b	.L44
+ 840              	.L50:
+ 211:../app/usart.c **** 	case 1:
+ 841              		.loc 1 211 3
+ 842 00c8 00BF     		nop
+ 843 00ca 02E0     		b	.L44
+ 844              	.L51:
+ 217:../app/usart.c **** 	case 2:
+ 845              		.loc 1 217 3
+ 846 00cc 00BF     		nop
+ 847 00ce 00E0     		b	.L44
+ 848              	.L52:
+ 234:../app/usart.c **** 	default:
+ 849              		.loc 1 234 3
+ 850 00d0 00BF     		nop
+ 851              	.L44:
+ 237:../app/usart.c **** 	}
+ 238:../app/usart.c ****     return ERROR;
+ 852              		.loc 1 238 12
+ 853 00d2 0023     		movs	r3, #0
+ 854              	.L48:
+ 239:../app/usart.c **** }
+ 855              		.loc 1 239 1
+ 856 00d4 1846     		mov	r0, r3
+ 857 00d6 0C37     		adds	r7, r7, #12
+ 858              		.cfi_def_cfa_offset 4
+ 859 00d8 BD46     		mov	sp, r7
+ 860              		.cfi_def_cfa_register 13
+ 861              		@ sp needed
+ 862 00da 80BC     		pop	{r7}
+ 863              		.cfi_restore 7
+ 864              		.cfi_def_cfa_offset 0
+ 865 00dc 7047     		bx	lr
+ 866              	.L54:
+ 867 00de 00BF     		.align	2
+ 868              	.L53:
+ 869 00e0 00000000 		.word	chksum.7746
+ 870 00e4 00000000 		.word	stateFlow.7749
+ 871 00e8 00000000 		.word	len.7747
+ 872 00ec 00000000 		.word	size.7748
+ 873 00f0 00000000 		.word	com1rx_frame
+ 874              		.cfi_endproc
+ 875              	.LFE123:
+ 877              		.section	.text.gd_usart0_upload,"ax",%progbits
+ 878              		.align	1
+ 879              		.global	gd_usart0_upload
+ 880              		.syntax unified
+ 881              		.thumb
+ 882              		.thumb_func
+ 883              		.fpu softvfp
+ 885              	gd_usart0_upload:
+ 886              	.LFB124:
+ 240:../app/usart.c **** 
+ 241:../app/usart.c **** void gd_usart0_upload(void)
+ 242:../app/usart.c **** {
+ 887              		.loc 1 242 1
+ 888              		.cfi_startproc
+ 889              		@ args = 0, pretend = 0, frame = 8
+ 890              		@ frame_needed = 1, uses_anonymous_args = 0
+ 891 0000 80B5     		push	{r7, lr}
+ 892              		.cfi_def_cfa_offset 8
+ 893              		.cfi_offset 7, -8
+ 894              		.cfi_offset 14, -4
+ 895 0002 82B0     		sub	sp, sp, #8
+ 896              		.cfi_def_cfa_offset 16
+ 897 0004 00AF     		add	r7, sp, #0
+ 898              		.cfi_def_cfa_register 7
+ 243:../app/usart.c **** 	uint8_t j, idx = 0, chksum = 0;
+ 899              		.loc 1 243 13
+ 900 0006 0023     		movs	r3, #0
+ 901 0008 7B71     		strb	r3, [r7, #5]
+ 902              		.loc 1 243 22
+ 903 000a 0023     		movs	r3, #0
+ 904 000c BB71     		strb	r3, [r7, #6]
+ 244:../app/usart.c **** 
+ 245:../app/usart.c **** 	/* check USART0 TX DMA0 channel transfer complete */
+ 246:../app/usart.c **** 	if (dma_transfer_number_get(DMA0, DMA_CH3)){
+ 905              		.loc 1 246 6
+ 906 000e 0321     		movs	r1, #3
+ 907 0010 3B48     		ldr	r0, .L61
+ 908 0012 FFF7FEFF 		bl	dma_transfer_number_get
+ 909 0016 0346     		mov	r3, r0
+ 910              		.loc 1 246 5
+ 911 0018 002B     		cmp	r3, #0
+ 912 001a 6DD1     		bne	.L60
+ 247:../app/usart.c **** 		return;
+ 248:../app/usart.c **** 	}
+ 249:../app/usart.c **** 	com1tx_buffer[idx++] = HEAD_ID / 0x100;
+ 913              		.loc 1 249 19
+ 914 001c 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 915 001e 5A1C     		adds	r2, r3, #1
+ 916 0020 7A71     		strb	r2, [r7, #5]
+ 917 0022 1A46     		mov	r2, r3
+ 918              		.loc 1 249 23
+ 919 0024 374B     		ldr	r3, .L61+4
+ 920 0026 FF21     		movs	r1, #255
+ 921 0028 9954     		strb	r1, [r3, r2]
+ 250:../app/usart.c **** 	com1tx_buffer[idx++] = HEAD_ID % 0x100;
+ 922              		.loc 1 250 19
+ 923 002a 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 924 002c 5A1C     		adds	r2, r3, #1
+ 925 002e 7A71     		strb	r2, [r7, #5]
+ 926 0030 1A46     		mov	r2, r3
+ 927              		.loc 1 250 23
+ 928 0032 344B     		ldr	r3, .L61+4
+ 929 0034 AA21     		movs	r1, #170
+ 930 0036 9954     		strb	r1, [r3, r2]
+ 251:../app/usart.c **** 	com1tx_buffer[idx++] = 0x00;
+ 931              		.loc 1 251 19
+ 932 0038 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 933 003a 5A1C     		adds	r2, r3, #1
+ 934 003c 7A71     		strb	r2, [r7, #5]
+ 935 003e 1A46     		mov	r2, r3
+ 936              		.loc 1 251 23
+ 937 0040 304B     		ldr	r3, .L61+4
+ 938 0042 0021     		movs	r1, #0
+ 939 0044 9954     		strb	r1, [r3, r2]
+ 252:../app/usart.c **** 	com1tx_buffer[idx++] = (virtul_led >> 24)  &  0xFF;
+ 940              		.loc 1 252 37
+ 941 0046 304B     		ldr	r3, .L61+8
+ 942 0048 1B68     		ldr	r3, [r3]
+ 943 004a 190E     		lsrs	r1, r3, #24
+ 944              		.loc 1 252 19
+ 945 004c 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 946 004e 5A1C     		adds	r2, r3, #1
+ 947 0050 7A71     		strb	r2, [r7, #5]
+ 948 0052 1A46     		mov	r2, r3
+ 949              		.loc 1 252 23
+ 950 0054 C9B2     		uxtb	r1, r1
+ 951 0056 2B4B     		ldr	r3, .L61+4
+ 952 0058 9954     		strb	r1, [r3, r2]
+ 253:../app/usart.c **** 	com1tx_buffer[idx++] = (virtul_led >> 16)  &  0xFF;
+ 953              		.loc 1 253 37
+ 954 005a 2B4B     		ldr	r3, .L61+8
+ 955 005c 1B68     		ldr	r3, [r3]
+ 956 005e 190C     		lsrs	r1, r3, #16
+ 957              		.loc 1 253 19
+ 958 0060 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 959 0062 5A1C     		adds	r2, r3, #1
+ 960 0064 7A71     		strb	r2, [r7, #5]
+ 961 0066 1A46     		mov	r2, r3
+ 962              		.loc 1 253 23
+ 963 0068 C9B2     		uxtb	r1, r1
+ 964 006a 264B     		ldr	r3, .L61+4
+ 965 006c 9954     		strb	r1, [r3, r2]
+ 254:../app/usart.c **** 	com1tx_buffer[idx++] = (virtul_led >> 8)  &  0xFF;
+ 966              		.loc 1 254 37
+ 967 006e 264B     		ldr	r3, .L61+8
+ 968 0070 1B68     		ldr	r3, [r3]
+ 969 0072 190A     		lsrs	r1, r3, #8
+ 970              		.loc 1 254 19
+ 971 0074 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 972 0076 5A1C     		adds	r2, r3, #1
+ 973 0078 7A71     		strb	r2, [r7, #5]
+ 974 007a 1A46     		mov	r2, r3
+ 975              		.loc 1 254 23
+ 976 007c C9B2     		uxtb	r1, r1
+ 977 007e 214B     		ldr	r3, .L61+4
+ 978 0080 9954     		strb	r1, [r3, r2]
+ 255:../app/usart.c **** 	com1tx_buffer[idx++] = (virtul_led >> 0)  &  0xFF;
+ 979              		.loc 1 255 23
+ 980 0082 214B     		ldr	r3, .L61+8
+ 981 0084 1968     		ldr	r1, [r3]
+ 982              		.loc 1 255 19
+ 983 0086 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 984 0088 5A1C     		adds	r2, r3, #1
+ 985 008a 7A71     		strb	r2, [r7, #5]
+ 986 008c 1A46     		mov	r2, r3
+ 987              		.loc 1 255 23
+ 988 008e C9B2     		uxtb	r1, r1
+ 989 0090 1C4B     		ldr	r3, .L61+4
+ 990 0092 9954     		strb	r1, [r3, r2]
+ 256:../app/usart.c **** 	com1tx_buffer[2] = idx - 2;		// header(2)
+ 991              		.loc 1 256 25
+ 992 0094 7B79     		ldrb	r3, [r7, #5]
+ 993 0096 023B     		subs	r3, r3, #2
+ 994 0098 DAB2     		uxtb	r2, r3
+ 995              		.loc 1 256 19
+ 996 009a 1A4B     		ldr	r3, .L61+4
+ 997 009c 9A70     		strb	r2, [r3, #2]
+ 257:../app/usart.c **** 	for (j=2; j<idx; j++) {
+ 998              		.loc 1 257 8
+ 999 009e 0223     		movs	r3, #2
+ 1000 00a0 FB71     		strb	r3, [r7, #7]
+ 1001              		.loc 1 257 2
+ 1002 00a2 08E0     		b	.L58
+ 1003              	.L59:
+ 258:../app/usart.c **** 		chksum += com1tx_buffer[j]; 
+ 1004              		.loc 1 258 26 discriminator 3
+ 1005 00a4 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1006 00a6 174A     		ldr	r2, .L61+4
+ 1007 00a8 D25C     		ldrb	r2, [r2, r3]	@ zero_extendqisi2
+ 1008              		.loc 1 258 10 discriminator 3
+ 1009 00aa BB79     		ldrb	r3, [r7, #6]
+ 1010 00ac 1344     		add	r3, r3, r2
+ 1011 00ae BB71     		strb	r3, [r7, #6]
+ 257:../app/usart.c **** 	for (j=2; j<idx; j++) {
+ 1012              		.loc 1 257 20 discriminator 3
+ 1013 00b0 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 1014 00b2 0133     		adds	r3, r3, #1
+ 1015 00b4 FB71     		strb	r3, [r7, #7]
+ 1016              	.L58:
+ 257:../app/usart.c **** 	for (j=2; j<idx; j++) {
+ 1017              		.loc 1 257 2 discriminator 1
+ 1018 00b6 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 1019 00b8 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 1020 00ba 9A42     		cmp	r2, r3
+ 1021 00bc F2D3     		bcc	.L59
+ 259:../app/usart.c **** 	}
+ 260:../app/usart.c **** 	com1tx_buffer[idx++] = 0 - chksum;
+ 1022              		.loc 1 260 19
+ 1023 00be 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 1024 00c0 5A1C     		adds	r2, r3, #1
+ 1025 00c2 7A71     		strb	r2, [r7, #5]
+ 1026 00c4 1A46     		mov	r2, r3
+ 1027              		.loc 1 260 23
+ 1028 00c6 BB79     		ldrb	r3, [r7, #6]
+ 1029 00c8 5B42     		rsbs	r3, r3, #0
+ 1030 00ca D9B2     		uxtb	r1, r3
+ 1031 00cc 0D4B     		ldr	r3, .L61+4
+ 1032 00ce 9954     		strb	r1, [r3, r2]
+ 261:../app/usart.c **** 	dma_channel_disable(DMA0, DMA_CH3);	
+ 1033              		.loc 1 261 2
+ 1034 00d0 0321     		movs	r1, #3
+ 1035 00d2 0B48     		ldr	r0, .L61
+ 1036 00d4 FFF7FEFF 		bl	dma_channel_disable
+ 262:../app/usart.c **** 	dma_flag_clear(DMA0, DMA_CH3, DMA_INTC_FTFIFC | DMA_INTC_HTFIFC | DMA_INTC_ERRIFC);
+ 1037              		.loc 1 262 2
+ 1038 00d8 0E22     		movs	r2, #14
+ 1039 00da 0321     		movs	r1, #3
+ 1040 00dc 0848     		ldr	r0, .L61
+ 1041 00de FFF7FEFF 		bl	dma_flag_clear
+ 263:../app/usart.c **** 	dma_transfer_number_config(DMA0, DMA_CH3, idx);
+ 1042              		.loc 1 263 2
+ 1043 00e2 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 1044 00e4 1A46     		mov	r2, r3
+ 1045 00e6 0321     		movs	r1, #3
+ 1046 00e8 0548     		ldr	r0, .L61
+ 1047 00ea FFF7FEFF 		bl	dma_transfer_number_config
+ 264:../app/usart.c **** 	dma_channel_enable(DMA0, DMA_CH3);
+ 1048              		.loc 1 264 2
+ 1049 00ee 0321     		movs	r1, #3
+ 1050 00f0 0348     		ldr	r0, .L61
+ 1051 00f2 FFF7FEFF 		bl	dma_channel_enable
+ 1052 00f6 00E0     		b	.L55
+ 1053              	.L60:
+ 247:../app/usart.c **** 	}
+ 1054              		.loc 1 247 3
+ 1055 00f8 00BF     		nop
+ 1056              	.L55:
+ 265:../app/usart.c **** }
+ 1057              		.loc 1 265 1
+ 1058 00fa 0837     		adds	r7, r7, #8
+ 1059              		.cfi_def_cfa_offset 8
+ 1060 00fc BD46     		mov	sp, r7
+ 1061              		.cfi_def_cfa_register 13
+ 1062              		@ sp needed
+ 1063 00fe 80BD     		pop	{r7, pc}
+ 1064              	.L62:
+ 1065              		.align	2
+ 1066              	.L61:
+ 1067 0100 00000240 		.word	1073872896
+ 1068 0104 00000000 		.word	com1tx_buffer
+ 1069 0108 00000000 		.word	virtul_led
+ 1070              		.cfi_endproc
+ 1071              	.LFE124:
+ 1073              		.section	.text.gd_usart0_download,"ax",%progbits
+ 1074              		.align	1
+ 1075              		.global	gd_usart0_download
+ 1076              		.syntax unified
+ 1077              		.thumb
+ 1078              		.thumb_func
+ 1079              		.fpu softvfp
+ 1081              	gd_usart0_download:
+ 1082              	.LFB125:
+ 266:../app/usart.c **** 
+ 267:../app/usart.c **** void gd_usart0_download(void)
+ 268:../app/usart.c **** {
+ 1083              		.loc 1 268 1
+ 1084              		.cfi_startproc
+ 1085              		@ args = 0, pretend = 0, frame = 8
+ 1086              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1087 0000 80B5     		push	{r7, lr}
+ 1088              		.cfi_def_cfa_offset 8
+ 1089              		.cfi_offset 7, -8
+ 1090              		.cfi_offset 14, -4
+ 1091 0002 82B0     		sub	sp, sp, #8
+ 1092              		.cfi_def_cfa_offset 16
+ 1093 0004 00AF     		add	r7, sp, #0
+ 1094              		.cfi_def_cfa_register 7
+ 269:../app/usart.c **** 	uint8_t ch;
+ 270:../app/usart.c **** 	uint16_t rx_index = dma_transfer_number_get(DMA0, DMA_CH4);
+ 1095              		.loc 1 270 22
+ 1096 0006 0421     		movs	r1, #4
+ 1097 0008 2148     		ldr	r0, .L69
+ 1098 000a FFF7FEFF 		bl	dma_transfer_number_get
+ 1099 000e 0346     		mov	r3, r0
+ 1100              		.loc 1 270 11
+ 1101 0010 FB80     		strh	r3, [r7, #6]	@ movhi
+ 271:../app/usart.c **** 	while (rx_index != com1rx_counter){
+ 1102              		.loc 1 271 8
+ 1103 0012 26E0     		b	.L64
+ 1104              	.L66:
+ 272:../app/usart.c **** 		ch = com1rx_buffer[COM1_MAX_SIZE - com1rx_counter];
+ 1105              		.loc 1 272 36
+ 1106 0014 1F4B     		ldr	r3, .L69+4
+ 1107 0016 1B88     		ldrh	r3, [r3]
+ 1108 0018 C3F11003 		rsb	r3, r3, #16
+ 1109              		.loc 1 272 6
+ 1110 001c 1E4A     		ldr	r2, .L69+8
+ 1111 001e D35C     		ldrb	r3, [r2, r3]
+ 1112 0020 7B71     		strb	r3, [r7, #5]
+ 273:../app/usart.c **** 		if (--com1rx_counter == 0x0000){
+ 1113              		.loc 1 273 7
+ 1114 0022 1C4B     		ldr	r3, .L69+4
+ 1115 0024 1B88     		ldrh	r3, [r3]
+ 1116 0026 013B     		subs	r3, r3, #1
+ 1117 0028 9AB2     		uxth	r2, r3
+ 1118              		.loc 1 273 6
+ 1119 002a 1A4B     		ldr	r3, .L69+4
+ 1120 002c 1A80     		strh	r2, [r3]	@ movhi
+ 1121              		.loc 1 273 7
+ 1122 002e 194B     		ldr	r3, .L69+4
+ 1123 0030 1B88     		ldrh	r3, [r3]
+ 1124              		.loc 1 273 6
+ 1125 0032 002B     		cmp	r3, #0
+ 1126 0034 02D1     		bne	.L65
+ 274:../app/usart.c **** 			com1rx_counter = COM1_MAX_SIZE;
+ 1127              		.loc 1 274 19
+ 1128 0036 174B     		ldr	r3, .L69+4
+ 1129 0038 1022     		movs	r2, #16
+ 1130 003a 1A80     		strh	r2, [r3]	@ movhi
+ 1131              	.L65:
+ 275:../app/usart.c **** 		}
+ 276:../app/usart.c **** 		if (SUCCESS == gd_usart0_rx_decode(ch)){
+ 1132              		.loc 1 276 18
+ 1133 003c 7B79     		ldrb	r3, [r7, #5]	@ zero_extendqisi2
+ 1134 003e 1846     		mov	r0, r3
+ 1135 0040 FFF7FEFF 		bl	gd_usart0_rx_decode
+ 1136 0044 0346     		mov	r3, r0
+ 1137              		.loc 1 276 6
+ 1138 0046 012B     		cmp	r3, #1
+ 1139 0048 0BD1     		bne	.L64
+ 277:../app/usart.c **** 			keyTouch_in = (com1rx_frame[0]<<8) | com1rx_frame[1];
+ 1140              		.loc 1 277 31
+ 1141 004a 144B     		ldr	r3, .L69+12
+ 1142 004c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 1143              		.loc 1 277 34
+ 1144 004e 1B02     		lsls	r3, r3, #8
+ 1145              		.loc 1 277 39
+ 1146 0050 1AB2     		sxth	r2, r3
+ 1147              		.loc 1 277 53
+ 1148 0052 124B     		ldr	r3, .L69+12
+ 1149 0054 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 1150 0056 1BB2     		sxth	r3, r3
+ 1151              		.loc 1 277 39
+ 1152 0058 1343     		orrs	r3, r3, r2
+ 1153 005a 1BB2     		sxth	r3, r3
+ 1154 005c 9AB2     		uxth	r2, r3
+ 1155              		.loc 1 277 16
+ 1156 005e 104B     		ldr	r3, .L69+16
+ 1157 0060 1A80     		strh	r2, [r3]	@ movhi
+ 1158              	.L64:
+ 271:../app/usart.c **** 		ch = com1rx_buffer[COM1_MAX_SIZE - com1rx_counter];
+ 1159              		.loc 1 271 18
+ 1160 0062 0C4B     		ldr	r3, .L69+4
+ 1161 0064 1B88     		ldrh	r3, [r3]
+ 271:../app/usart.c **** 		ch = com1rx_buffer[COM1_MAX_SIZE - com1rx_counter];
+ 1162              		.loc 1 271 8
+ 1163 0066 FA88     		ldrh	r2, [r7, #6]
+ 1164 0068 9A42     		cmp	r2, r3
+ 1165 006a D3D1     		bne	.L66
+ 278:../app/usart.c **** 		}
+ 279:../app/usart.c **** 	}
+ 280:../app/usart.c **** 	if (dma_flag_get(DMA0, DMA_CH4,DMA_INTF_FTFIF)) {
+ 1166              		.loc 1 280 6
+ 1167 006c 0222     		movs	r2, #2
+ 1168 006e 0421     		movs	r1, #4
+ 1169 0070 0748     		ldr	r0, .L69
+ 1170 0072 FFF7FEFF 		bl	dma_flag_get
+ 1171 0076 0346     		mov	r3, r0
+ 1172              		.loc 1 280 5
+ 1173 0078 002B     		cmp	r3, #0
+ 1174 007a 04D0     		beq	.L68
+ 281:../app/usart.c **** 		dma_flag_clear(DMA0, DMA_CH4, DMA_INTC_FTFIFC | DMA_INTC_HTFIFC | DMA_INTC_ERRIFC);
+ 1175              		.loc 1 281 3
+ 1176 007c 0E22     		movs	r2, #14
+ 1177 007e 0421     		movs	r1, #4
+ 1178 0080 0348     		ldr	r0, .L69
+ 1179 0082 FFF7FEFF 		bl	dma_flag_clear
+ 1180              	.L68:
+ 282:../app/usart.c **** 	}
+ 283:../app/usart.c **** }
+ 1181              		.loc 1 283 1
+ 1182 0086 00BF     		nop
+ 1183 0088 0837     		adds	r7, r7, #8
+ 1184              		.cfi_def_cfa_offset 8
+ 1185 008a BD46     		mov	sp, r7
+ 1186              		.cfi_def_cfa_register 13
+ 1187              		@ sp needed
+ 1188 008c 80BD     		pop	{r7, pc}
+ 1189              	.L70:
+ 1190 008e 00BF     		.align	2
+ 1191              	.L69:
+ 1192 0090 00000240 		.word	1073872896
+ 1193 0094 00000000 		.word	com1rx_counter
+ 1194 0098 00000000 		.word	com1rx_buffer
+ 1195 009c 00000000 		.word	com1rx_frame
+ 1196 00a0 00000000 		.word	keyTouch_in
+ 1197              		.cfi_endproc
+ 1198              	.LFE125:
+ 1200              		.section	.text.gd_combus_cbfunc,"ax",%progbits
+ 1201              		.align	1
+ 1202              		.global	gd_combus_cbfunc
+ 1203              		.syntax unified
+ 1204              		.thumb
+ 1205              		.thumb_func
+ 1206              		.fpu softvfp
+ 1208              	gd_combus_cbfunc:
+ 1209              	.LFB126:
+ 284:../app/usart.c **** 
+ 285:../app/usart.c **** /* USER CODE END 1 */
+ 286:../app/usart.c **** 
+ 287:../app/usart.c **** /* USER CODE BEGIN 2 */
+ 288:../app/usart.c **** void gd_combus_cbfunc(void)
+ 289:../app/usart.c **** {
+ 1210              		.loc 1 289 1
+ 1211              		.cfi_startproc
+ 1212              		@ args = 0, pretend = 0, frame = 0
+ 1213              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1214 0000 80B5     		push	{r7, lr}
+ 1215              		.cfi_def_cfa_offset 8
+ 1216              		.cfi_offset 7, -8
+ 1217              		.cfi_offset 14, -4
+ 1218 0002 00AF     		add	r7, sp, #0
+ 1219              		.cfi_def_cfa_register 7
+ 290:../app/usart.c **** 	gd_usart0_upload();
+ 1220              		.loc 1 290 2
+ 1221 0004 FFF7FEFF 		bl	gd_usart0_upload
+ 291:../app/usart.c **** 	gd_usart0_download();
+ 1222              		.loc 1 291 2
+ 1223 0008 FFF7FEFF 		bl	gd_usart0_download
+ 292:../app/usart.c **** 	gd_usart1_download();
+ 1224              		.loc 1 292 2
+ 1225 000c FFF7FEFF 		bl	gd_usart1_download
+ 293:../app/usart.c **** }
+ 1226              		.loc 1 293 1
+ 1227 0010 00BF     		nop
+ 1228 0012 80BD     		pop	{r7, pc}
+ 1229              		.cfi_endproc
+ 1230              	.LFE126:
+ 1232              		.section	.bss.chksum.7746,"aw",%nobits
+ 1235              	chksum.7746:
+ 1236 0000 00       		.space	1
+ 1237              		.section	.bss.stateFlow.7749,"aw",%nobits
+ 1240              	stateFlow.7749:
+ 1241 0000 00       		.space	1
+ 1242              		.section	.bss.len.7747,"aw",%nobits
+ 1245              	len.7747:
+ 1246 0000 00       		.space	1
+ 1247              		.section	.bss.size.7748,"aw",%nobits
+ 1250              	size.7748:
+ 1251 0000 00       		.space	1
+ 1252              		.text
+ 1253              	.Letext0:
+ 1254              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1255              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 1256              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 1257              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 1258              		.file 6 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
+ 1259              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
+ 1260              		.file 8 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+ 1261              		.file 9 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dma.h"
+ 1262              		.file 10 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_usart.h"
+ 1263              		.file 11 "../osal/os_lyh_core.h"
+ 1264              		.file 12 "../app/keyboard.h"
+ 1265              		.file 13 "../app/display.h"
+ 1266              		.file 14 "../app/usart.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 usart.c
+                            *COM*:00000040 com2rx_buffer
+                            *COM*:00000040 com2rx_frame
+                            *COM*:00000002 com2rx_w_counter
+                            *COM*:00000002 com2rx_r_counter
+                            *COM*:00000002 com2rx_counter
+                            *COM*:00000010 com1tx_buffer
+                            *COM*:00000010 com1rx_buffer
+                            *COM*:00000010 com1rx_frame
+                            *COM*:00000002 com1rx_counter
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:25     .text.gd_uart_counter_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:33     .text.gd_uart_counter_init:00000000 gd_uart_counter_init
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:74     .text.gd_uart_counter_init:00000024 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:82     .rodata:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:103    .text.gd_uart_com_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:110    .text.gd_uart_com_init:00000000 gd_uart_com_init
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:243    .text.gd_uart_com_init:000000fc $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:254    .text.gd_usart0_dma_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:261    .text.gd_usart0_dma_config:00000000 gd_usart0_dma_config
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:379    .text.gd_usart0_dma_config:000000b0 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:388    .text.gd_usart_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:395    .text.gd_usart_Init:00000000 gd_usart_Init
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:432    .text.gd_usart_Init:00000030 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:438    .text.gd_usart1_upload:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:445    .text.gd_usart1_upload:00000000 gd_usart1_upload
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:522    .text.gd_usart1_upload:00000058 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:527    .text.gd_usart1_rx_decode:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:534    .text.gd_usart1_rx_decode:00000000 gd_usart1_rx_decode
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:597    .text.gd_usart1_rx_decode:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:603    .text.gd_usart1_download:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:610    .text.gd_usart1_download:00000000 gd_usart1_download
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:684    .text.gd_usart1_download:00000050 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:691    .text.gd_usart0_rx_decode:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:698    .text.gd_usart0_rx_decode:00000000 gd_usart0_rx_decode
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:731    .text.gd_usart0_rx_decode:00000028 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:735    .text.gd_usart0_rx_decode:00000038 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:869    .text.gd_usart0_rx_decode:000000e0 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1235   .bss.chksum.7746:00000000 chksum.7746
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1240   .bss.stateFlow.7749:00000000 stateFlow.7749
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1245   .bss.len.7747:00000000 len.7747
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1250   .bss.size.7748:00000000 size.7748
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:878    .text.gd_usart0_upload:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:885    .text.gd_usart0_upload:00000000 gd_usart0_upload
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1067   .text.gd_usart0_upload:00000100 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1074   .text.gd_usart0_download:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1081   .text.gd_usart0_download:00000000 gd_usart0_download
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1192   .text.gd_usart0_download:00000090 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1201   .text.gd_combus_cbfunc:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1208   .text.gd_combus_cbfunc:00000000 gd_combus_cbfunc
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1236   .bss.chksum.7746:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1241   .bss.stateFlow.7749:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1246   .bss.len.7747:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccM5ESZf.s:1251   .bss.size.7748:00000000 $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
+                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
+                           .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
+                           .group:00000000 wm4.usart.h.19.6cf0083f56d5d6d53e20e3a595afda34
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+usart_deinit
+usart_baudrate_set
+usart_receive_config
+usart_transmit_config
+usart_enable
+dma_deinit
+dma_init
+dma_circulation_disable
+dma_memory_to_memory_disable
+dma_circulation_enable
+dma_channel_disable
+dma_channel_enable
+usart_dma_transmit_config
+usart_dma_receive_config
+nvic_irq_enable
+usart_interrupt_enable
+usart_data_transmit
+usart_flag_get
+dma_transfer_number_get
+dma_flag_clear
+dma_transfer_number_config
+virtul_led
+dma_flag_get
+keyTouch_in

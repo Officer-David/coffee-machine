@@ -1,0 +1,384 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"display.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	virtul_led,4,4
+  16              		.section	.text.display_init,"ax",%progbits
+  17              		.align	1
+  18              		.global	display_init
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu softvfp
+  25              	display_init:
+  26              	.LFB116:
+  27              		.file 1 "../app/display.c"
+   1:../app/display.c **** /* USER CODE BEGIN Header */
+   2:../app/display.c **** /**
+   3:../app/display.c ****   ******************************************************************************
+   4:../app/display.c ****   * @file    gpio.c
+   5:../app/display.c ****   * @brief   This file provides code for the configuration
+   6:../app/display.c ****   *          of all used GPIO pins.
+   7:../app/display.c ****   ******************************************************************************
+   8:../app/display.c ****   * @attention
+   9:../app/display.c ****   *
+  10:../app/display.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  11:../app/display.c ****   * in the root directory of this software component.
+  12:../app/display.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  13:../app/display.c ****   *
+  14:../app/display.c ****   ******************************************************************************
+  15:../app/display.c ****   */
+  16:../app/display.c **** /* USER CODE END Header */
+  17:../app/display.c **** 
+  18:../app/display.c **** /* Includes ------------------------------------------------------------------*/
+  19:../app/display.c **** #define _DISPLAY_C_
+  20:../app/display.c **** #include "gd32f30x.h"
+  21:../app/display.c **** #include "os_lyh_core.h"
+  22:../app/display.c **** #include "configboard.h"
+  23:../app/display.c **** #include "display.h"
+  24:../app/display.c **** #include "app.h"
+  25:../app/display.c **** 
+  26:../app/display.c **** /* USER CODE BEGIN 0 */
+  27:../app/display.c **** 
+  28:../app/display.c **** /* USER CODE END 0 */
+  29:../app/display.c **** 
+  30:../app/display.c **** /*----------------------------------------------------------------------------*/
+  31:../app/display.c **** /* Configure display                                                            */
+  32:../app/display.c **** /*----------------------------------------------------------------------------*/
+  33:../app/display.c **** /* USER CODE BEGIN 1 */
+  34:../app/display.c **** void display_init(void)
+  35:../app/display.c **** {
+  28              		.loc 1 35 1
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 80B4     		push	{r7}
+  34              		.cfi_def_cfa_offset 4
+  35              		.cfi_offset 7, -4
+  36 0002 00AF     		add	r7, sp, #0
+  37              		.cfi_def_cfa_register 7
+  36:../app/display.c **** 	virtul_led = 0;
+  38              		.loc 1 36 13
+  39 0004 034B     		ldr	r3, .L2
+  40 0006 0022     		movs	r2, #0
+  41 0008 1A60     		str	r2, [r3]
+  37:../app/display.c **** 	//app_virtual_ledtest_cbfunc();
+  38:../app/display.c **** }
+  42              		.loc 1 38 1
+  43 000a 00BF     		nop
+  44 000c BD46     		mov	sp, r7
+  45              		.cfi_def_cfa_register 13
+  46              		@ sp needed
+  47 000e 80BC     		pop	{r7}
+  48              		.cfi_restore 7
+  49              		.cfi_def_cfa_offset 0
+  50 0010 7047     		bx	lr
+  51              	.L3:
+  52 0012 00BF     		.align	2
+  53              	.L2:
+  54 0014 00000000 		.word	virtul_led
+  55              		.cfi_endproc
+  56              	.LFE116:
+  58              		.section	.text.display_led,"ax",%progbits
+  59              		.align	1
+  60              		.global	display_led
+  61              		.syntax unified
+  62              		.thumb
+  63              		.thumb_func
+  64              		.fpu softvfp
+  66              	display_led:
+  67              	.LFB117:
+  39:../app/display.c **** 
+  40:../app/display.c **** void display_led(uint8_t led, uint8_t bitval)
+  41:../app/display.c **** {
+  68              		.loc 1 41 1
+  69              		.cfi_startproc
+  70              		@ args = 0, pretend = 0, frame = 8
+  71              		@ frame_needed = 1, uses_anonymous_args = 0
+  72              		@ link register save eliminated.
+  73 0000 80B4     		push	{r7}
+  74              		.cfi_def_cfa_offset 4
+  75              		.cfi_offset 7, -4
+  76 0002 83B0     		sub	sp, sp, #12
+  77              		.cfi_def_cfa_offset 16
+  78 0004 00AF     		add	r7, sp, #0
+  79              		.cfi_def_cfa_register 7
+  80 0006 0346     		mov	r3, r0
+  81 0008 0A46     		mov	r2, r1
+  82 000a FB71     		strb	r3, [r7, #7]
+  83 000c 1346     		mov	r3, r2
+  84 000e BB71     		strb	r3, [r7, #6]
+  42:../app/display.c **** 	if (bitval == LED_OFF) {
+  85              		.loc 1 42 5
+  86 0010 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+  87 0012 002B     		cmp	r3, #0
+  88 0014 0AD1     		bne	.L5
+  43:../app/display.c **** 		CLR_LED(led);
+  89              		.loc 1 43 3
+  90 0016 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  91 0018 0122     		movs	r2, #1
+  92 001a 02FA03F3 		lsl	r3, r2, r3
+  93 001e DA43     		mvns	r2, r3
+  94 0020 0F4B     		ldr	r3, .L9
+  95 0022 1B68     		ldr	r3, [r3]
+  96 0024 1340     		ands	r3, r3, r2
+  97 0026 0E4A     		ldr	r2, .L9
+  98 0028 1360     		str	r3, [r2]
+  44:../app/display.c **** 	}
+  45:../app/display.c **** 	else if (bitval == LED_ON){
+  46:../app/display.c **** 		SET_LED(led);
+  47:../app/display.c **** 	}
+  48:../app/display.c **** 	else {
+  49:../app/display.c **** 		TOG_LED(led);
+  50:../app/display.c **** 	}
+  51:../app/display.c **** }
+  99              		.loc 1 51 1
+ 100 002a 13E0     		b	.L8
+ 101              	.L5:
+  45:../app/display.c **** 		SET_LED(led);
+ 102              		.loc 1 45 10
+ 103 002c BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 104 002e 012B     		cmp	r3, #1
+ 105 0030 08D1     		bne	.L7
+  46:../app/display.c **** 	}
+ 106              		.loc 1 46 3
+ 107 0032 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 108 0034 0122     		movs	r2, #1
+ 109 0036 9A40     		lsls	r2, r2, r3
+ 110 0038 094B     		ldr	r3, .L9
+ 111 003a 1B68     		ldr	r3, [r3]
+ 112 003c 1343     		orrs	r3, r3, r2
+ 113 003e 084A     		ldr	r2, .L9
+ 114 0040 1360     		str	r3, [r2]
+ 115              		.loc 1 51 1
+ 116 0042 07E0     		b	.L8
+ 117              	.L7:
+  49:../app/display.c **** 	}
+ 118              		.loc 1 49 3
+ 119 0044 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 120 0046 0122     		movs	r2, #1
+ 121 0048 9A40     		lsls	r2, r2, r3
+ 122 004a 054B     		ldr	r3, .L9
+ 123 004c 1B68     		ldr	r3, [r3]
+ 124 004e 5340     		eors	r3, r3, r2
+ 125 0050 034A     		ldr	r2, .L9
+ 126 0052 1360     		str	r3, [r2]
+ 127              	.L8:
+ 128              		.loc 1 51 1
+ 129 0054 00BF     		nop
+ 130 0056 0C37     		adds	r7, r7, #12
+ 131              		.cfi_def_cfa_offset 4
+ 132 0058 BD46     		mov	sp, r7
+ 133              		.cfi_def_cfa_register 13
+ 134              		@ sp needed
+ 135 005a 80BC     		pop	{r7}
+ 136              		.cfi_restore 7
+ 137              		.cfi_def_cfa_offset 0
+ 138 005c 7047     		bx	lr
+ 139              	.L10:
+ 140 005e 00BF     		.align	2
+ 141              	.L9:
+ 142 0060 00000000 		.word	virtul_led
+ 143              		.cfi_endproc
+ 144              	.LFE117:
+ 146              		.section	.text.display_get_led,"ax",%progbits
+ 147              		.align	1
+ 148              		.global	display_get_led
+ 149              		.syntax unified
+ 150              		.thumb
+ 151              		.thumb_func
+ 152              		.fpu softvfp
+ 154              	display_get_led:
+ 155              	.LFB118:
+  52:../app/display.c **** 
+  53:../app/display.c **** uint8_t display_get_led(uint8_t led)
+  54:../app/display.c **** {
+ 156              		.loc 1 54 1
+ 157              		.cfi_startproc
+ 158              		@ args = 0, pretend = 0, frame = 8
+ 159              		@ frame_needed = 1, uses_anonymous_args = 0
+ 160              		@ link register save eliminated.
+ 161 0000 80B4     		push	{r7}
+ 162              		.cfi_def_cfa_offset 4
+ 163              		.cfi_offset 7, -4
+ 164 0002 83B0     		sub	sp, sp, #12
+ 165              		.cfi_def_cfa_offset 16
+ 166 0004 00AF     		add	r7, sp, #0
+ 167              		.cfi_def_cfa_register 7
+ 168 0006 0346     		mov	r3, r0
+ 169 0008 FB71     		strb	r3, [r7, #7]
+  55:../app/display.c **** 	return GET_LED(led)? LED_ON:LED_OFF;
+ 170              		.loc 1 55 21
+ 171 000a 074B     		ldr	r3, .L13
+ 172 000c 1A68     		ldr	r2, [r3]
+ 173 000e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 174 0010 22FA03F3 		lsr	r3, r2, r3
+ 175              		.loc 1 55 29
+ 176 0014 DBB2     		uxtb	r3, r3
+ 177 0016 03F00103 		and	r3, r3, #1
+ 178 001a DBB2     		uxtb	r3, r3
+  56:../app/display.c **** }
+ 179              		.loc 1 56 1
+ 180 001c 1846     		mov	r0, r3
+ 181 001e 0C37     		adds	r7, r7, #12
+ 182              		.cfi_def_cfa_offset 4
+ 183 0020 BD46     		mov	sp, r7
+ 184              		.cfi_def_cfa_register 13
+ 185              		@ sp needed
+ 186 0022 80BC     		pop	{r7}
+ 187              		.cfi_restore 7
+ 188              		.cfi_def_cfa_offset 0
+ 189 0024 7047     		bx	lr
+ 190              	.L14:
+ 191 0026 00BF     		.align	2
+ 192              	.L13:
+ 193 0028 00000000 		.word	virtul_led
+ 194              		.cfi_endproc
+ 195              	.LFE118:
+ 197              		.section	.text.app_virtual_ledtest_cbfunc,"ax",%progbits
+ 198              		.align	1
+ 199              		.global	app_virtual_ledtest_cbfunc
+ 200              		.syntax unified
+ 201              		.thumb
+ 202              		.thumb_func
+ 203              		.fpu softvfp
+ 205              	app_virtual_ledtest_cbfunc:
+ 206              	.LFB119:
+  57:../app/display.c **** 
+  58:../app/display.c **** /* USER CODE END 1 */
+  59:../app/display.c **** 
+  60:../app/display.c **** /* USER CODE BEGIN 2 */
+  61:../app/display.c **** void app_virtual_ledtest_cbfunc(void)
+  62:../app/display.c **** {
+ 207              		.loc 1 62 1
+ 208              		.cfi_startproc
+ 209              		@ args = 0, pretend = 0, frame = 0
+ 210              		@ frame_needed = 1, uses_anonymous_args = 0
+ 211 0000 80B5     		push	{r7, lr}
+ 212              		.cfi_def_cfa_offset 8
+ 213              		.cfi_offset 7, -8
+ 214              		.cfi_offset 14, -4
+ 215 0002 00AF     		add	r7, sp, #0
+ 216              		.cfi_def_cfa_register 7
+  63:../app/display.c **** 	virtul_led <<= 1;
+ 217              		.loc 1 63 13
+ 218 0004 0A4B     		ldr	r3, .L17
+ 219 0006 1B68     		ldr	r3, [r3]
+ 220 0008 5B00     		lsls	r3, r3, #1
+ 221 000a 094A     		ldr	r2, .L17
+ 222 000c 1360     		str	r3, [r2]
+  64:../app/display.c **** 	if (!virtul_led) {
+ 223              		.loc 1 64 6
+ 224 000e 084B     		ldr	r3, .L17
+ 225 0010 1B68     		ldr	r3, [r3]
+ 226              		.loc 1 64 5
+ 227 0012 002B     		cmp	r3, #0
+ 228 0014 02D1     		bne	.L16
+  65:../app/display.c **** 		virtul_led = 1u;
+ 229              		.loc 1 65 14
+ 230 0016 064B     		ldr	r3, .L17
+ 231 0018 0122     		movs	r2, #1
+ 232 001a 1A60     		str	r2, [r3]
+ 233              	.L16:
+  66:../app/display.c **** 	}
+  67:../app/display.c **** 	osal_lyh_over_timer(OS_VIRUTAL_LED, Ms_1000, app_virtual_ledtest_cbfunc);
+ 234              		.loc 1 67 2
+ 235 001c 054A     		ldr	r2, .L17+4
+ 236 001e 4FF47A71 		mov	r1, #1000
+ 237 0022 4FF48040 		mov	r0, #16384
+ 238 0026 FFF7FEFF 		bl	osal_lyh_over_timer
+  68:../app/display.c **** }
+ 239              		.loc 1 68 1
+ 240 002a 00BF     		nop
+ 241 002c 80BD     		pop	{r7, pc}
+ 242              	.L18:
+ 243 002e 00BF     		.align	2
+ 244              	.L17:
+ 245 0030 00000000 		.word	virtul_led
+ 246 0034 00000000 		.word	app_virtual_ledtest_cbfunc
+ 247              		.cfi_endproc
+ 248              	.LFE119:
+ 250              		.text
+ 251              	.Letext0:
+ 252              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 253              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 254              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 255              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 256              		.file 6 "../osal/os_lyh_core.h"
+ 257              		.file 7 "../app/display.h"
+ 258              		.file 8 "../app/app.h"
+ 259              		.file 9 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 display.c
+                            *COM*:00000004 virtul_led
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:17     .text.display_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:25     .text.display_init:00000000 display_init
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:54     .text.display_init:00000014 $d
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:59     .text.display_led:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:66     .text.display_led:00000000 display_led
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:142    .text.display_led:00000060 $d
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:147    .text.display_get_led:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:154    .text.display_get_led:00000000 display_get_led
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:193    .text.display_get_led:00000028 $d
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:198    .text.app_virtual_ledtest_cbfunc:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:205    .text.app_virtual_ledtest_cbfunc:00000000 app_virtual_ledtest_cbfunc
+C:\Users\user001\AppData\Local\Temp\ccVlO9UY.s:245    .text.app_virtual_ledtest_cbfunc:00000030 $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
+                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.display.h.19.b57365f15e601ba878404bee334f618f
+                           .group:00000000 wm4.app.h.3.cf06ebbefccdf8f9dbc3f6d932ae3362
+
+UNDEFINED SYMBOLS
+osal_lyh_over_timer

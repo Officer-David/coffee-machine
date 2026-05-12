@@ -1,0 +1,639 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"dcmotor.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.bss.motor_state,"aw",%nobits
+  18              	motor_state:
+  19 0000 00       		.space	1
+  20              		.section	.text.dc_motor_SetPins,"ax",%progbits
+  21              		.align	1
+  22              		.arch armv7e-m
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  26              		.fpu softvfp
+  28              	dc_motor_SetPins:
+  29              	.LFB116:
+  30              		.file 1 "../app/dcmotor.c"
+   1:../app/dcmotor.c **** 
+   2:../app/dcmotor.c **** #define _DCMOTOR_C_
+   3:../app/dcmotor.c **** #include <stdlib.h>
+   4:../app/dcmotor.c **** #include "systick.h"
+   5:../app/dcmotor.c **** #include "gd32f30x.h"
+   6:../app/dcmotor.c **** #include "os_lyh_core.h"
+   7:../app/dcmotor.c **** #include "configboard.h"
+   8:../app/dcmotor.c **** #include "dcmotor.h"
+   9:../app/dcmotor.c **** 
+  10:../app/dcmotor.c **** /* Pin definitions */
+  11:../app/dcmotor.c **** #define MOTOR_RIGHT_PIN   GPIO_PIN_14
+  12:../app/dcmotor.c **** #define MOTOR_RIGHT_PORT  GPIOB
+  13:../app/dcmotor.c **** #define MOTOR_LEFT_PIN    GPIO_PIN_15
+  14:../app/dcmotor.c **** #define MOTOR_LEFT_PORT   GPIOB
+  15:../app/dcmotor.c **** #define MOTOR_POS_PIN     GPIO_PIN_8
+  16:../app/dcmotor.c **** #define MOTOR_POS_PORT    GPIOA
+  17:../app/dcmotor.c **** 
+  18:../app/dcmotor.c **** /* Static variable: motor state */
+  19:../app/dcmotor.c **** static MotorState motor_state = MOTOR_STATE_STOPED;
+  20:../app/dcmotor.c **** 
+  21:../app/dcmotor.c **** /* Static function: set two control pins with interlock protection */
+  22:../app/dcmotor.c **** static void dc_motor_SetPins(uint8_t in1, uint8_t in2) {
+  31              		.loc 1 22 56
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 8
+  34              		@ frame_needed = 1, uses_anonymous_args = 0
+  35 0000 80B5     		push	{r7, lr}
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 82B0     		sub	sp, sp, #8
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              		.cfi_def_cfa_register 7
+  43 0006 0346     		mov	r3, r0
+  44 0008 0A46     		mov	r2, r1
+  45 000a FB71     		strb	r3, [r7, #7]
+  46 000c 1346     		mov	r3, r2
+  47 000e BB71     		strb	r3, [r7, #6]
+  23:../app/dcmotor.c ****     /* Interlock protection: do not allow both pins high */
+  24:../app/dcmotor.c ****     if (in1 && in2) {
+  48              		.loc 1 24 8
+  49 0010 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  50 0012 002B     		cmp	r3, #0
+  51 0014 06D0     		beq	.L2
+  52              		.loc 1 24 13 discriminator 1
+  53 0016 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+  54 0018 002B     		cmp	r3, #0
+  55 001a 03D0     		beq	.L2
+  25:../app/dcmotor.c ****         in1 = 0;
+  56              		.loc 1 25 13
+  57 001c 0023     		movs	r3, #0
+  58 001e FB71     		strb	r3, [r7, #7]
+  26:../app/dcmotor.c ****         in2 = 0;
+  59              		.loc 1 26 13
+  60 0020 0023     		movs	r3, #0
+  61 0022 BB71     		strb	r3, [r7, #6]
+  62              	.L2:
+  27:../app/dcmotor.c ****     }
+  28:../app/dcmotor.c **** 	
+  29:../app/dcmotor.c ****     if (in1){
+  63              		.loc 1 29 8
+  64 0024 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  65 0026 002B     		cmp	r3, #0
+  66 0028 05D0     		beq	.L3
+  30:../app/dcmotor.c ****         SetMotor_IN1_High();
+  67              		.loc 1 30 9
+  68 002a 4FF48041 		mov	r1, #16384
+  69 002e 0D48     		ldr	r0, .L8
+  70 0030 FFF7FEFF 		bl	gpio_bit_set
+  71 0034 04E0     		b	.L4
+  72              	.L3:
+  31:../app/dcmotor.c ****     }
+  32:../app/dcmotor.c ****     else{
+  33:../app/dcmotor.c ****         ClrMotor_IN1_Low();	
+  73              		.loc 1 33 9
+  74 0036 4FF48041 		mov	r1, #16384
+  75 003a 0A48     		ldr	r0, .L8
+  76 003c FFF7FEFF 		bl	gpio_bit_reset
+  77              	.L4:
+  34:../app/dcmotor.c ****     }
+  35:../app/dcmotor.c **** 	
+  36:../app/dcmotor.c ****     if (in2){
+  78              		.loc 1 36 8
+  79 0040 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+  80 0042 002B     		cmp	r3, #0
+  81 0044 05D0     		beq	.L5
+  37:../app/dcmotor.c ****         SetMotor_IN2_High();
+  82              		.loc 1 37 9
+  83 0046 4FF40041 		mov	r1, #32768
+  84 004a 0648     		ldr	r0, .L8
+  85 004c FFF7FEFF 		bl	gpio_bit_set
+  38:../app/dcmotor.c ****     }
+  39:../app/dcmotor.c ****     else{
+  40:../app/dcmotor.c ****         ClrMotor_IN2_Low();	
+  41:../app/dcmotor.c ****     }
+  42:../app/dcmotor.c **** }
+  86              		.loc 1 42 1
+  87 0050 04E0     		b	.L7
+  88              	.L5:
+  40:../app/dcmotor.c ****     }
+  89              		.loc 1 40 9
+  90 0052 4FF40041 		mov	r1, #32768
+  91 0056 0348     		ldr	r0, .L8
+  92 0058 FFF7FEFF 		bl	gpio_bit_reset
+  93              	.L7:
+  94              		.loc 1 42 1
+  95 005c 00BF     		nop
+  96 005e 0837     		adds	r7, r7, #8
+  97              		.cfi_def_cfa_offset 8
+  98 0060 BD46     		mov	sp, r7
+  99              		.cfi_def_cfa_register 13
+ 100              		@ sp needed
+ 101 0062 80BD     		pop	{r7, pc}
+ 102              	.L9:
+ 103              		.align	2
+ 104              	.L8:
+ 105 0064 000C0140 		.word	1073810432
+ 106              		.cfi_endproc
+ 107              	.LFE116:
+ 109              		.section	.text.dc_motor_Stop,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	dc_motor_Stop
+ 112              		.syntax unified
+ 113              		.thumb
+ 114              		.thumb_func
+ 115              		.fpu softvfp
+ 117              	dc_motor_Stop:
+ 118              	.LFB117:
+  43:../app/dcmotor.c **** 
+  44:../app/dcmotor.c **** /* Stop motor and update state */
+  45:../app/dcmotor.c **** void dc_motor_Stop(void) {
+ 119              		.loc 1 45 26
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 1, uses_anonymous_args = 0
+ 123 0000 80B5     		push	{r7, lr}
+ 124              		.cfi_def_cfa_offset 8
+ 125              		.cfi_offset 7, -8
+ 126              		.cfi_offset 14, -4
+ 127 0002 00AF     		add	r7, sp, #0
+ 128              		.cfi_def_cfa_register 7
+  46:../app/dcmotor.c ****     dc_motor_SetPins(0, 0);
+ 129              		.loc 1 46 5
+ 130 0004 0021     		movs	r1, #0
+ 131 0006 0020     		movs	r0, #0
+ 132 0008 FFF7FEFF 		bl	dc_motor_SetPins
+  47:../app/dcmotor.c ****     if (motor_state != MOTOR_STATE_FAULT) {
+ 133              		.loc 1 47 21
+ 134 000c 044B     		ldr	r3, .L13
+ 135 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 136              		.loc 1 47 8
+ 137 0010 032B     		cmp	r3, #3
+ 138 0012 02D0     		beq	.L12
+  48:../app/dcmotor.c ****         motor_state = MOTOR_STATE_STOPED;
+ 139              		.loc 1 48 21
+ 140 0014 024B     		ldr	r3, .L13
+ 141 0016 0022     		movs	r2, #0
+ 142 0018 1A70     		strb	r2, [r3]
+ 143              	.L12:
+  49:../app/dcmotor.c ****     }
+  50:../app/dcmotor.c **** }
+ 144              		.loc 1 50 1
+ 145 001a 00BF     		nop
+ 146 001c 80BD     		pop	{r7, pc}
+ 147              	.L14:
+ 148 001e 00BF     		.align	2
+ 149              	.L13:
+ 150 0020 00000000 		.word	motor_state
+ 151              		.cfi_endproc
+ 152              	.LFE117:
+ 154              		.section	.text.dc_motor_Start,"ax",%progbits
+ 155              		.align	1
+ 156              		.global	dc_motor_Start
+ 157              		.syntax unified
+ 158              		.thumb
+ 159              		.thumb_func
+ 160              		.fpu softvfp
+ 162              	dc_motor_Start:
+ 163              	.LFB118:
+  51:../app/dcmotor.c **** 
+  52:../app/dcmotor.c **** /* Start motor with specified direction */
+  53:../app/dcmotor.c **** void dc_motor_Start(MotorDirection dir) {
+ 164              		.loc 1 53 41
+ 165              		.cfi_startproc
+ 166              		@ args = 0, pretend = 0, frame = 8
+ 167              		@ frame_needed = 1, uses_anonymous_args = 0
+ 168 0000 80B5     		push	{r7, lr}
+ 169              		.cfi_def_cfa_offset 8
+ 170              		.cfi_offset 7, -8
+ 171              		.cfi_offset 14, -4
+ 172 0002 82B0     		sub	sp, sp, #8
+ 173              		.cfi_def_cfa_offset 16
+ 174 0004 00AF     		add	r7, sp, #0
+ 175              		.cfi_def_cfa_register 7
+ 176 0006 0346     		mov	r3, r0
+ 177 0008 FB71     		strb	r3, [r7, #7]
+  54:../app/dcmotor.c ****     /* Block operation when in fault state */
+  55:../app/dcmotor.c ****     if (motor_state == MOTOR_STATE_FAULT) {
+ 178              		.loc 1 55 21
+ 179 000a 104B     		ldr	r3, .L23
+ 180 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 181              		.loc 1 55 8
+ 182 000e 032B     		cmp	r3, #3
+ 183 0010 18D0     		beq	.L22
+  56:../app/dcmotor.c ****         return;
+  57:../app/dcmotor.c ****     }
+  58:../app/dcmotor.c **** #if 0	
+  59:../app/dcmotor.c ****     /* Check position signal first; if low, prevent start */
+  60:../app/dcmotor.c ****     if (MOTOR_DET_STATE() == RESET) {
+  61:../app/dcmotor.c ****         dc_motor_Stop();
+  62:../app/dcmotor.c ****         return;
+  63:../app/dcmotor.c ****     }
+  64:../app/dcmotor.c **** #endif	
+  65:../app/dcmotor.c ****     switch (dir) {
+ 184              		.loc 1 65 5
+ 185 0012 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 186 0014 012B     		cmp	r3, #1
+ 187 0016 02D0     		beq	.L18
+ 188 0018 022B     		cmp	r3, #2
+ 189 001a 08D0     		beq	.L19
+ 190 001c 0FE0     		b	.L21
+ 191              	.L18:
+  66:../app/dcmotor.c ****         case MOTOR_RIGHT:
+  67:../app/dcmotor.c ****             dc_motor_SetPins(1, 0);
+ 192              		.loc 1 67 13
+ 193 001e 0021     		movs	r1, #0
+ 194 0020 0120     		movs	r0, #1
+ 195 0022 FFF7FEFF 		bl	dc_motor_SetPins
+  68:../app/dcmotor.c ****             motor_state = MOTOR_STATE_RUNNING_RIGHT;
+ 196              		.loc 1 68 25
+ 197 0026 094B     		ldr	r3, .L23
+ 198 0028 0122     		movs	r2, #1
+ 199 002a 1A70     		strb	r2, [r3]
+  69:../app/dcmotor.c ****             break;
+ 200              		.loc 1 69 13
+ 201 002c 0BE0     		b	.L15
+ 202              	.L19:
+  70:../app/dcmotor.c ****         case MOTOR_LEFT:
+  71:../app/dcmotor.c ****             dc_motor_SetPins(0, 1);
+ 203              		.loc 1 71 13
+ 204 002e 0121     		movs	r1, #1
+ 205 0030 0020     		movs	r0, #0
+ 206 0032 FFF7FEFF 		bl	dc_motor_SetPins
+  72:../app/dcmotor.c ****             motor_state = MOTOR_STATE_RUNNING_LEFT;
+ 207              		.loc 1 72 25
+ 208 0036 054B     		ldr	r3, .L23
+ 209 0038 0222     		movs	r2, #2
+ 210 003a 1A70     		strb	r2, [r3]
+  73:../app/dcmotor.c ****             break;
+ 211              		.loc 1 73 13
+ 212 003c 03E0     		b	.L15
+ 213              	.L21:
+  74:../app/dcmotor.c ****         default:
+  75:../app/dcmotor.c ****             dc_motor_Stop();
+ 214              		.loc 1 75 13
+ 215 003e FFF7FEFF 		bl	dc_motor_Stop
+  76:../app/dcmotor.c ****             break;
+ 216              		.loc 1 76 13
+ 217 0042 00E0     		b	.L15
+ 218              	.L22:
+  56:../app/dcmotor.c ****     }
+ 219              		.loc 1 56 9
+ 220 0044 00BF     		nop
+ 221              	.L15:
+  77:../app/dcmotor.c ****     }
+  78:../app/dcmotor.c **** }
+ 222              		.loc 1 78 1
+ 223 0046 0837     		adds	r7, r7, #8
+ 224              		.cfi_def_cfa_offset 8
+ 225 0048 BD46     		mov	sp, r7
+ 226              		.cfi_def_cfa_register 13
+ 227              		@ sp needed
+ 228 004a 80BD     		pop	{r7, pc}
+ 229              	.L24:
+ 230              		.align	2
+ 231              	.L23:
+ 232 004c 00000000 		.word	motor_state
+ 233              		.cfi_endproc
+ 234              	.LFE118:
+ 236              		.section	.text.dc_motor_GetState,"ax",%progbits
+ 237              		.align	1
+ 238              		.global	dc_motor_GetState
+ 239              		.syntax unified
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.fpu softvfp
+ 244              	dc_motor_GetState:
+ 245              	.LFB119:
+  79:../app/dcmotor.c **** 
+  80:../app/dcmotor.c **** /* Get current motor state */
+  81:../app/dcmotor.c **** MotorState dc_motor_GetState(void) {
+ 246              		.loc 1 81 36
+ 247              		.cfi_startproc
+ 248              		@ args = 0, pretend = 0, frame = 0
+ 249              		@ frame_needed = 1, uses_anonymous_args = 0
+ 250              		@ link register save eliminated.
+ 251 0000 80B4     		push	{r7}
+ 252              		.cfi_def_cfa_offset 4
+ 253              		.cfi_offset 7, -4
+ 254 0002 00AF     		add	r7, sp, #0
+ 255              		.cfi_def_cfa_register 7
+  82:../app/dcmotor.c ****     return motor_state;
+ 256              		.loc 1 82 12
+ 257 0004 024B     		ldr	r3, .L27
+ 258 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  83:../app/dcmotor.c **** }
+ 259              		.loc 1 83 1
+ 260 0008 1846     		mov	r0, r3
+ 261 000a BD46     		mov	sp, r7
+ 262              		.cfi_def_cfa_register 13
+ 263              		@ sp needed
+ 264 000c 80BC     		pop	{r7}
+ 265              		.cfi_restore 7
+ 266              		.cfi_def_cfa_offset 0
+ 267 000e 7047     		bx	lr
+ 268              	.L28:
+ 269              		.align	2
+ 270              	.L27:
+ 271 0010 00000000 		.word	motor_state
+ 272              		.cfi_endproc
+ 273              	.LFE119:
+ 275              		.section	.text.dc_motor_ClearFault,"ax",%progbits
+ 276              		.align	1
+ 277              		.global	dc_motor_ClearFault
+ 278              		.syntax unified
+ 279              		.thumb
+ 280              		.thumb_func
+ 281              		.fpu softvfp
+ 283              	dc_motor_ClearFault:
+ 284              	.LFB120:
+  84:../app/dcmotor.c **** 
+  85:../app/dcmotor.c **** /* Clear fault state (call externally after fault recovery) */
+  86:../app/dcmotor.c **** void dc_motor_ClearFault(void) {
+ 285              		.loc 1 86 32
+ 286              		.cfi_startproc
+ 287              		@ args = 0, pretend = 0, frame = 0
+ 288              		@ frame_needed = 1, uses_anonymous_args = 0
+ 289 0000 80B5     		push	{r7, lr}
+ 290              		.cfi_def_cfa_offset 8
+ 291              		.cfi_offset 7, -8
+ 292              		.cfi_offset 14, -4
+ 293 0002 00AF     		add	r7, sp, #0
+ 294              		.cfi_def_cfa_register 7
+  87:../app/dcmotor.c ****     if (motor_state == MOTOR_STATE_FAULT) {
+ 295              		.loc 1 87 21
+ 296 0004 054B     		ldr	r3, .L32
+ 297 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 298              		.loc 1 87 8
+ 299 0008 032B     		cmp	r3, #3
+ 300 000a 04D1     		bne	.L31
+  88:../app/dcmotor.c ****         motor_state = MOTOR_STATE_STOPED;
+ 301              		.loc 1 88 21
+ 302 000c 034B     		ldr	r3, .L32
+ 303 000e 0022     		movs	r2, #0
+ 304 0010 1A70     		strb	r2, [r3]
+  89:../app/dcmotor.c ****         dc_motor_Stop();   /* Ensure pins output stop level */
+ 305              		.loc 1 89 9
+ 306 0012 FFF7FEFF 		bl	dc_motor_Stop
+ 307              	.L31:
+  90:../app/dcmotor.c ****     }
+  91:../app/dcmotor.c **** }
+ 308              		.loc 1 91 1
+ 309 0016 00BF     		nop
+ 310 0018 80BD     		pop	{r7, pc}
+ 311              	.L33:
+ 312 001a 00BF     		.align	2
+ 313              	.L32:
+ 314 001c 00000000 		.word	motor_state
+ 315              		.cfi_endproc
+ 316              	.LFE120:
+ 318              		.section	.text.dc_motor_reach_irqHandler,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	dc_motor_reach_irqHandler
+ 321              		.syntax unified
+ 322              		.thumb
+ 323              		.thumb_func
+ 324              		.fpu softvfp
+ 326              	dc_motor_reach_irqHandler:
+ 327              	.LFB121:
+  92:../app/dcmotor.c **** 
+  93:../app/dcmotor.c **** /* irq interrupt handler (shared by EXTI lines 5~9) */
+  94:../app/dcmotor.c **** void dc_motor_reach_irqHandler(void) {
+ 328              		.loc 1 94 38
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 0
+ 331              		@ frame_needed = 1, uses_anonymous_args = 0
+ 332 0000 80B5     		push	{r7, lr}
+ 333              		.cfi_def_cfa_offset 8
+ 334              		.cfi_offset 7, -8
+ 335              		.cfi_offset 14, -4
+ 336 0002 00AF     		add	r7, sp, #0
+ 337              		.cfi_def_cfa_register 7
+  95:../app/dcmotor.c ****     /* Software debounce: delay then re-check level */
+  96:../app/dcmotor.c ****     if (MOTOR_DET_STATE() == RESET) {
+ 338              		.loc 1 96 9
+ 339 0004 4FF48071 		mov	r1, #256
+ 340 0008 0448     		ldr	r0, .L37
+ 341 000a FFF7FEFF 		bl	gpio_input_bit_get
+ 342 000e 0346     		mov	r3, r0
+ 343              		.loc 1 96 8
+ 344 0010 002B     		cmp	r3, #0
+ 345 0012 01D1     		bne	.L36
+  97:../app/dcmotor.c ****         dc_motor_Stop();   /* Position reached, stop motor immediately */
+ 346              		.loc 1 97 9
+ 347 0014 FFF7FEFF 		bl	dc_motor_Stop
+ 348              	.L36:
+  98:../app/dcmotor.c ****     }
+  99:../app/dcmotor.c **** }
+ 349              		.loc 1 99 1
+ 350 0018 00BF     		nop
+ 351 001a 80BD     		pop	{r7, pc}
+ 352              	.L38:
+ 353              		.align	2
+ 354              	.L37:
+ 355 001c 00080140 		.word	1073809408
+ 356              		.cfi_endproc
+ 357              	.LFE121:
+ 359              		.section	.text.gd_dcmotor_Init,"ax",%progbits
+ 360              		.align	1
+ 361              		.global	gd_dcmotor_Init
+ 362              		.syntax unified
+ 363              		.thumb
+ 364              		.thumb_func
+ 365              		.fpu softvfp
+ 367              	gd_dcmotor_Init:
+ 368              	.LFB122:
+ 100:../app/dcmotor.c **** 
+ 101:../app/dcmotor.c **** /* Initialize motor control pins and external interrupt */
+ 102:../app/dcmotor.c **** void gd_dcmotor_Init(void) {
+ 369              		.loc 1 102 28
+ 370              		.cfi_startproc
+ 371              		@ args = 0, pretend = 0, frame = 0
+ 372              		@ frame_needed = 1, uses_anonymous_args = 0
+ 373 0000 80B5     		push	{r7, lr}
+ 374              		.cfi_def_cfa_offset 8
+ 375              		.cfi_offset 7, -8
+ 376              		.cfi_offset 14, -4
+ 377 0002 00AF     		add	r7, sp, #0
+ 378              		.cfi_def_cfa_register 7
+ 103:../app/dcmotor.c ****     /* Enable GPIO clocks */
+ 104:../app/dcmotor.c ****     rcu_periph_clock_enable(RCU_GPIOA);
+ 379              		.loc 1 104 5
+ 380 0004 40F20260 		movw	r0, #1538
+ 381 0008 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 105:../app/dcmotor.c ****     rcu_periph_clock_enable(RCU_GPIOB);
+ 382              		.loc 1 105 5
+ 383 000c 40F20360 		movw	r0, #1539
+ 384 0010 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 106:../app/dcmotor.c ****     /* Enable AFIO clock */
+ 107:../app/dcmotor.c ****     rcu_periph_clock_enable(RCU_AF);
+ 385              		.loc 1 107 5
+ 386 0014 4FF4C060 		mov	r0, #1536
+ 387 0018 FFF7FEFF 		bl	rcu_periph_clock_enable
+ 108:../app/dcmotor.c **** 
+ 109:../app/dcmotor.c ****     /* Configure PB14, PB15 as push-pull output, 50MHz */
+ 110:../app/dcmotor.c ****     MOTOR_IN1_CONFIG();
+ 388              		.loc 1 110 5
+ 389 001c 4FF48043 		mov	r3, #16384
+ 390 0020 0122     		movs	r2, #1
+ 391 0022 1021     		movs	r1, #16
+ 392 0024 0C48     		ldr	r0, .L40
+ 393 0026 FFF7FEFF 		bl	gpio_init
+ 111:../app/dcmotor.c ****     MOTOR_IN2_CONFIG();
+ 394              		.loc 1 111 5
+ 395 002a 4FF40043 		mov	r3, #32768
+ 396 002e 0122     		movs	r2, #1
+ 397 0030 1021     		movs	r1, #16
+ 398 0032 0948     		ldr	r0, .L40
+ 399 0034 FFF7FEFF 		bl	gpio_init
+ 112:../app/dcmotor.c **** 
+ 113:../app/dcmotor.c ****     /* Initial state: motor stopped */
+ 114:../app/dcmotor.c ****     dc_motor_SetPins(0, 0);
+ 400              		.loc 1 114 5
+ 401 0038 0021     		movs	r1, #0
+ 402 003a 0020     		movs	r0, #0
+ 403 003c FFF7FEFF 		bl	dc_motor_SetPins
+ 115:../app/dcmotor.c **** 
+ 116:../app/dcmotor.c ****     /* Configure PA8 as floating input */
+ 117:../app/dcmotor.c ****     MOTOR_DET_CONFIG();
+ 404              		.loc 1 117 5
+ 405 0040 4FF48073 		mov	r3, #256
+ 406 0044 0122     		movs	r2, #1
+ 407 0046 0421     		movs	r1, #4
+ 408 0048 0448     		ldr	r0, .L40+4
+ 409 004a FFF7FEFF 		bl	gpio_init
+ 118:../app/dcmotor.c **** 
+ 119:../app/dcmotor.c ****     motor_state = MOTOR_STATE_STOPED;
+ 410              		.loc 1 119 17
+ 411 004e 044B     		ldr	r3, .L40+8
+ 412 0050 0022     		movs	r2, #0
+ 413 0052 1A70     		strb	r2, [r3]
+ 120:../app/dcmotor.c **** }
+ 414              		.loc 1 120 1
+ 415 0054 00BF     		nop
+ 416 0056 80BD     		pop	{r7, pc}
+ 417              	.L41:
+ 418              		.align	2
+ 419              	.L40:
+ 420 0058 000C0140 		.word	1073810432
+ 421 005c 00080140 		.word	1073809408
+ 422 0060 00000000 		.word	motor_state
+ 423              		.cfi_endproc
+ 424              	.LFE122:
+ 426              		.text
+ 427              	.Letext0:
+ 428              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 429              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 430              		.file 4 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 431              		.file 5 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 432              		.file 6 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 433              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 434              		.file 8 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 435              		.file 9 "../inc/systick.h"
+ 436              		.file 10 "../Firmware/CMSIS/core_cm4.h"
+ 437              		.file 11 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 438              		.file 12 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
+ 439              		.file 13 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
+ 440              		.file 14 "../osal/os_lyh_core.h"
+ 441              		.file 15 "../app/dcmotor.h"
+ 442              		.file 16 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 dcmotor.c
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:18     .bss.motor_state:00000000 motor_state
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:19     .bss.motor_state:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:21     .text.dc_motor_SetPins:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:28     .text.dc_motor_SetPins:00000000 dc_motor_SetPins
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:105    .text.dc_motor_SetPins:00000064 $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:110    .text.dc_motor_Stop:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:117    .text.dc_motor_Stop:00000000 dc_motor_Stop
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:150    .text.dc_motor_Stop:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:155    .text.dc_motor_Start:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:162    .text.dc_motor_Start:00000000 dc_motor_Start
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:232    .text.dc_motor_Start:0000004c $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:237    .text.dc_motor_GetState:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:244    .text.dc_motor_GetState:00000000 dc_motor_GetState
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:271    .text.dc_motor_GetState:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:276    .text.dc_motor_ClearFault:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:283    .text.dc_motor_ClearFault:00000000 dc_motor_ClearFault
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:314    .text.dc_motor_ClearFault:0000001c $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:319    .text.dc_motor_reach_irqHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:326    .text.dc_motor_reach_irqHandler:00000000 dc_motor_reach_irqHandler
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:355    .text.dc_motor_reach_irqHandler:0000001c $d
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:360    .text.gd_dcmotor_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:367    .text.gd_dcmotor_Init:00000000 gd_dcmotor_Init
+C:\Users\user001\AppData\Local\Temp\ccpyWckh.s:420    .text.gd_dcmotor_Init:00000058 $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
+                           .group:00000000 wm4.features.h.22.fad1cec3bc7ff06488171438dbdcfd02
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdlib.h.13.4ed386f5c1a80d71e72172885d946ef2
+                           .group:00000000 wm4.stddef.h.181.13772e73e5434e8cc4fafaaddad2b5da
+                           .group:00000000 wm4.stddef.h.39.cf3ebec0bc8c9e3d2f276a64e0fe5e7a
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.alloca.h.8.dfc0c703c47ec3e69746825b17d9e66d
+                           .group:00000000 wm4.stdlib.h.56.d4493cd3736e51e9d56335045f26df45
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.systick.h.43.07d7885abc5933e4002e0422ed75c55a
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
+                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.dcmotor.h.2.1caa1708509315681b04efde390218ee
+
+UNDEFINED SYMBOLS
+gpio_bit_set
+gpio_bit_reset
+gpio_input_bit_get
+rcu_periph_clock_enable
+gpio_init
