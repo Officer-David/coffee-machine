@@ -32,8 +32,8 @@ src/gd32f30x_it.o: ../src/gd32f30x_it.c ../inc/gd32f30x_it.h \
  ../osal/os_lyh_config.h ../osal/os_lyh_core.h ../osal/os_lyh_config.h \
  ../osal/os_msg.h ../osal/os_msg.h ../app/configboard.h ../app/keyboard.h \
  ../app/acmotor.h ../app/dcmotor.h ../app/display.h ../app/extint.h \
- ../app/timer.h ../app/usart.h ../app/gpio.h ../app/adc.h ../app/app.h \
- ../app/bus.h
+ ../app/timer.h ../app/usart.h ../app/gpio.h ../app/heat.h ../app/adc.h \
+ ../app/app.h ../app/bus.h
 
 ../inc/gd32f30x_it.h:
 
@@ -132,6 +132,8 @@ src/gd32f30x_it.o: ../src/gd32f30x_it.c ../inc/gd32f30x_it.h \
 ../app/usart.h:
 
 ../app/gpio.h:
+
+../app/heat.h:
 
 ../app/adc.h:
 

@@ -495,27 +495,27 @@
  380              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gd32f30x_crc.c
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:16     .text.crc_deinit:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:24     .text.crc_deinit:00000000 crc_deinit
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:64     .text.crc_deinit:00000020 $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:71     .text.crc_data_register_reset:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:78     .text.crc_data_register_reset:00000000 crc_data_register_reset
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:108    .text.crc_data_register_reset:00000018 $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:113    .text.crc_data_register_read:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:120    .text.crc_data_register_read:00000000 crc_data_register_read
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:155    .text.crc_data_register_read:00000018 $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:160    .text.crc_free_data_register_read:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:167    .text.crc_free_data_register_read:00000000 crc_free_data_register_read
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:202    .text.crc_free_data_register_read:00000018 $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:207    .text.crc_free_data_register_write:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:214    .text.crc_free_data_register_write:00000000 crc_free_data_register_write
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:250    .text.crc_free_data_register_write:0000001c $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:255    .text.crc_single_data_calculate:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:262    .text.crc_single_data_calculate:00000000 crc_single_data_calculate
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:299    .text.crc_single_data_calculate:0000001c $d
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:304    .text.crc_block_data_calculate:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:311    .text.crc_block_data_calculate:00000000 crc_block_data_calculate
-C:\Users\user001\AppData\Local\Temp\ccKi4M9o.s:371    .text.crc_block_data_calculate:0000003c $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:16     .text.crc_deinit:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:24     .text.crc_deinit:00000000 crc_deinit
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:64     .text.crc_deinit:00000020 $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:71     .text.crc_data_register_reset:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:78     .text.crc_data_register_reset:00000000 crc_data_register_reset
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:108    .text.crc_data_register_reset:00000018 $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:113    .text.crc_data_register_read:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:120    .text.crc_data_register_read:00000000 crc_data_register_read
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:155    .text.crc_data_register_read:00000018 $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:160    .text.crc_free_data_register_read:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:167    .text.crc_free_data_register_read:00000000 crc_free_data_register_read
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:202    .text.crc_free_data_register_read:00000018 $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:207    .text.crc_free_data_register_write:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:214    .text.crc_free_data_register_write:00000000 crc_free_data_register_write
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:250    .text.crc_free_data_register_write:0000001c $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:255    .text.crc_single_data_calculate:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:262    .text.crc_single_data_calculate:00000000 crc_single_data_calculate
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:299    .text.crc_single_data_calculate:0000001c $d
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:304    .text.crc_block_data_calculate:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:311    .text.crc_block_data_calculate:00000000 crc_block_data_calculate
+C:\Users\user001\AppData\Local\Temp\cccYI4hb.s:371    .text.crc_block_data_calculate:0000003c $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

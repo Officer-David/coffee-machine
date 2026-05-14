@@ -1,0 +1,647 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"heat.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.comm	heat_id,1,1
+  16              		.comm	heat_task_step,1,1
+  17              		.comm	target_temp,2,2
+  18              		.section	.text.heat_task_nextstep,"ax",%progbits
+  19              		.align	1
+  20              		.global	heat_task_nextstep
+  21              		.arch armv7e-m
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  25              		.fpu softvfp
+  27              	heat_task_nextstep:
+  28              	.LFB119:
+  29              		.file 1 "../app/heat.c"
+   1:../app/heat.c **** 
+   2:../app/heat.c **** /*
+   3:../app/heat.c ****   ******************************************************************************
+   4:../app/heat.c ****   * @file           : bus.c
+   5:../app/heat.c ****   * @brief         : keyboard program body
+   6:../app/heat.c ****   ******************************************************************************
+   7:../app/heat.c ****   * @attention
+   8:../app/heat.c ****   *
+   9:../app/heat.c ****   * Date					 		
+  10:../app/heat.c ****   * Description
+  11:../app/heat.c ****   *____________________________________________________________________________*/
+  12:../app/heat.c **** 
+  13:../app/heat.c **** /*_____ I N C L U D E S ____________________________________________________*/
+  14:../app/heat.c **** #define _HEAT_C_
+  15:../app/heat.c **** #include <stdio.h>
+  16:../app/heat.c **** #include <string.h>
+  17:../app/heat.c **** #include "gd32f30x.h"
+  18:../app/heat.c **** #include "user_apiopt.h"
+  19:../app/heat.c **** 
+  20:../app/heat.c **** /*_____ D E F I N I T I O N S ________________________________________________*/
+  21:../app/heat.c **** #define DELT_VAL			10
+  22:../app/heat.c **** 
+  23:../app/heat.c **** /*_____ M A C R O S ______________________________________________________*/
+  24:../app/heat.c **** 
+  25:../app/heat.c **** 
+  26:../app/heat.c **** /*_____ F U N C T I O N S __________________________________________________*/
+  27:../app/heat.c **** 
+  28:../app/heat.c **** void heat_task_nextstep(uint8_t Step)
+  29:../app/heat.c **** {
+  30              		.loc 1 29 1
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34 0000 80B5     		push	{r7, lr}
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+  39              		.cfi_def_cfa_offset 16
+  40 0004 00AF     		add	r7, sp, #0
+  41              		.cfi_def_cfa_register 7
+  42 0006 0346     		mov	r3, r0
+  43 0008 FB71     		strb	r3, [r7, #7]
+  30:../app/heat.c **** 	osal_lyh_restore_task(heat_id);
+  44              		.loc 1 30 2
+  45 000a 064B     		ldr	r3, .L2
+  46 000c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  47 000e 1846     		mov	r0, r3
+  48 0010 FFF7FEFF 		bl	osal_lyh_restore_task
+  31:../app/heat.c **** 	heat_task_step = Step;
+  49              		.loc 1 31 17
+  50 0014 044A     		ldr	r2, .L2+4
+  51 0016 FB79     		ldrb	r3, [r7, #7]
+  52 0018 1370     		strb	r3, [r2]
+  32:../app/heat.c **** }
+  53              		.loc 1 32 1
+  54 001a 00BF     		nop
+  55 001c 0837     		adds	r7, r7, #8
+  56              		.cfi_def_cfa_offset 8
+  57 001e BD46     		mov	sp, r7
+  58              		.cfi_def_cfa_register 13
+  59              		@ sp needed
+  60 0020 80BD     		pop	{r7, pc}
+  61              	.L3:
+  62 0022 00BF     		.align	2
+  63              	.L2:
+  64 0024 00000000 		.word	heat_id
+  65 0028 00000000 		.word	heat_task_step
+  66              		.cfi_endproc
+  67              	.LFE119:
+  69              		.section	.text.heat_temp_deal,"ax",%progbits
+  70              		.align	1
+  71              		.global	heat_temp_deal
+  72              		.syntax unified
+  73              		.thumb
+  74              		.thumb_func
+  75              		.fpu softvfp
+  77              	heat_temp_deal:
+  78              	.LFB120:
+  33:../app/heat.c **** 
+  34:../app/heat.c **** void heat_temp_deal(uint16_t target_val)
+  35:../app/heat.c **** {
+  79              		.loc 1 35 1
+  80              		.cfi_startproc
+  81              		@ args = 0, pretend = 0, frame = 16
+  82              		@ frame_needed = 1, uses_anonymous_args = 0
+  83 0000 80B5     		push	{r7, lr}
+  84              		.cfi_def_cfa_offset 8
+  85              		.cfi_offset 7, -8
+  86              		.cfi_offset 14, -4
+  87 0002 84B0     		sub	sp, sp, #16
+  88              		.cfi_def_cfa_offset 24
+  89 0004 00AF     		add	r7, sp, #0
+  90              		.cfi_def_cfa_register 7
+  91 0006 0346     		mov	r3, r0
+  92 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+  36:../app/heat.c **** 	uint16_t cur_temp_val = gd_adc_get(TEMPERATURE);
+  93              		.loc 1 36 26
+  94 000a 0220     		movs	r0, #2
+  95 000c FFF7FEFF 		bl	gd_adc_get
+  96 0010 0346     		mov	r3, r0
+  97 0012 FB81     		strh	r3, [r7, #14]	@ movhi
+  37:../app/heat.c **** 	int16_t temp_delt;
+  38:../app/heat.c **** 
+  39:../app/heat.c **** 	temp_delt = cur_temp_val - target_val;
+  98              		.loc 1 39 27
+  99 0014 FA89     		ldrh	r2, [r7, #14]	@ movhi
+ 100 0016 FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 101 0018 D31A     		subs	r3, r2, r3
+ 102 001a 9BB2     		uxth	r3, r3
+ 103              		.loc 1 39 12
+ 104 001c BB81     		strh	r3, [r7, #12]	@ movhi
+  40:../app/heat.c **** 	if (temp_delt > DELT_VAL){
+ 105              		.loc 1 40 5
+ 106 001e B7F90C30 		ldrsh	r3, [r7, #12]
+ 107 0022 0A2B     		cmp	r3, #10
+ 108 0024 02DD     		ble	.L5
+  41:../app/heat.c **** 		ac_heat_stop();
+ 109              		.loc 1 41 3
+ 110 0026 FFF7FEFF 		bl	ac_heat_stop
+  42:../app/heat.c **** 	}
+  43:../app/heat.c **** 	else if (temp_delt < -DELT_VAL){
+  44:../app/heat.c **** 		ac_heat_start();
+  45:../app/heat.c **** 	}
+  46:../app/heat.c **** }
+ 111              		.loc 1 46 1
+ 112 002a 06E0     		b	.L7
+ 113              	.L5:
+  43:../app/heat.c **** 		ac_heat_start();
+ 114              		.loc 1 43 10
+ 115 002c B7F90C30 		ldrsh	r3, [r7, #12]
+ 116 0030 13F10A0F 		cmn	r3, #10
+ 117 0034 01DA     		bge	.L7
+  44:../app/heat.c **** 	}
+ 118              		.loc 1 44 3
+ 119 0036 FFF7FEFF 		bl	ac_heat_start
+ 120              	.L7:
+ 121              		.loc 1 46 1
+ 122 003a 00BF     		nop
+ 123 003c 1037     		adds	r7, r7, #16
+ 124              		.cfi_def_cfa_offset 8
+ 125 003e BD46     		mov	sp, r7
+ 126              		.cfi_def_cfa_register 13
+ 127              		@ sp needed
+ 128 0040 80BD     		pop	{r7, pc}
+ 129              		.cfi_endproc
+ 130              	.LFE120:
+ 132              		.section	.text.heat_get_temp,"ax",%progbits
+ 133              		.align	1
+ 134              		.global	heat_get_temp
+ 135              		.syntax unified
+ 136              		.thumb
+ 137              		.thumb_func
+ 138              		.fpu softvfp
+ 140              	heat_get_temp:
+ 141              	.LFB121:
+  47:../app/heat.c **** 
+  48:../app/heat.c **** uint8_t heat_get_temp(uint16_t target_val)
+  49:../app/heat.c **** {
+ 142              		.loc 1 49 1
+ 143              		.cfi_startproc
+ 144              		@ args = 0, pretend = 0, frame = 16
+ 145              		@ frame_needed = 1, uses_anonymous_args = 0
+ 146 0000 80B5     		push	{r7, lr}
+ 147              		.cfi_def_cfa_offset 8
+ 148              		.cfi_offset 7, -8
+ 149              		.cfi_offset 14, -4
+ 150 0002 84B0     		sub	sp, sp, #16
+ 151              		.cfi_def_cfa_offset 24
+ 152 0004 00AF     		add	r7, sp, #0
+ 153              		.cfi_def_cfa_register 7
+ 154 0006 0346     		mov	r3, r0
+ 155 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+  50:../app/heat.c **** 	uint16_t cur_temp_val = gd_adc_get(TEMPERATURE);
+ 156              		.loc 1 50 26
+ 157 000a 0220     		movs	r0, #2
+ 158 000c FFF7FEFF 		bl	gd_adc_get
+ 159 0010 0346     		mov	r3, r0
+ 160 0012 FB81     		strh	r3, [r7, #14]	@ movhi
+  51:../app/heat.c **** 	int16_t temp_delt;
+  52:../app/heat.c **** 
+  53:../app/heat.c **** 	temp_delt = cur_temp_val - target_val;
+ 161              		.loc 1 53 27
+ 162 0014 FA89     		ldrh	r2, [r7, #14]	@ movhi
+ 163 0016 FB88     		ldrh	r3, [r7, #6]	@ movhi
+ 164 0018 D31A     		subs	r3, r2, r3
+ 165 001a 9BB2     		uxth	r3, r3
+ 166              		.loc 1 53 12
+ 167 001c BB81     		strh	r3, [r7, #12]	@ movhi
+  54:../app/heat.c **** 	if ((temp_delt < DELT_VAL) && (temp_delt > -DELT_VAL)){
+ 168              		.loc 1 54 5
+ 169 001e B7F90C30 		ldrsh	r3, [r7, #12]
+ 170 0022 092B     		cmp	r3, #9
+ 171 0024 06DC     		bgt	.L9
+ 172              		.loc 1 54 29 discriminator 1
+ 173 0026 B7F90C30 		ldrsh	r3, [r7, #12]
+ 174 002a 13F1090F 		cmn	r3, #9
+ 175 002e 01DB     		blt	.L9
+  55:../app/heat.c **** 		return TRUE;
+ 176              		.loc 1 55 10
+ 177 0030 0123     		movs	r3, #1
+ 178 0032 00E0     		b	.L10
+ 179              	.L9:
+  56:../app/heat.c **** 	}
+  57:../app/heat.c **** 	return FAIL;
+ 180              		.loc 1 57 9
+ 181 0034 0023     		movs	r3, #0
+ 182              	.L10:
+  58:../app/heat.c **** }
+ 183              		.loc 1 58 1
+ 184 0036 1846     		mov	r0, r3
+ 185 0038 1037     		adds	r7, r7, #16
+ 186              		.cfi_def_cfa_offset 8
+ 187 003a BD46     		mov	sp, r7
+ 188              		.cfi_def_cfa_register 13
+ 189              		@ sp needed
+ 190 003c 80BD     		pop	{r7, pc}
+ 191              		.cfi_endproc
+ 192              	.LFE121:
+ 194              		.section	.text.init_heat_task,"ax",%progbits
+ 195              		.align	1
+ 196              		.global	init_heat_task
+ 197              		.syntax unified
+ 198              		.thumb
+ 199              		.thumb_func
+ 200              		.fpu softvfp
+ 202              	init_heat_task:
+ 203              	.LFB122:
+  59:../app/heat.c **** 
+  60:../app/heat.c **** /************************************************************************
+  61:../app/heat.c **** * function name: init_heat
+  62:../app/heat.c **** * input: non
+  63:../app/heat.c **** * output: non
+  64:../app/heat.c **** * description: object thread
+  65:../app/heat.c **** *************************************************************************/
+  66:../app/heat.c **** void init_heat_task(uint8_t id)
+  67:../app/heat.c **** {
+ 204              		.loc 1 67 1
+ 205              		.cfi_startproc
+ 206              		@ args = 0, pretend = 0, frame = 8
+ 207              		@ frame_needed = 1, uses_anonymous_args = 0
+ 208              		@ link register save eliminated.
+ 209 0000 80B4     		push	{r7}
+ 210              		.cfi_def_cfa_offset 4
+ 211              		.cfi_offset 7, -4
+ 212 0002 83B0     		sub	sp, sp, #12
+ 213              		.cfi_def_cfa_offset 16
+ 214 0004 00AF     		add	r7, sp, #0
+ 215              		.cfi_def_cfa_register 7
+ 216 0006 0346     		mov	r3, r0
+ 217 0008 FB71     		strb	r3, [r7, #7]
+  68:../app/heat.c **** 	heat_id = id;
+ 218              		.loc 1 68 10
+ 219 000a 054A     		ldr	r2, .L12
+ 220 000c FB79     		ldrb	r3, [r7, #7]
+ 221 000e 1370     		strb	r3, [r2]
+  69:../app/heat.c **** 	heat_task_step = HEAT_INIT_STATE;
+ 222              		.loc 1 69 17
+ 223 0010 044B     		ldr	r3, .L12+4
+ 224 0012 0022     		movs	r2, #0
+ 225 0014 1A70     		strb	r2, [r3]
+  70:../app/heat.c **** }
+ 226              		.loc 1 70 1
+ 227 0016 00BF     		nop
+ 228 0018 0C37     		adds	r7, r7, #12
+ 229              		.cfi_def_cfa_offset 4
+ 230 001a BD46     		mov	sp, r7
+ 231              		.cfi_def_cfa_register 13
+ 232              		@ sp needed
+ 233 001c 80BC     		pop	{r7}
+ 234              		.cfi_restore 7
+ 235              		.cfi_def_cfa_offset 0
+ 236 001e 7047     		bx	lr
+ 237              	.L13:
+ 238              		.align	2
+ 239              	.L12:
+ 240 0020 00000000 		.word	heat_id
+ 241 0024 00000000 		.word	heat_task_step
+ 242              		.cfi_endproc
+ 243              	.LFE122:
+ 245              		.section	.text.heat_task_handler,"ax",%progbits
+ 246              		.align	1
+ 247              		.global	heat_task_handler
+ 248              		.syntax unified
+ 249              		.thumb
+ 250              		.thumb_func
+ 251              		.fpu softvfp
+ 253              	heat_task_handler:
+ 254              	.LFB123:
+  71:../app/heat.c **** 
+  72:../app/heat.c **** /************************************************************************
+  73:../app/heat.c **** * function name: heat_task_handler
+  74:../app/heat.c **** * input: non
+  75:../app/heat.c **** * output: non
+  76:../app/heat.c **** * description: object thread
+  77:../app/heat.c **** *************************************************************************/
+  78:../app/heat.c **** void heat_task_handler(void)
+  79:../app/heat.c **** {
+ 255              		.loc 1 79 1
+ 256              		.cfi_startproc
+ 257              		@ args = 0, pretend = 0, frame = 0
+ 258              		@ frame_needed = 1, uses_anonymous_args = 0
+ 259 0000 80B5     		push	{r7, lr}
+ 260              		.cfi_def_cfa_offset 8
+ 261              		.cfi_offset 7, -8
+ 262              		.cfi_offset 14, -4
+ 263 0002 00AF     		add	r7, sp, #0
+ 264              		.cfi_def_cfa_register 7
+  80:../app/heat.c **** 	switch(heat_task_step)
+ 265              		.loc 1 80 2
+ 266 0004 0F4B     		ldr	r3, .L23
+ 267 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 268 0008 022B     		cmp	r3, #2
+ 269 000a 0CD0     		beq	.L15
+ 270 000c 022B     		cmp	r3, #2
+ 271 000e 13DC     		bgt	.L20
+ 272 0010 002B     		cmp	r3, #0
+ 273 0012 02D0     		beq	.L17
+ 274 0014 012B     		cmp	r3, #1
+ 275 0016 11D0     		beq	.L21
+  81:../app/heat.c **** 	{
+  82:../app/heat.c **** 		case HEAT_INIT_STATE:
+  83:../app/heat.c **** 			ac_heat_stop();
+  84:../app/heat.c **** 			heat_task_step = HEAT_IDLE_STATE;
+  85:../app/heat.c **** 			break;
+  86:../app/heat.c **** 		case HEAT_RUN_STATE:
+  87:../app/heat.c **** 			heat_temp_deal(target_temp);
+  88:../app/heat.c **** 			osal_lyh_delay_task(Ms_100);
+  89:../app/heat.c **** 			break;
+  90:../app/heat.c **** 		case HEAT_IDLE_STATE:
+  91:../app/heat.c **** 			break;
+  92:../app/heat.c **** 		default:
+  93:../app/heat.c **** 			break;
+ 276              		.loc 1 93 4
+ 277 0018 0EE0     		b	.L20
+ 278              	.L17:
+  83:../app/heat.c **** 			heat_task_step = HEAT_IDLE_STATE;
+ 279              		.loc 1 83 4
+ 280 001a FFF7FEFF 		bl	ac_heat_stop
+  84:../app/heat.c **** 			break;
+ 281              		.loc 1 84 19
+ 282 001e 094B     		ldr	r3, .L23
+ 283 0020 0122     		movs	r2, #1
+ 284 0022 1A70     		strb	r2, [r3]
+  85:../app/heat.c **** 		case HEAT_RUN_STATE:
+ 285              		.loc 1 85 4
+ 286 0024 0BE0     		b	.L19
+ 287              	.L15:
+  87:../app/heat.c **** 			osal_lyh_delay_task(Ms_100);
+ 288              		.loc 1 87 4
+ 289 0026 084B     		ldr	r3, .L23+4
+ 290 0028 1B88     		ldrh	r3, [r3]
+ 291 002a 1846     		mov	r0, r3
+ 292 002c FFF7FEFF 		bl	heat_temp_deal
+  88:../app/heat.c **** 			break;
+ 293              		.loc 1 88 4
+ 294 0030 6420     		movs	r0, #100
+ 295 0032 FFF7FEFF 		bl	osal_lyh_delay_task
+  89:../app/heat.c **** 		case HEAT_IDLE_STATE:
+ 296              		.loc 1 89 4
+ 297 0036 02E0     		b	.L19
+ 298              	.L20:
+ 299              		.loc 1 93 4
+ 300 0038 00BF     		nop
+ 301 003a 00E0     		b	.L22
+ 302              	.L21:
+  91:../app/heat.c **** 		default:
+ 303              		.loc 1 91 4
+ 304 003c 00BF     		nop
+ 305              	.L19:
+ 306              	.L22:
+  94:../app/heat.c **** 	}
+  95:../app/heat.c **** }
+ 307              		.loc 1 95 1
+ 308 003e 00BF     		nop
+ 309 0040 80BD     		pop	{r7, pc}
+ 310              	.L24:
+ 311 0042 00BF     		.align	2
+ 312              	.L23:
+ 313 0044 00000000 		.word	heat_task_step
+ 314 0048 00000000 		.word	target_temp
+ 315              		.cfi_endproc
+ 316              	.LFE123:
+ 318              		.section	.text.heat_event_handler,"ax",%progbits
+ 319              		.align	1
+ 320              		.global	heat_event_handler
+ 321              		.syntax unified
+ 322              		.thumb
+ 323              		.thumb_func
+ 324              		.fpu softvfp
+ 326              	heat_event_handler:
+ 327              	.LFB124:
+  96:../app/heat.c **** 
+  97:../app/heat.c **** /************************************************************************
+  98:../app/heat.c **** * function name: heat_processEvent
+  99:../app/heat.c **** * input: non
+ 100:../app/heat.c **** * output: non
+ 101:../app/heat.c **** * description: this object's message loop
+ 102:../app/heat.c **** *************************************************************************/
+ 103:../app/heat.c **** uint32_t heat_event_handler( uint8_t task_id, uint32_t events)
+ 104:../app/heat.c **** {
+ 328              		.loc 1 104 1
+ 329              		.cfi_startproc
+ 330              		@ args = 0, pretend = 0, frame = 8
+ 331              		@ frame_needed = 1, uses_anonymous_args = 0
+ 332 0000 80B5     		push	{r7, lr}
+ 333              		.cfi_def_cfa_offset 8
+ 334              		.cfi_offset 7, -8
+ 335              		.cfi_offset 14, -4
+ 336 0002 82B0     		sub	sp, sp, #8
+ 337              		.cfi_def_cfa_offset 16
+ 338 0004 00AF     		add	r7, sp, #0
+ 339              		.cfi_def_cfa_register 7
+ 340 0006 0346     		mov	r3, r0
+ 341 0008 3960     		str	r1, [r7]
+ 342 000a FB71     		strb	r3, [r7, #7]
+ 105:../app/heat.c **** 	if (heat_id != task_id){
+ 343              		.loc 1 105 14
+ 344 000c 114B     		ldr	r3, .L30
+ 345 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 346              		.loc 1 105 5
+ 347 0010 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 348 0012 9A42     		cmp	r2, r3
+ 349 0014 01D0     		beq	.L26
+ 106:../app/heat.c **** 		return events;
+ 350              		.loc 1 106 10
+ 351 0016 3B68     		ldr	r3, [r7]
+ 352 0018 18E0     		b	.L27
+ 353              	.L26:
+ 107:../app/heat.c **** 	}
+ 108:../app/heat.c **** 	if (HEAT_START_EVENT & events){
+ 354              		.loc 1 108 23
+ 355 001a 3B68     		ldr	r3, [r7]
+ 356 001c 03F00103 		and	r3, r3, #1
+ 357              		.loc 1 108 5
+ 358 0020 002B     		cmp	r3, #0
+ 359 0022 06D0     		beq	.L28
+ 109:../app/heat.c **** 		if (heat_task_step != HEAT_RUN_STATE){
+ 360              		.loc 1 109 22
+ 361 0024 0C4B     		ldr	r3, .L30+4
+ 362 0026 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 363              		.loc 1 109 6
+ 364 0028 022B     		cmp	r3, #2
+ 365 002a 02D0     		beq	.L28
+ 110:../app/heat.c **** 			heat_task_nextstep(HEAT_RUN_STATE);
+ 366              		.loc 1 110 4
+ 367 002c 0220     		movs	r0, #2
+ 368 002e FFF7FEFF 		bl	heat_task_nextstep
+ 369              	.L28:
+ 111:../app/heat.c **** 		}
+ 112:../app/heat.c **** 	}
+ 113:../app/heat.c **** 	if (HEAT_STOP_EVENT & events){
+ 370              		.loc 1 113 22
+ 371 0032 3B68     		ldr	r3, [r7]
+ 372 0034 03F00203 		and	r3, r3, #2
+ 373              		.loc 1 113 5
+ 374 0038 002B     		cmp	r3, #0
+ 375 003a 06D0     		beq	.L29
+ 114:../app/heat.c **** 		if (heat_task_step == HEAT_RUN_STATE){
+ 376              		.loc 1 114 22
+ 377 003c 064B     		ldr	r3, .L30+4
+ 378 003e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 379              		.loc 1 114 6
+ 380 0040 022B     		cmp	r3, #2
+ 381 0042 02D1     		bne	.L29
+ 115:../app/heat.c **** 			heat_task_nextstep(HEAT_INIT_STATE);
+ 382              		.loc 1 115 4
+ 383 0044 0020     		movs	r0, #0
+ 384 0046 FFF7FEFF 		bl	heat_task_nextstep
+ 385              	.L29:
+ 116:../app/heat.c **** 		}
+ 117:../app/heat.c **** 	}
+ 118:../app/heat.c **** 	return events;
+ 386              		.loc 1 118 9
+ 387 004a 3B68     		ldr	r3, [r7]
+ 388              	.L27:
+ 119:../app/heat.c **** }
+ 389              		.loc 1 119 1
+ 390 004c 1846     		mov	r0, r3
+ 391 004e 0837     		adds	r7, r7, #8
+ 392              		.cfi_def_cfa_offset 8
+ 393 0050 BD46     		mov	sp, r7
+ 394              		.cfi_def_cfa_register 13
+ 395              		@ sp needed
+ 396 0052 80BD     		pop	{r7, pc}
+ 397              	.L31:
+ 398              		.align	2
+ 399              	.L30:
+ 400 0054 00000000 		.word	heat_id
+ 401 0058 00000000 		.word	heat_task_step
+ 402              		.cfi_endproc
+ 403              	.LFE124:
+ 405              		.text
+ 406              	.Letext0:
+ 407              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 408              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 409              		.file 4 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 410              		.file 5 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 411              		.file 6 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 412              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 413              		.file 8 "../Firmware/CMSIS/core_cm4.h"
+ 414              		.file 9 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 415              		.file 10 "../osal/os_lyh_core.h"
+ 416              		.file 11 "../app/keyboard.h"
+ 417              		.file 12 "../app/acmotor.h"
+ 418              		.file 13 "../app/display.h"
+ 419              		.file 14 "../app/usart.h"
+ 420              		.file 15 "../app/heat.h"
+ 421              		.file 16 "../app/adc.h"
+ 422              		.file 17 "../app/app.h"
+ 423              		.file 18 "../app/bus.h"
+ 424              		.file 19 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 heat.c
+                            *COM*:00000001 heat_id
+                            *COM*:00000001 heat_task_step
+                            *COM*:00000002 target_temp
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:19     .text.heat_task_nextstep:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:27     .text.heat_task_nextstep:00000000 heat_task_nextstep
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:64     .text.heat_task_nextstep:00000024 $d
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:70     .text.heat_temp_deal:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:77     .text.heat_temp_deal:00000000 heat_temp_deal
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:133    .text.heat_get_temp:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:140    .text.heat_get_temp:00000000 heat_get_temp
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:195    .text.init_heat_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:202    .text.init_heat_task:00000000 init_heat_task
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:240    .text.init_heat_task:00000020 $d
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:246    .text.heat_task_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:253    .text.heat_task_handler:00000000 heat_task_handler
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:313    .text.heat_task_handler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:319    .text.heat_event_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:326    .text.heat_event_handler:00000000 heat_event_handler
+C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:400    .text.heat_event_handler:00000054 $d
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
+                           .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
+                           .group:00000000 wm4.features.h.22.fad1cec3bc7ff06488171438dbdcfd02
+                           .group:00000000 wm4.config.h.220.6cac6a9685cfce5e83c17784171638d9
+                           .group:00000000 wm4._ansi.h.31.de524f58584151836e90d8620a16f8e8
+                           .group:00000000 wm4.stdio.h.31.7c0e28c411445f3f9c5b11accf882760
+                           .group:00000000 wm4._default_types.h.6.959254cf5f09734ea7516c89e8bb21bd
+                           .group:00000000 wm4.stddef.h.181.c3f52a3b0f4c288bddb5dda1562858e2
+                           .group:00000000 wm4.cdefs.h.49.6260d97adb8d27534cbdc0f868b8ea87
+                           .group:00000000 wm4.stddef.h.39.b727a6c3269d9d6ef9fc646b721a8287
+                           .group:00000000 wm4.stdarg.h.34.3a23a216c0c293b3d2ea2e89281481e6
+                           .group:00000000 wm4.lock.h.2.1461d1fff82dffe8bfddc23307f6484f
+                           .group:00000000 wm4._types.h.125.5cf8a495f1f7ef36777ad868a1e32068
+                           .group:00000000 wm4.stddef.h.155.3588ebfdd1e8c7ede80509bb9c3b8009
+                           .group:00000000 wm4._types.h.184.03611d4f6b5bec9997bcf4279eceba07
+                           .group:00000000 wm4.reent.h.17.90c2574d4acdcfce933db5cb09ff35fe
+                           .group:00000000 wm4.types.h.40.e8c16e7ec36ba55f133d0616070e25fc
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4._endian.h.31.65a10590763c3dde1ac4a7f66d7d4891
+                           .group:00000000 wm4.endian.h.9.49f3a4695c1b61e8a0808de3c4a106cb
+                           .group:00000000 wm4._timeval.h.30.0e8bfd94e85db17dda3286ee81496fe6
+                           .group:00000000 wm4.timespec.h.41.d855182eb0e690443ab8651bcedca6e1
+                           .group:00000000 wm4.select.h.19.97ca6fd0c752a0f3b6719fd314d361e6
+                           .group:00000000 wm4.types.h.69.ed3eae3cf73030a737515151ebcab7a1
+                           .group:00000000 wm4.sched.h.22.c60982713a5c428609783c78f9c78d95
+                           .group:00000000 wm4._pthreadtypes.h.36.fcee9961c35163dde6267ef772ad1972
+                           .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
+                           .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
+                           .group:00000000 wm4.string.h.8.c4b8571ce60dff2817f43fec8b86aecd
+                           .group:00000000 wm4.stddef.h.155.ba788add86a0e365f264484f110c3c29
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
+                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+                           .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
+                           .group:00000000 wm4.acmotor.h.19.e32e17b82447380c9631c8ecb160ec50
+                           .group:00000000 wm4.dcmotor.h.2.f0e751b97a118431bbabf05c3c943b2b
+                           .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
+                           .group:00000000 wm4.timer.h.19.a82f4ede3cad5645e78e3c71f10c984d
+                           .group:00000000 wm4.usart.h.19.b0b7cc356d4f06c8ed965d5c47dabfa0
+                           .group:00000000 wm4.heat.h.3.c5505329d800fdba1d98ba08bc0b743e
+                           .group:00000000 wm4.adc.h.19.b7b71ccc5b83f495b1d7f2c83649d46d
+                           .group:00000000 wm4.app.h.3.832bf133db86c9b5783895aba11d0e00
+                           .group:00000000 wm4.bus.h.3.006a12bb937063aa955474032db251cd
+
+UNDEFINED SYMBOLS
+osal_lyh_restore_task
+gd_adc_get
+ac_heat_stop
+ac_heat_start
+osal_lyh_delay_task

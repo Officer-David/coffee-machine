@@ -1,4 +1,4 @@
-src/main.o: ../src/main.c \
+app/heat.o: ../app/heat.c \
  ../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h \
  ../Firmware/CMSIS/core_cm4.h ../Firmware/CMSIS/core_cmInstr.h \
  ../Firmware/CMSIS/core_cmFunc.h ../Firmware/CMSIS/core_cm4_simd.h \
@@ -28,12 +28,11 @@ src/main.o: ../src/main.c \
  ../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_misc.h \
  ../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_enet.h \
  ../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_exmc.h \
- ../inc/systick.h ../inc/main.h ../inc/user_apiopt.h \
- ../osal/os_lyh_config.h ../osal/os_lyh_core.h ../osal/os_lyh_config.h \
- ../osal/os_msg.h ../osal/os_msg.h ../app/configboard.h ../app/keyboard.h \
- ../app/acmotor.h ../app/dcmotor.h ../app/display.h ../app/extint.h \
- ../app/timer.h ../app/usart.h ../app/gpio.h ../app/heat.h ../app/adc.h \
- ../app/app.h ../app/bus.h
+ ../inc/user_apiopt.h ../osal/os_lyh_config.h ../osal/os_lyh_core.h \
+ ../osal/os_lyh_config.h ../osal/os_msg.h ../osal/os_msg.h \
+ ../app/configboard.h ../app/keyboard.h ../app/acmotor.h ../app/dcmotor.h \
+ ../app/display.h ../app/extint.h ../app/timer.h ../app/usart.h \
+ ../app/gpio.h ../app/heat.h ../app/adc.h ../app/app.h ../app/bus.h
 
 ../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h:
 
@@ -96,10 +95,6 @@ src/main.o: ../src/main.c \
 ../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_enet.h:
 
 ../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_exmc.h:
-
-../inc/systick.h:
-
-../inc/main.h:
 
 ../inc/user_apiopt.h:
 

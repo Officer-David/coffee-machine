@@ -12,6 +12,7 @@ C_SRCS += \
 ../app/display.c \
 ../app/extint.c \
 ../app/gpio.c \
+../app/heat.c \
 ../app/keyboard.c \
 ../app/timer.c \
 ../app/usart.c 
@@ -25,6 +26,7 @@ C_DEPS += \
 ./app/display.d \
 ./app/extint.d \
 ./app/gpio.d \
+./app/heat.d \
 ./app/keyboard.d \
 ./app/timer.d \
 ./app/usart.d 
@@ -38,6 +40,7 @@ OBJS += \
 ./app/display.o \
 ./app/extint.o \
 ./app/gpio.o \
+./app/heat.o \
 ./app/keyboard.o \
 ./app/timer.o \
 ./app/usart.o 
@@ -55,7 +58,7 @@ app/%.o: ../app/%.c app/subdir.mk
 clean: clean-app
 
 clean-app:
-	-$(RM) ./app/acmotor.d ./app/acmotor.o ./app/adc.d ./app/adc.o ./app/app.d ./app/app.o ./app/bus.d ./app/bus.o ./app/dcmotor.d ./app/dcmotor.o ./app/display.d ./app/display.o ./app/extint.d ./app/extint.o ./app/gpio.d ./app/gpio.o ./app/keyboard.d ./app/keyboard.o ./app/timer.d ./app/timer.o ./app/usart.d ./app/usart.o
+	-$(RM) ./app/acmotor.d ./app/acmotor.o ./app/adc.d ./app/adc.o ./app/app.d ./app/app.o ./app/bus.d ./app/bus.o ./app/dcmotor.d ./app/dcmotor.o ./app/display.d ./app/display.o ./app/extint.d ./app/extint.o ./app/gpio.d ./app/gpio.o ./app/heat.d ./app/heat.o ./app/keyboard.d ./app/keyboard.o ./app/timer.d ./app/timer.o ./app/usart.d ./app/usart.o
 
 .PHONY: clean-app
 

@@ -535,28 +535,28 @@
  406              		.file 6 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gd32f30x_dbg.c
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:16     .text.dbg_deinit:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:24     .text.dbg_deinit:00000000 dbg_deinit
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:54     .text.dbg_deinit:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:59     .text.dbg_id_get:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:66     .text.dbg_id_get:00000000 dbg_id_get
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:93     .text.dbg_id_get:00000010 $d
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:98     .text.dbg_low_power_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:105    .text.dbg_low_power_enable:00000000 dbg_low_power_enable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:141    .text.dbg_low_power_enable:00000020 $d
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:146    .text.dbg_low_power_disable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:153    .text.dbg_low_power_disable:00000000 dbg_low_power_disable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:192    .text.dbg_low_power_disable:00000020 $d
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:197    .text.dbg_periph_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:204    .text.dbg_periph_enable:00000000 dbg_periph_enable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:256    .text.dbg_periph_disable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:263    .text.dbg_periph_disable:00000000 dbg_periph_disable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:317    .text.dbg_trace_pin_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:324    .text.dbg_trace_pin_enable:00000000 dbg_trace_pin_enable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:354    .text.dbg_trace_pin_enable:00000018 $d
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:359    .text.dbg_trace_pin_disable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:366    .text.dbg_trace_pin_disable:00000000 dbg_trace_pin_disable
-C:\Users\user001\AppData\Local\Temp\cc0A8Ypy.s:396    .text.dbg_trace_pin_disable:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:16     .text.dbg_deinit:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:24     .text.dbg_deinit:00000000 dbg_deinit
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:54     .text.dbg_deinit:00000014 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:59     .text.dbg_id_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:66     .text.dbg_id_get:00000000 dbg_id_get
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:93     .text.dbg_id_get:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:98     .text.dbg_low_power_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:105    .text.dbg_low_power_enable:00000000 dbg_low_power_enable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:141    .text.dbg_low_power_enable:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:146    .text.dbg_low_power_disable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:153    .text.dbg_low_power_disable:00000000 dbg_low_power_disable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:192    .text.dbg_low_power_disable:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:197    .text.dbg_periph_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:204    .text.dbg_periph_enable:00000000 dbg_periph_enable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:256    .text.dbg_periph_disable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:263    .text.dbg_periph_disable:00000000 dbg_periph_disable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:317    .text.dbg_trace_pin_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:324    .text.dbg_trace_pin_enable:00000000 dbg_trace_pin_enable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:354    .text.dbg_trace_pin_enable:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:359    .text.dbg_trace_pin_disable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:366    .text.dbg_trace_pin_disable:00000000 dbg_trace_pin_disable
+C:\Users\user001\AppData\Local\Temp\ccwuSRzf.s:396    .text.dbg_trace_pin_disable:00000018 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

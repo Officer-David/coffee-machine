@@ -16,10 +16,10 @@
   16              		.comm	thisPt,2,2
   17              		.comm	tasksPendMask,2,2
   18              		.comm	PreTicks,4,4
-  19              		.comm	tasksArr,12,4
-  20              		.comm	eventMap,12,4
-  21              		.comm	taskDelayCounter,12,4
-  22              		.comm	taskseventArr,12,4
+  19              		.comm	tasksArr,16,4
+  20              		.comm	eventMap,16,4
+  21              		.comm	taskDelayCounter,16,4
+  22              		.comm	taskseventArr,16,4
   23              		.comm	overTimeStruct,256,4
   24              		.section	.text.osal_SysTicks,"ax",%progbits
   25              		.align	1
@@ -152,7 +152,7 @@
   40:../osal/os_lyh_core.c **** 			
  105              		.loc 1 40 3 discriminator 1
  106 0060 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
- 107 0062 022B     		cmp	r3, #2
+ 107 0062 032B     		cmp	r3, #3
  108 0064 D8D9     		bls	.L5
   48:../osal/os_lyh_core.c **** 				}
   49:../osal/os_lyh_core.c **** 			}
@@ -485,7 +485,7 @@
  377 00fe 044B     		ldr	r3, .L22
  378 0100 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
  379              		.loc 1 102 6
- 380 0102 032B     		cmp	r3, #3
+ 380 0102 042B     		cmp	r3, #4
  381 0104 7FF47FAF 		bne	.L20
  103:../osal/os_lyh_core.c **** 			thisTask= 0;
  382              		.loc 1 103 12
@@ -582,7 +582,7 @@
  114:../osal/os_lyh_core.c **** 	for(i = 0; i < sizeof(taskDelayCounter)/sizeof(taskDelayCounter[0]); i++)
  459              		.loc 1 114 2 discriminator 1
  460 003c FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
- 461 003e 022B     		cmp	r3, #2
+ 461 003e 032B     		cmp	r3, #3
  462 0040 EFD9     		bls	.L26
  118:../osal/os_lyh_core.c **** 	}
  119:../osal/os_lyh_core.c **** 
@@ -688,7 +688,7 @@
  129:../osal/os_lyh_core.c **** 	{	
  546              		.loc 1 129 2 discriminator 1
  547 00c0 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
- 548 00c2 022B     		cmp	r3, #2
+ 548 00c2 032B     		cmp	r3, #3
  549 00c4 EFD9     		bls	.L30
  133:../osal/os_lyh_core.c **** 	}
  134:../osal/os_lyh_core.c **** }
@@ -768,7 +768,7 @@
  139:../osal/os_lyh_core.c **** 	{
  616              		.loc 1 139 7
  617 0024 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
- 618 0026 022B     		cmp	r3, #2
+ 618 0026 032B     		cmp	r3, #3
  619 0028 F3D9     		bls	.L37
  620 002a 00E0     		b	.L36
  621              	.L40:
@@ -780,7 +780,7 @@
  145:../osal/os_lyh_core.c **** 	if(i == sizeof(tasksArr)/sizeof(tasksArr[0]))
  625              		.loc 1 145 4
  626 002e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
- 627 0030 032B     		cmp	r3, #3
+ 627 0030 042B     		cmp	r3, #4
  628 0032 01D1     		bne	.L38
  146:../osal/os_lyh_core.c **** 	    return 0;
  629              		.loc 1 146 13
@@ -1757,44 +1757,44 @@ DEFINED SYMBOLS
                             *COM*:00000002 thisPt
                             *COM*:00000002 tasksPendMask
                             *COM*:00000004 PreTicks
-                            *COM*:0000000c tasksArr
-                            *COM*:0000000c eventMap
-                            *COM*:0000000c taskDelayCounter
-                            *COM*:0000000c taskseventArr
+                            *COM*:00000010 tasksArr
+                            *COM*:00000010 eventMap
+                            *COM*:00000010 taskDelayCounter
+                            *COM*:00000010 taskseventArr
                             *COM*:00000100 overTimeStruct
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:25     .text.osal_SysTicks:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:33     .text.osal_SysTicks:00000000 osal_SysTicks
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:194    .text.osal_SysTicks:000000e0 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:202    .text.osal_start_system:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:209    .text.osal_start_system:00000000 osal_start_system
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:391    .text.osal_start_system:00000110 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:401    .text.osal_lyh_core_init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:408    .text.osal_lyh_core_init:00000000 osal_lyh_core_init
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:562    .text.osal_lyh_core_init:000000d0 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:574    .text.osal_create_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:581    .text.osal_create_task:00000000 osal_create_task
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:679    .text.osal_create_task:00000078 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:686    .text.osal_lyh_suspend_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:693    .text.osal_lyh_suspend_task:00000000 osal_lyh_suspend_task
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:739    .text.osal_lyh_suspend_task:00000034 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:744    .text.osal_lyh_restore_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:751    .text.osal_lyh_restore_task:00000000 osal_lyh_restore_task
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:795    .text.osal_lyh_restore_task:00000030 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:800    .text.osal_lyh_delay_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:807    .text.osal_lyh_delay_task:00000000 osal_lyh_delay_task
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:870    .text.osal_lyh_delay_task:00000048 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:877    .text.osal_lyh_delay_over_timer:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:884    .text.osal_lyh_delay_over_timer:00000000 osal_lyh_delay_over_timer
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1108   .text.osal_lyh_delay_over_timer:00000148 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1115   .text.osal_lyh_over_timer:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1122   .text.osal_lyh_over_timer:00000000 osal_lyh_over_timer
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1310   .text.osal_lyh_over_timer:00000108 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1316   .text.osal_lyh_kill_over_timer:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1323   .text.osal_lyh_kill_over_timer:00000000 osal_lyh_kill_over_timer
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1426   .text.osal_lyh_kill_over_timer:00000084 $d
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1431   .text.osal_lyh_get_event:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1438   .text.osal_lyh_get_event:00000000 osal_lyh_get_event
-C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1469   .text.osal_lyh_get_event:0000001c $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:25     .text.osal_SysTicks:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:33     .text.osal_SysTicks:00000000 osal_SysTicks
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:194    .text.osal_SysTicks:000000e0 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:202    .text.osal_start_system:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:209    .text.osal_start_system:00000000 osal_start_system
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:391    .text.osal_start_system:00000110 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:401    .text.osal_lyh_core_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:408    .text.osal_lyh_core_init:00000000 osal_lyh_core_init
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:562    .text.osal_lyh_core_init:000000d0 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:574    .text.osal_create_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:581    .text.osal_create_task:00000000 osal_create_task
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:679    .text.osal_create_task:00000078 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:686    .text.osal_lyh_suspend_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:693    .text.osal_lyh_suspend_task:00000000 osal_lyh_suspend_task
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:739    .text.osal_lyh_suspend_task:00000034 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:744    .text.osal_lyh_restore_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:751    .text.osal_lyh_restore_task:00000000 osal_lyh_restore_task
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:795    .text.osal_lyh_restore_task:00000030 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:800    .text.osal_lyh_delay_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:807    .text.osal_lyh_delay_task:00000000 osal_lyh_delay_task
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:870    .text.osal_lyh_delay_task:00000048 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:877    .text.osal_lyh_delay_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:884    .text.osal_lyh_delay_over_timer:00000000 osal_lyh_delay_over_timer
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1108   .text.osal_lyh_delay_over_timer:00000148 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1115   .text.osal_lyh_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1122   .text.osal_lyh_over_timer:00000000 osal_lyh_over_timer
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1310   .text.osal_lyh_over_timer:00000108 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1316   .text.osal_lyh_kill_over_timer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1323   .text.osal_lyh_kill_over_timer:00000000 osal_lyh_kill_over_timer
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1426   .text.osal_lyh_kill_over_timer:00000084 $d
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1431   .text.osal_lyh_get_event:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1438   .text.osal_lyh_get_event:00000000 osal_lyh_get_event
+C:\Users\user001\AppData\Local\Temp\cceBCOWt.s:1469   .text.osal_lyh_get_event:0000001c $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
                            .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
@@ -1848,8 +1848,8 @@ C:\Users\user001\AppData\Local\Temp\ccfHxvqd.s:1469   .text.osal_lyh_get_event:0
                            .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
                            .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
                            .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
-                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
-                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
+                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.Systick.h.36.4d6972f44cce074db9bfcd285bdc289e

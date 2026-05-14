@@ -779,25 +779,25 @@ DEFINED SYMBOLS
                             *ABS*:00000000 adc.c
                             *COM*:00000002 ac_max_value
                             *COM*:0000000c adc_value
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:18     .text.rcu_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:26     .text.rcu_config:00000000 rcu_config
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:64     .text.gpio_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:71     .text.gpio_config:00000000 gpio_config
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:107    .text.gpio_config:0000002c $d
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:113    .text.dma_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:120    .text.dma_config:00000000 dma_config
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:191    .text.dma_config:0000005c $d
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:198    .text.adc_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:205    .text.adc_config:00000000 adc_config
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:331    .text.adc_config:000000ec $d
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:337    .text.gd_adc_Init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:344    .text.gd_adc_Init:00000000 gd_adc_Init
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:371    .text.gd_adc_get:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:378    .text.gd_adc_get:00000000 gd_adc_get
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:498    .text.gd_adc_get:0000008c $d
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:503    .text.gd_adc_trigger:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:510    .text.gd_adc_trigger:00000000 gd_adc_trigger
-C:\Users\user001\AppData\Local\Temp\ccL78Uqc.s:555    .text.gd_adc_trigger:00000034 $d
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:18     .text.rcu_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:26     .text.rcu_config:00000000 rcu_config
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:64     .text.gpio_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:71     .text.gpio_config:00000000 gpio_config
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:107    .text.gpio_config:0000002c $d
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:113    .text.dma_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:120    .text.dma_config:00000000 dma_config
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:191    .text.dma_config:0000005c $d
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:198    .text.adc_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:205    .text.adc_config:00000000 adc_config
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:331    .text.adc_config:000000ec $d
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:337    .text.gd_adc_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:344    .text.gd_adc_Init:00000000 gd_adc_Init
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:371    .text.gd_adc_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:378    .text.gd_adc_get:00000000 gd_adc_get
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:498    .text.gd_adc_get:0000008c $d
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:503    .text.gd_adc_trigger:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:510    .text.gd_adc_trigger:00000000 gd_adc_trigger
+C:\Users\user001\AppData\Local\Temp\ccdpk4VO.s:555    .text.gd_adc_trigger:00000034 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

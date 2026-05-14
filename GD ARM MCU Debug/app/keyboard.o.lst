@@ -1394,30 +1394,30 @@ DEFINED SYMBOLS
                             *COM*:00000002 keyTouch_in
                             *COM*:00000001 keyboard_id
                             *COM*:00000001 keyboard_task_step
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:20     .text.ini_keys_value:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:28     .text.ini_keys_value:00000000 ini_keys_value
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:148    .text.ini_keys_value:000000d4 $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:154    .text.key_switch_debouncer:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:161    .text.key_switch_debouncer:00000000 key_switch_debouncer
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:978    .text.key_prohibit_mask:00000000 key_prohibit_mask
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:529    .text.key_switch_debouncer:0000022c $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:536    .text.key_scan_process:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:543    .text.key_scan_process:00000000 key_scan_process
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:784    .text.key_scan_process:00000180 $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:791    .text.init_key_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:798    .text.init_key_task:00000000 init_key_task
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:836    .text.init_key_task:00000020 $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:842    .text.key_task_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:849    .text.key_task_handler:00000000 key_task_handler
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:909    .text.key_task_handler:00000044 $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:914    .text.key_event_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:921    .text.key_event_handler:00000000 key_event_handler
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:966    .text.key_event_handler:00000028 $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:971    .text.key_prohibit_mask:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1033   .text.key_prohibit_mask:0000003c $d
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1038   .text.key_prohibit_setup:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1045   .text.key_prohibit_setup:00000000 key_prohibit_setup
-C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1103   .text.key_prohibit_setup:0000003c $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:20     .text.ini_keys_value:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:28     .text.ini_keys_value:00000000 ini_keys_value
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:148    .text.ini_keys_value:000000d4 $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:154    .text.key_switch_debouncer:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:161    .text.key_switch_debouncer:00000000 key_switch_debouncer
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:978    .text.key_prohibit_mask:00000000 key_prohibit_mask
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:529    .text.key_switch_debouncer:0000022c $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:536    .text.key_scan_process:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:543    .text.key_scan_process:00000000 key_scan_process
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:784    .text.key_scan_process:00000180 $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:791    .text.init_key_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:798    .text.init_key_task:00000000 init_key_task
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:836    .text.init_key_task:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:842    .text.key_task_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:849    .text.key_task_handler:00000000 key_task_handler
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:909    .text.key_task_handler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:914    .text.key_event_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:921    .text.key_event_handler:00000000 key_event_handler
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:966    .text.key_event_handler:00000028 $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:971    .text.key_prohibit_mask:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:1033   .text.key_prohibit_mask:0000003c $d
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:1038   .text.key_prohibit_setup:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:1045   .text.key_prohibit_setup:00000000 key_prohibit_setup
+C:\Users\user001\AppData\Local\Temp\ccgS1agG.s:1103   .text.key_prohibit_setup:0000003c $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
                            .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
@@ -1469,12 +1469,12 @@ C:\Users\user001\AppData\Local\Temp\ccDaqivX.s:1103   .text.key_prohibit_setup:0
                            .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
                            .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
                            .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
-                           .group:00000000 wm4.os_lyh_config.h.10.213390af792f8ee185e77ca0b801ca99
-                           .group:00000000 wm4.os_msg.h.10.6d1c8ec1318f505fcb411ccb9c4983d1
+                           .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
+                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.keyboard.h.3.4fe79013fc7f0052bffe12e1409d6549
-                           .group:00000000 wm4.app.h.3.cf06ebbefccdf8f9dbc3f6d932ae3362
+                           .group:00000000 wm4.app.h.3.790571a15e53edc5748d2197d43a6111
 
 UNDEFINED SYMBOLS
 memset

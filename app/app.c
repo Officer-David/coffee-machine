@@ -31,6 +31,8 @@
  uint8_t cup_loop;			//杯数循环次数	0：x1，1：x2
  uint8_t turn_off_flag;		//关机标志位
  uint8_t flush_flag;		//冲洗标志位
+enum _RUNNING_STATE CERRNT_STATE;	//当前运行状态
+uint16_t drop_beans_time;		//前往丢咖啡渣剩余时间
 /*_____ F U N C T I O N S __________________________________________________*/
 void app_virtual_croszero_cbfunc(void)
 {
@@ -112,7 +114,6 @@ void app_resource_free(uint8_t Step)
 	case APP_SETUP_STATE:
 		break;
 	case APP_RUNNING_ONOFF_STATE:
-		osal_lyh_kill_over_timer(OS_LED_TIME);
 		break;
 	default:
 		break;
@@ -235,14 +236,26 @@ void app_led_espresso_init(void)
 
 void app_led_americano_cbfunc(void)
 {
-	display_led(AMERICANO1_LED, LED_TOGGLE);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_americano_cbfunc);
+	//根据杯数显示对应的指示灯
+	if(0 == manual_setup.cup){
+		display_led(AMERICANO1_LED, LED_TOGGLE);
+	}
+	else if(1 == manual_setup.cup){
+		display_led(AMERICANO2_LED, LED_TOGGLE);
+	}
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_americano_cbfunc);
 }
 
 void app_led_americano_init(void)
 {
-	display_led(AMERICANO1_LED, LED_ON);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_americano_cbfunc);
+	//根据杯数显示对应的指示灯
+	if(0 == manual_setup.cup){
+		display_led(AMERICANO1_LED, LED_TOGGLE);
+	}
+	else if(1 == manual_setup.cup){
+		display_led(AMERICANO2_LED, LED_TOGGLE);
+	}
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_americano_cbfunc);
 }
 
 void app_led_hotwater_cbfunc(void)
@@ -359,99 +372,14 @@ void app_onoff_key_deal(void)
 		app_task_nextstep(APP_STARTUP_STATE, STARTUP_INIT_STATE);
 		break;
 	case APP_STARTUP_STATE:
+		break;
 	case APP_NORMAL_STATE:
-		/* 判断是否需要冲洗 */
-		if (1 == flush_flag) {														//需要冲洗	
-			app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_FLUSH);		//切换冲洗状态
-			app_leds_all_fun(LED_OFF);			
-			app_leds_all_ind(LED_OFF);			
-			display_led(START_LED, LED_OFF);
-			app_led_show_init();													//只开启流水灯
-																					//其他灯熄灭
-		}
-		else {																		//不需要冲洗
-			app_task_nextstep(APP_SETUP_STATE, SETUP_INIT_STATE);					//切换到SETUP状态
-		}
-		break;
 	case APP_ESPRESSO_STATE:
-		switch (app_task_substep)
-		{
-			/* 萃取电机位置检测与研磨过程中触发on/off */
-			case ESPRESSO_INIT_STATE:
-			case ESPRESSO_MOTO_CHECK_STATE:
-			case ESPRESSO_MOTO_CHECK_JUDGE_STATE:
-			case ESPRESSO_MOTO_FIRST_RST_STATE:
-			case ESPRESSO_MOTO_CHECK_COMPLETE_STATE:
-			case ESPRESSO_GRIND_TIME_JUDGE_STATE:
-			case ESPRESSO_GRIND_STATE:
-				app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_GRIND_STATE);
-				break;
-			/* 前往接水过程中触发on/off */
-			case ESPRESSO_MOTO_GO_BREW_STATE:
-			case ESPRESSO_MOTO_GO_BREW_JUDGE_STATE:	
-				app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_GO_WATER_STATE);
-				break;
-			/* 预浸泡过程中触发on/off */
-			case ESPRESSO_PRE_BREW_STATE:
-			case ESPRESSO_WAIT_BREW_STATE:				
-				app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_PRE_BREW_STATE);
-				break;
-			/* 冲煮过程中触发on/off */
-			case ESPRESSO_BREW_STATE:
-			case ESPRESSO_BREW_FINISH_STATE:				
-				app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_BREW_STATE);
-				break;
-			/* 冲煮完毕后触发on/off */
-			case ESPRESSO_GO_DROP_COFFEE_GROUNDS_STATE:
-			case ESPRESSO_DROP_COFFEE_GROUNDS_STATE:
-			case ESPRESSO_BACK_STATE:
-			case ESPRESSO_INPLACE_JUDGE_STATE:
-			case ESPRESSO_INPLACE_STATE:
-			case ESPRESSO_MOTO_SECOND_RST_STATE:
-			case ESPRESSO_JUDGE_TWO_CUP_STATE:
-			case ESPRESSO_COMPLETE_STATE:				
-				cup_loop = 0;			//取消第二杯的循环，不强制停止第一杯的倒粉、萃取电机复位操作
-				turn_off_flag = 1;		//设置关机标志位，流程结束后执行关机
-				app_led_show_init();	//流水灯初始化
-				break;
-			default:		
-				break;
-		}
-		break;
 	case APP_AMERICAN_STATE:
-		/* 萃取电机位置检测与研磨过程中触发on/off */
-			//app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_GRIND_STATE);
-
-		/* 前往接水过程中触发on/off */
-			//app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_GO_WATER_STATE);
-
-		/* 预浸泡过程中触发on/off */
-			//app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_PRE_BREW_STATE);
-
-		/* 冲煮过程中触发on/off */
-			//app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_BREW_STATE);
-
-		/* 第一次萃取完成后触发on/off（倒粉、第二次去接水等剩余状态的处理方式都一致） */
-			// cup_loop = 0;			
-			// turn_off_flag = 1;		
-			// app_led_show_init();	
-				
-		break;	
 	case APP_HOTWATER_STATE:
 	case APP_STEAM_STATE:
-		/* 判断是否需要冲洗 */
-		if (1 == flush_flag) {													//需要冲洗	
-			app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_FLUSH);	//切换冲洗状态
-			app_leds_all_fun(LED_OFF);
-			app_leds_all_ind(LED_OFF);
-			display_led(START_LED, LED_OFF);
-			app_led_show_init();												//只开启流水灯
-																				//其他灯熄灭
-		}
-		else {																	//不需要冲洗
-			app_task_nextstep(APP_SETUP_STATE, SETUP_INIT_STATE);				//切换到SETUP状态
-		}
-		break;
+		app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_INIT_STATE);		
+		break;	
 	default:
 		break;
 	}
@@ -470,7 +398,7 @@ uint8_t app_start_key_deal(void)
 				ret = 1;
 				break;
 			case NORMAL_AMERICANO_RUN_STATE:
-				app_task_nextstep(APP_AMERICAN_STATE, AMERICAN_INIT_STATE);
+				app_task_nextstep(APP_AMERICAN_STATE, AMERICANO_INIT_STATE);
 				ret = 1;
 				break;
 			case NORMAL_HOTWATER_RUN_STATE:
@@ -1148,6 +1076,7 @@ void app_espresso_handler(void)
 	{
 		/* 初始化状态 */
 		case ESPRESSO_INIT_STATE:
+			CERRNT_STATE = INIT_AND_GRIND_STATE;	//记录进度
 			app_leds_all_fun(LED_OFF);
 			app_leds_all_ind(LED_OFF);
 			display_led(START_LED, LED_ON);
@@ -1193,32 +1122,35 @@ void app_espresso_handler(void)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				app_task_substep = ESPRESSO_GRIND_TIME_JUDGE_STATE;					
+				app_task_substep = ESPRESSO_GRIND_ING_STATE;					
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
 		/* 研磨咖啡豆 */
-		case ESPRESSO_GRIND_TIME_JUDGE_STATE:
-			ac_grind_start(1000);		//启动研磨电机
+		case ESPRESSO_GRIND_ING_STATE:
+			app_turn_heat_on(TARGET_TEMP_100D);
 			if(0 == manual_setup.coffee)	//研磨时间根据coffee程度调整：x1=8s,x2=9s,x3=10s
 			{
+				ac_grind_start(1000);		//启动研磨电机
 				run_max_time = GRIND_TIMER(Ms_8000, Ms_100);
-				app_task_substep = ESPRESSO_GRIND_STATE;
+				app_task_substep = ESPRESSO_GRIND_END_STATE;
 			}
 			else if (1 == manual_setup.coffee)
 			{
+				ac_grind_start(1000);		//启动研磨电机
 				run_max_time = GRIND_TIMER(Ms_9000, Ms_100);
-				app_task_substep = ESPRESSO_GRIND_STATE;	
+				app_task_substep = ESPRESSO_GRIND_END_STATE;	
 			}			
 			else if(2 == manual_setup.coffee)
 			{
+				ac_grind_start(1000);		//启动研磨电机
 				run_max_time = GRIND_TIMER(Ms_10000, Ms_100);
-				app_task_substep = ESPRESSO_GRIND_STATE;	
+				app_task_substep = ESPRESSO_GRIND_END_STATE;	
 			}
 			break;
-		case ESPRESSO_GRIND_STATE:
+		case ESPRESSO_GRIND_END_STATE:
 			if (--run_max_time == 0){	//判断研磨时间是否到达
 				ac_grind_stop();
 				osal_lyh_delay_task(Ms_1000);
@@ -1230,6 +1162,7 @@ void app_espresso_handler(void)
 			break;
 		/* 萃取电机转到萃取位置 */
 		case ESPRESSO_MOTO_GO_BREW_STATE:
+			CERRNT_STATE = GO_BREW_STATE;	//记录进度
 			dc_motor_Start(MOTOR_LEFT);		
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(Ms_7000, Ms_100);
@@ -1249,6 +1182,7 @@ void app_espresso_handler(void)
 			break;
 		/* 预冲煮状态 */
 		case ESPRESSO_PRE_BREW_STATE:
+			CERRNT_STATE = PRE_BREW_STATE;	//记录进度
 			ac_pumb_start(CONTINUE_MODE);		//启动水泵
 			osal_lyh_delay_task(Ms_2000 - Ms_100);
 			app_task_substep = ESPRESSO_WAIT_BREW_STATE;	
@@ -1259,7 +1193,8 @@ void app_espresso_handler(void)
 			app_task_substep = ESPRESSO_BREW_STATE;	
 			break;
 		/* 冲煮状态 */
-		case ESPRESSO_BREW_STATE:			
+		case ESPRESSO_BREW_STATE:
+			CERRNT_STATE = BREW_STATE;	//记录进度
 			if(0 == manual_setup.water)		//根据杯量决定抽水时间：x1=5s,x2=10s,x3=20s
 			{
 				ac_pumb_start(CONTINUE_MODE);
@@ -1287,17 +1222,24 @@ void app_espresso_handler(void)
 			break;
 		/* 丢咖啡渣状态 */
 		case ESPRESSO_GO_DROP_COFFEE_GROUNDS_STATE:
+			CERRNT_STATE = DROP_BEANS_STATE;	//记录进度
 			dc_motor_Start(MOTOR_RIGHT);	//电机反转2.9s， 到丢咖啡渣位置
-			osal_lyh_delay_task(Ms_3000 - Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_2900, Ms_100);
 			app_task_substep = ESPRESSO_DROP_COFFEE_GROUNDS_STATE;	
 			break;
 		case ESPRESSO_DROP_COFFEE_GROUNDS_STATE:
-			dc_motor_Stop();
-			osal_lyh_delay_task(Ms_3000);
-			app_task_substep = ESPRESSO_BACK_STATE;
+			if(--run_max_time == 0){
+				dc_motor_Stop();
+				osal_lyh_delay_task(Ms_3000);
+				app_task_substep = ESPRESSO_BACK_STATE;
+			}
+			else{
+				osal_lyh_delay_task(Ms_100);
+			}
 			break;
 		/* 萃取电机返回原位 */
 		case ESPRESSO_BACK_STATE:		//电机向原位转动
+			CERRNT_STATE = RST_STATE;	//记录进度		
 			dc_motor_Start(MOTOR_RIGHT);
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = RIGHT_TIMER(Ms_5000, Ms_100);
@@ -1344,16 +1286,11 @@ void app_espresso_handler(void)
 			break;
 		/* 制作完成状态 */
 		case ESPRESSO_COMPLETE_STATE:
-			if(1 == turn_off_flag){		//判断有无关机指令
-				turn_off_flag = 0;		//消耗掉关机指令
-				app_task_nextstep(APP_RUNNING_ONOFF_STATE, RUNNING_ONOFF_FLUSH);		//进入清洗状态
-			}
-			else {
-				osal_lyh_kill_over_timer(OS_LED_TIME);		//杀死espresso指示灯闪烁定时器
-				app_led_finish_step();						//执行完成后的指示灯显示
-				flush_flag = 1;								//设置冲洗标志	
-				app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
-			}
+			CERRNT_STATE = NULL_STATE;	//记录进度
+			app_turn_heat_off();		//关闭加热
+			flush_flag = 1;				//置位冲洗
+			app_led_finish_step();		//执行完成后的指示灯显示
+			app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
 			break;
 		default:
 			break;
@@ -1370,174 +1307,346 @@ void app_american_handler(void)
 {
 	switch(app_task_substep)
 	{
-		case AMERICAN_INIT_STATE:
+		/* 初始化状态 */
+		case AMERICANO_INIT_STATE:
+			CERRNT_STATE = INIT_AND_GRIND_STATE;	//记录进度
+			app_leds_all_fun(LED_OFF);
+			app_leds_all_ind(LED_OFF);
 			display_led(START_LED, LED_ON);
-			app_led_americano_init();
-			osal_lyh_delay_task(Ms_10);
-			app_task_substep = AMERICAN_RIGHT_STATE;
+			app_led_americano_init();		//初始化americano指示灯闪烁
+			if(1 == manual_setup.cup){		//判断本次制作杯数
+				cup_loop = 1;
+			}
+			else{
+				cup_loop = 0;
+			}
+			app_task_substep = AMERICANO_MOTO_CHECK_STATE;
 			break;
-		case AMERICAN_RIGHT_STATE:
+		/* 萃取电机位置检测 */
+		case AMERICANO_MOTO_CHECK_STATE:	
 			dc_motor_Start(MOTOR_RIGHT);
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);
-			app_task_substep = AMERICAN_RIGHT_RST_STATE;
-			run_max_time = RIGHT_TIMER(Ms_2000, Ms_100);
 			osal_lyh_delay_task(Ms_100);
-			break;
-		case AMERICAN_RIGHT_RST_STATE:
-			if ((MOTOR_STATE_STOPED == dc_motor_GetState())
-				|| (TRUE == app_motor_ready())
-				|| (--run_max_time == 0)){
-				dc_motor_Stop();
-				osal_lyh_delay_task(Ms_200);
-				app_task_substep = AMERICAN_LEFT_STATE;
-			}
-			else {
-				osal_lyh_delay_task(Ms_100);
-			}
-			break;
-		case AMERICAN_LEFT_STATE:
-			dc_motor_Start(MOTOR_LEFT);
-			osal_lyh_delay_task(Ms_100);
-			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
-			app_task_substep = AMERICAN_LEFT_RST_STATE;
-			break;
-		case AMERICAN_LEFT_RST_STATE:
-			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel) 
-				&& ((MOTOR_STATE_STOPED == dc_motor_GetState())
-				|| (--run_max_time == 0))){
-				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
-				app_task_substep = AMERICAN_GRIND_INIT_STATE;
-			}
-			osal_lyh_delay_task(Ms_100);
-			break;
-		case AMERICAN_GRIND_INIT_STATE:
-			app_turn_heat_off();
-			ac_grind_start(1000);
-			osal_lyh_delay_task(Ms_8000);
-			if (manual_setup.coffee == 1){
-				osal_lyh_delay_task(Ms_9000);
-			}
-			else if (manual_setup.coffee == 2){
-				osal_lyh_delay_task(Ms_10000);
-			}
-			app_task_substep = AMERICAN_GRIND_RUN_STATE;
-			break;
-		case AMERICAN_GRIND_RUN_STATE:
-			ac_grind_stop();
-			app_turn_heat_on(TARGET_TEMP_100D);
-			osal_lyh_delay_task(Ms_100);
-			app_task_substep = AMERICAN_GRIND_END_STATE;
-			break;
-		case AMERICAN_GRIND_END_STATE:
-			dc_motor_Start(MOTOR_LEFT);
-			osal_lyh_delay_task(Ms_100);
-			run_max_time = LEFT_TIMER(Ms_6000, Ms_100);
-			app_task_substep = AMERICAN_LEFT_MOVE_STATE;
-			break;
-		case AMERICAN_LEFT_MOVE_STATE:
-			if ((MOTOR_STATE_STOPED == dc_motor_GetState())
-				|| (TRUE == app_motor_ready())
-				|| (--run_max_time == 0)){
-				dc_motor_Stop();
-				app_task_substep = AMERICAN_PRECOFFEE_RDY_STATE;
-			}
-			osal_lyh_delay_task(Ms_100);
-			break;
-		case AMERICAN_PRECOFFEE_RDY_STATE:
-			ac_pumb_start(CONTINUE_MODE);
-			run_max_time = PRECOFFEE_MAX_TIMER(Ms_100);
-			app_task_substep = AMERICAN_PRECOFFEE_ING_STATE;
-			break;
-		case AMERICAN_PRECOFFEE_ING_STATE:
-			if (--run_max_time == 0){
-				ac_pumb_stop();
-				app_task_substep = AMERICAN_PRECOFFEE_END_STATE;
-			}
-			else {
-				osal_lyh_delay_task(Ms_100);
-			}
-			break;
-		case AMERICAN_PRECOFFEE_END_STATE:
-			osal_lyh_delay_task(Ms_2000 - Ms_200);		// stop 1800ms
-			app_task_substep = AMERICAN_COFFEE_RDY_STATE;
-			break;
-		case AMERICAN_COFFEE_RDY_STATE:
-			ac_pumb_start(CONTINUE_MODE);
-			run_max_time = COFFEE_MAX_TIMER(Ms_100);
-			app_task_substep = AMERICAN_COFFEE_ING_STATE;
-			break;
-		case AMERICAN_COFFEE_ING_STATE:
-			if (--run_max_time == 0){
-				ac_pumb_stop();
-				osal_lyh_delay_task(Ms_6000);
-				app_task_substep = AMERICAN_COFFEE_END_STATE;
-			}
-			else {
-				osal_lyh_delay_task(Ms_100);
-			}
-			break;
-		case AMERICAN_COFFEE_END_STATE:
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);
-			osal_lyh_delay_task(Ms_500);	// wait motor to move the detecting point
-			dc_motor_Start(MOTOR_RIGHT);
-			run_max_time = RIGHT_TIMER((Ms_3000 - Ms_100), Ms_100);
-			app_task_substep = AMERICAN_RIGHT_SEG1_STATE;
-			break;
-		case AMERICAN_RIGHT_SEG1_STATE:
-			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
-				|| (TRUE == app_motor_ready())
-				|| (--run_max_time == 0)){
-				dc_motor_Stop();
-				osal_lyh_delay_task(Ms_3000);
-				app_task_substep = AMERICAN_RIGHT_PAUSE_STATE;
-			}
-			else {
-				osal_lyh_delay_task(Ms_100);
-			}
-			break;
-		case AMERICAN_RIGHT_PAUSE_STATE:
-			dc_motor_Start(MOTOR_RIGHT);
 			run_max_time = RIGHT_TIMER(Ms_3000, Ms_100);
-			app_task_substep = AMERICAN_RIGHT_SEG2_STATE;
-			osal_lyh_delay_task(Ms_100);
+			app_task_substep = AMERICANO_MOTO_CHECK_JUDGE_STATE;
 			break;
-		case AMERICAN_RIGHT_SEG2_STATE:
+		/* 判断萃取电机是否触碰原点触点 */
+		case AMERICANO_MOTO_CHECK_JUDGE_STATE:
 			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (TRUE == app_motor_ready())
 				|| (--run_max_time == 0)){
 				dc_motor_Stop();
-				osal_lyh_delay_task(Ms_200);
-				app_task_substep = AMERICAN_LEFT_START_STATE;
+				app_task_substep = AMERICANO_MOTO_FIRST_RST_STATE;					
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
-		case AMERICAN_LEFT_START_STATE:
+		/* 萃取电机向回转到原点 */
+		case AMERICANO_MOTO_FIRST_RST_STATE:
 			dc_motor_Start(MOTOR_LEFT);
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
-			app_task_substep = AMERICAN_LEFT_END_STATE;
+			app_task_substep = AMERICANO_MOTO_CHECK_COMPLETE_STATE;
 			break;
-		case AMERICAN_LEFT_END_STATE:
+		/* 判断萃取电机是否完成回转 */
+		case AMERICANO_MOTO_CHECK_COMPLETE_STATE:
 			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				osal_lyh_delay_task(Ms_360);
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
-				app_task_substep = AMERICAN_EXTRACT_RST_STATE;
+				app_task_substep = AMERICANO_GRIND_TIME_JUDGE_STATE;					
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
-		case AMERICAN_EXTRACT_RST_STATE:
+		/* 研磨咖啡豆 */
+		case AMERICANO_GRIND_TIME_JUDGE_STATE:
+			app_turn_heat_on(TARGET_TEMP_100D);		//开启加热
+			if(0 == manual_setup.coffee)	//研磨时间根据coffee程度调整：x1=8s,x2=9s,x3=10s
+			{
+				ac_grind_start(1000);		//启动研磨电机
+				run_max_time = GRIND_TIMER(Ms_8000, Ms_100);
+				app_task_substep = AMERICANO_GRIND_STATE;
+			}
+			else if (1 == manual_setup.coffee)
+			{
+				ac_grind_start(1000);		//启动研磨电机
+				run_max_time = GRIND_TIMER(Ms_9000, Ms_100);
+				app_task_substep = AMERICANO_GRIND_STATE;	
+			}			
+			else if(2 == manual_setup.coffee)
+			{
+				ac_grind_start(1000);		//启动研磨电机
+				run_max_time = GRIND_TIMER(Ms_10000, Ms_100);
+				app_task_substep = AMERICANO_GRIND_STATE;	
+			}
+			break;
+		case AMERICANO_GRIND_STATE:
+			if (--run_max_time == 0){	//判断研磨时间是否到达
+				ac_grind_stop();
+				osal_lyh_delay_task(Ms_1000);
+				app_task_substep = AMERICANO_MOTO_GO_BREW_STATE;	
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 萃取电机转到萃取位置 */
+		case AMERICANO_MOTO_GO_BREW_STATE:
+			CERRNT_STATE = GO_BREW_STATE;	//记录进度		
+			dc_motor_Start(MOTOR_LEFT);		
 			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(Ms_7000, Ms_100);
+			app_task_substep = AMERICANO_MOTO_GO_BREW_JUDGE_STATE;
 			break;
-		case AMERICAN_EXTRACT_CHECK_STATE:
+		/* 判断萃取电机是否到达萃取位置 */
+		case AMERICANO_MOTO_GO_BREW_JUDGE_STATE:
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_PRE_BREW_STATE;	
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}			
 			break;
+		/* 预冲煮状态 */
+		case AMERICANO_PRE_BREW_STATE:
+			CERRNT_STATE = PRE_BREW_STATE;	//记录进度
+			ac_pumb_start(CONTINUE_MODE);		//启动水泵
+			osal_lyh_delay_task(Ms_2000 - Ms_200);
+			app_task_substep = AMERICANO_WAIT_BREW_STATE;	
+			break;
+		case AMERICANO_WAIT_BREW_STATE:
+			ac_pumb_stop();						//停止水泵
+			osal_lyh_delay_task(Ms_4000);
+			app_task_substep = AMERICANO_BREW_STATE;	
+			break;
+		/* 冲煮状态 */
+		case AMERICANO_BREW_STATE:			
+			CERRNT_STATE = BREW_STATE;	//记录进度
+			ac_pumb_start(CONTINUE_MODE);
+			osal_lyh_delay_task(Ms_12000 - Ms_100);
+			app_task_substep = AMERICANO_BREW_FINISH_STATE;			
+			break;
+		case AMERICANO_BREW_FINISH_STATE:	//冲煮完成
+			ac_pumb_stop();		//停止水泵	
+			osal_lyh_delay_task(Ms_6000);
+			app_task_substep = AMERICANO_GO_DROP_COFFEE_GROUNDS_STATE;	
+			break;
+		/* 丢咖啡渣状态 */
+		case AMERICANO_GO_DROP_COFFEE_GROUNDS_STATE:
+			CERRNT_STATE = DROP_BEANS_STATE;	//记录进度
+			dc_motor_Start(MOTOR_RIGHT);	//电机反转2.9s， 到丢咖啡渣位置
+			osal_lyh_delay_task(Ms_3000 - Ms_100);
+			app_task_substep = AMERICANO_DROP_COFFEE_GROUNDS_STATE;	
+			break;
+		case AMERICANO_DROP_COFFEE_GROUNDS_STATE:
+			dc_motor_Stop();
+			osal_lyh_delay_task(Ms_3000);
+			app_task_substep = AMERICANO_BACK_STATE;
+			break;
+		/* 萃取电机返回原位 */
+		case AMERICANO_BACK_STATE:		//电机向原位转动
+			CERRNT_STATE = RST_STATE;	//记录进度
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_5000, Ms_100);
+			app_task_substep = AMERICANO_INPLACE_JUDGE_STATE;
+			break;	
+		case AMERICANO_INPLACE_JUDGE_STATE:			//判断电机是否到原点触点
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_INPLACE_STATE;					
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		case AMERICANO_INPLACE_STATE:			//电机回转到原位
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			app_task_substep = AMERICANO_MOTO_RST_STATE;
+			break;	
+		case AMERICANO_MOTO_RST_STATE:	//判断电机是否回转到原位
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_JUDGE_TWO_CUP_STATE;
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 判断是否继续制作第二杯 */
+		case AMERICANO_JUDGE_TWO_CUP_STATE:
+			flush_flag = 1;				//置位清洗标志
+			if(1 == cup_loop){											//需要制作第二杯	
+				cup_loop = 0;											//消耗杯数循环标志
+				osal_lyh_delay_task(Ms_500);
+				app_task_substep = AMERICANO_GRIND_TIME_JUDGE_STATE;	//返回研磨步骤，继续制作第二杯
+			}
+			else{														//不需要制作第二杯
+				osal_lyh_delay_task(Ms_360);
+				app_task_substep = AMERICANO_MOTO_CHECK2_STATE;			//进行第二次萃取电机位置检查
+			}
+			break;
+		/* 第二次检测萃取电机位置 */
+		case AMERICANO_MOTO_CHECK2_STATE:
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_3000, Ms_100);
+			app_task_substep = AMERICANO_MOTO_CHECK2_JUDGE_STATE;
+			break;
+		/* 判断萃取电机是否触碰原点触点 */
+		case AMERICANO_MOTO_CHECK2_JUDGE_STATE:
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_MOTO_SECOND_RST_STATE;					
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 萃取电机向回转到原点 */
+		case AMERICANO_MOTO_SECOND_RST_STATE:
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			app_task_substep = AMERICANO_MOTO_CHECK2_COMPLETE_STATE;
+			break;
+		/* 判断萃取电机是否完成回转 */
+		case AMERICANO_MOTO_CHECK2_COMPLETE_STATE:
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_WAIT_MOTO_GO_BREW2_STATE;					
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 等待第二次萃取（加水） */	
+		case AMERICANO_WAIT_MOTO_GO_BREW2_STATE:
+			osal_lyh_delay_task(Ms_4000);
+			app_task_substep = AMERICANO_MOTO_GO_BREW2_STATE;
+			break;
+		/* 第二次去萃取（加水） */	
+		case AMERICANO_MOTO_GO_BREW2_STATE:
+			CERRNT_STATE = GO_BREW_STATE;	//记录进度
+			dc_motor_Start(MOTOR_LEFT);		
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(Ms_7000, Ms_100);
+			app_task_substep = AMERICANO_MOTO_GO_BREW2_JUDGE_STATE;
+			break;
+		/* 判断萃取电机是否到达萃取位置 */
+		case AMERICANO_MOTO_GO_BREW2_JUDGE_STATE:
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_BREW2_STATE;	
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}			
+			break;
+		/* 第二次萃取（加水） */	
+		case AMERICANO_BREW2_STATE:
+			CERRNT_STATE = BREW_STATE;	//记录进度
+			if(0 == manual_setup.water){			//根据杯量决定抽水时间：x1=19s,x2=36s,x3=51s		
+				ac_pumb_start(CONTINUE_MODE);
+				if(1 == manual_setup.cup){
+					osal_lyh_delay_task(Ms_19000);
+				}
+				else{
+					osal_lyh_delay_task(Ms_33000);
+				}
+				app_task_substep = AMERICANO_BREW2_FINISH_STATE;	
+			}
+			else if (1 == manual_setup.water){
+				ac_pumb_start(CONTINUE_MODE);
+				if(1 == manual_setup.cup){
+					osal_lyh_delay_task(Ms_36000);
+				}
+				else{
+					osal_lyh_delay_task(Ms_72000);
+				}
+				app_task_substep = AMERICANO_BREW2_FINISH_STATE;		
+			}
+			else if (2 == manual_setup.water){
+				ac_pumb_start(CONTINUE_MODE);
+				if(1 == manual_setup.cup){
+					osal_lyh_delay_task(Ms_51000);
+				}
+				else{
+					osal_lyh_delay_task(Ms_105000);
+				}
+				app_task_substep = AMERICANO_BREW2_FINISH_STATE;		
+			}
+			break;
+		case AMERICANO_BREW2_FINISH_STATE:
+			ac_pumb_stop();		//停止水泵
+			osal_lyh_delay_task(Ms_6000);
+			app_task_substep = AMERICANO_BACK2_STATE;
+			break;
+		/* 返回原位 */	
+		case AMERICANO_BACK2_STATE:
+			CERRNT_STATE = RST_STATE;	//记录进度
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_1000);			//此处delay应保持较大的数（>500ms），否则电机还未转出触点就开始检测，
+													//容易误判为已经触碰到原点开关，导致电机无法回转到原位
+			run_max_time = RIGHT_TIMER(Ms_6000, Ms_100);		
+			app_task_substep = AMERICANO_INPLACE2_JUDGE_STATE;
+			break;	
+		 /* 判断电机是否到原点触点 */	
+		case AMERICANO_INPLACE2_JUDGE_STATE:													
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_INPLACE2_STATE;				
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 萃取电机回转到原位 */
+		case AMERICANO_INPLACE2_STATE:													
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			app_task_substep = AMERICANO_MOTO_RST2_STATE;
+			break;
+		/* 判断萃取电机是否回转到原位 */
+		case AMERICANO_MOTO_RST2_STATE:													
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				app_task_substep = AMERICANO_COMPLETE_STATE;
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		case AMERICANO_COMPLETE_STATE:
+			CERRNT_STATE = NULL_STATE;	//记录进度
+			app_turn_heat_off();		//关闭加热
+			flush_flag = 1;				//设置冲洗标志	
+			app_led_finish_step();		//执行完成后的指示灯显示
+			app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
+			break;	
+
 		default:
 			break;
 	}
@@ -1714,20 +1823,18 @@ void app_setup_handler(void)
 
 /**************************************************************************
  * @brief 在研磨状态下按下ON/OFF键的处理函数
- * @return none
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
  * @note 该函数在espresso, americano的研磨状态下按下ON/OFF键时被调用
  *************************************************************************/
-void app_running_onoff_grind_handler(void)
+uint8_t app_running_onoff_grind_handler(void)
 {
 	static uint8_t sta = 0;
 	switch (sta)
 	{
-		/* 停止研磨电机 */
-		case 0:		
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);								
-			app_led_show_init();							
-			display_led(START_LED, LED_OFF);
+		/* 停止研磨、萃取电机 */
+		case 0:									
 			ac_grind_stop();
+			dc_motor_Stop();
 			osal_lyh_delay_task(Ms_100);
 			sta = 1;
 			break;
@@ -1805,10 +1912,9 @@ void app_running_onoff_grind_handler(void)
 			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel) 
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
-				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, TRUE);								
+				dc_motor_Stop();												
 				sta = 0;
-				app_task_nextsubstep(RUNNING_ONOFF_FLUSH);	//进入冲煮状态下按下ON/OFF键的处理流程的最后一个子状态：flush状态
+				return TRUE;
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
@@ -1817,25 +1923,23 @@ void app_running_onoff_grind_handler(void)
 		default:
 			break;
 	}
+	return FAIL;
 }
 
 /**************************************************************************
  * @brief 在萃取电机去接水状态下按下ON/OFF键的处理函数
- * @return none
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
  * @note 该函数在espresso, americano的去接水状态下按下ON/OFF键时被调用
  *************************************************************************/
-void app_running_onoff_go_water_handler(void)
+uint8_t app_running_onoff_go_water_handler(void)
 {
 	static uint8_t sta = 0;
 	switch (sta)
 	{
 		/* 停止萃取电机 */
 		case 0:					
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);						
-			app_led_show_init();
-			display_led(START_LED, LED_OFF);
 			dc_motor_Stop();
-			osal_lyh_delay_task(Ms_1000);
+			osal_lyh_delay_task(Ms_300);
 			sta = 1;
 			break;
 		/* 萃取电机转到接水位置 */
@@ -1913,9 +2017,8 @@ void app_running_onoff_go_water_handler(void)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
 				sta = 0;
-				app_task_nextsubstep(RUNNING_ONOFF_FLUSH);	//进入冲煮状态下按下ON/OFF键的处理流程的最后一个子状态：flush状态
+				return TRUE;
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
@@ -1924,23 +2027,21 @@ void app_running_onoff_go_water_handler(void)
 		default:
 			break;
 	}
+	return FAIL;
 }
 
 /**************************************************************************
  * @brief 在萃取电机预冲煮状态下按下ON/OFF键的处理函数
- * @return none
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
  * @note 该函数在espresso, americano的预冲煮状态下按下ON/OFF键时被调用
  *************************************************************************/
-void app_running_onoff_pre_brew_handler(void)
+uint8_t app_running_onoff_pre_brew_handler(void)
 {
 	static uint8_t sta = 0;
 	switch (sta)
 	{
 		/* 停止水泵 */
 		case 0:		
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);											
-			app_led_show_init();							
-			display_led(START_LED, LED_OFF);
 			ac_pumb_stop();
 			osal_lyh_delay_task(Ms_1000);
 			sta = 1;
@@ -2001,9 +2102,8 @@ void app_running_onoff_pre_brew_handler(void)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
 				sta = 0;
-				app_task_nextsubstep(RUNNING_ONOFF_FLUSH);	//进入冲煮状态下按下ON/OFF键的处理流程的最后一个子状态：冲洗管路
+				return TRUE;
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
@@ -2012,23 +2112,21 @@ void app_running_onoff_pre_brew_handler(void)
 		default:
 			break;
 	}
+	return FAIL;
 }
 
 /**************************************************************************
  * @brief 在冲煮状态下按下ON/OFF键的处理函数
- * @return none
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
  * @note 该函数在espresso, americano的冲煮状态下按下ON/OFF键时被调用
  *************************************************************************/
-void app_running_onoff_brew_handler(void)
+uint8_t app_running_onoff_brew_handler(void)
 {
 	static uint8_t sta = 0;
 	switch (sta)
 	{
 		 /* 停止水泵 */
 		case 0:			
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);
-			app_led_show_init();							
-			display_led(START_LED, LED_OFF);
 			ac_pumb_stop();
 			osal_lyh_delay_task(Ms_4000);
 			sta = 1;
@@ -2077,9 +2175,8 @@ void app_running_onoff_brew_handler(void)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
 				sta = 0;
-				app_task_nextsubstep(RUNNING_ONOFF_FLUSH);	//进入冲煮状态下按下ON/OFF键的处理流程的最后一个子状态：冲洗管路
+				return TRUE;
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
@@ -2088,84 +2185,273 @@ void app_running_onoff_brew_handler(void)
 		default:
 			break;
 	}
+	return FAIL;
 }
 
 /**************************************************************************
- * @brief 冲洗管路函数处理流程
- * @return none
- * @note 此函数中没有检测萃取电机位置的步骤，使用时的前置条件是：萃取电机已经回转到原位
+ * @brief 在丢咖啡渣状态下按下ON/OFF键的处理函数
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
+ * @note 该函数在espresso, americano的丢咖啡渣状态下按下ON/OFF键时被调用
  *************************************************************************/
-void app_running_onoff_flush_handler(void)
+uint8_t app_running_onoff_drop_beans_handler(void)
 {
 	static uint8_t sta = 0;
 	switch (sta)
 	{
-		/* 清洗管路初始阶段：屏蔽ON/OFF，萃取电机前往萃取位置 */
+		/* 进入倒粉初始化 */
 		case 0:
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);					
-			dc_motor_Start(MOTOR_LEFT);		
-			osal_lyh_delay_task(Ms_100);
-			run_max_time = LEFT_TIMER(Ms_7000, Ms_100);		//此处时间需要根据实际情况整改
+			dc_motor_Stop();
 			sta = 1;
 			break;
-		/* 判断萃取电机是否到达萃取位置 */
+		/* 转动电机继续前往倒粉 */	
 		case 1:
-			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
-				|| (TRUE == app_motor_ready())
-				|| (--run_max_time == 0)){
-				dc_motor_Stop();
-				sta = 2;	
+			if(drop_beans_time){
+				dc_motor_Start(MOTOR_RIGHT);
+				sta = 2;
 			}
-			else {
-				osal_lyh_delay_task(Ms_100);
-			}			
+			else{
+				sta = 3;
+			}
 			break;
-		 /* 启动水泵冲洗管路 */
+		/* 判断剩余转动时间 */	
 		case 2:
-			ac_pumb_start(CONTINUE_MODE);		//启动水泵
-			osal_lyh_delay_task(Ms_10000);		
-			sta = 3;
+			if(--drop_beans_time == 0){
+				dc_motor_Stop();
+				sta = 3;
+			}
+			else{
+				osal_lyh_delay_task(Ms_100);
+			}
 			break;
+		/* 倒粉ING */	
 		case 3:
-			ac_pumb_stop();						//关闭水泵
-			osal_lyh_delay_task(Ms_6000);		
+			osal_lyh_delay_task(Ms_3000);
 			sta = 4;
 			break;
-		 /* 萃取电机向原点转动 */
-		case 4:
+		/* 电机向原点转动 */	
+		case 4:		
 			dc_motor_Start(MOTOR_RIGHT);
-			osal_lyh_delay_task(Ms_1000);			//此处delay应保持较大的数（>500ms），否则电机还未转出触点就开始检测，
-													//容易误判为已经触碰到原点开关，导致电机无法回转到原位
-			run_max_time = RIGHT_TIMER(Ms_6000, Ms_100);		
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_5000, Ms_100);
 			sta = 5;
-			break;	
-		 /* 判断电机是否到原点触点 */	
-		case 5:													
+			break;
+		/* 判断电机是否到原点触点 */		
+		case 5:			
 			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (TRUE == app_motor_ready())
 				|| (--run_max_time == 0)){
 				dc_motor_Stop();
-				sta = 6;				
+				sta = 6;					
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
-		/* 判断萃取电机是否回转到原位 */
-		case 6:													//电机回转到原位
+		/* 电机回转到原位 */	
+		case 6:			
 			dc_motor_Start(MOTOR_LEFT);
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
 			sta = 7;
 			break;	
-		case 7:													//判断电机是否回转到原位
+		case 7:	//判断电机是否回转到原位
 			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
-				key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
 				sta = 0;
-				app_task_nextstep(APP_IDLE_STATE, IDLE_INIT_STATE);	
+				return TRUE;
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;			
+		default:
+			break;
+	}	
+	return FAIL;
+}
+
+/**************************************************************************
+ * @brief 在萃取电机回原位状态下按下ON/OFF键的处理函数
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
+ * @note 该函数在espresso, americano的萃取电机回原位状态下按下ON/OFF键时被调用
+ *************************************************************************/
+uint8_t app_running_onoff_rst_handler(void)
+{
+	static uint8_t sta = 0;
+	switch (sta)
+	{
+		/* 复位初始化 */
+		case 0:
+			dc_motor_Stop();
+			sta = 1;
+			break;
+		/* 做回转到原位动作 */	
+		case 1:
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_5000, Ms_100);
+			sta = 2;
+			break;
+		/* 判断电机是否到原点触点 */		
+		case 2:			
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				sta = 3;					
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 电机回转到原位 */	
+		case 3:			
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			sta = 4;
+			break;	
+		case 4:	//判断电机是否回转到原位
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				sta = 0;
+				return TRUE;
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;			
+		default:
+			break;
+	}
+	return FAIL;
+}
+
+/**************************************************************************
+ * @brief 冲洗管路函数处理流程
+ * @return TRUE：流程结束，萃取电机处于原位， FAIL：流程执行中
+ * @note 进入此函数后会检测萃取电机的位置，再去接水冲洗
+ *************************************************************************/
+uint8_t app_running_onoff_flush_handler(void)
+{
+	static uint8_t sta = 0;
+	switch (sta)
+	{	
+		/* 进入清洗初始化 */
+		case 0:
+			dc_motor_Stop();
+			app_turn_heat_on(TARGET_TEMP_90D);
+			osal_lyh_delay_task(Ms_100);
+			sta = 1;
+			break;
+		/* 检查萃取电机位置 */
+		case 1:
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = RIGHT_TIMER(Ms_3000, Ms_100);
+			sta = 2;
+			break;
+		/* 判断萃取电机是否触碰原点触点 */
+		case 2:
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				sta = 3;					
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 萃取电机向回转到原点 */
+		case 3:
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			sta = 4;
+			break;
+		/* 判断萃取电机是否完成回转 */
+		case 4:
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				sta = 5;				
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;				
+		/* 萃取电机前往萃取位置 */
+		case 5:
+			dc_motor_Start(MOTOR_LEFT);		
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(Ms_7000, Ms_100);		//此处时间需要根据实际情况整改
+			sta = 6;
+			break;
+		/* 判断萃取电机是否到达萃取位置 */
+		case 6:
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				sta = 7;	
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}			
+			break;
+		/* 启动水泵冲洗管路 */
+		case 7:
+			ac_pumb_start(CONTINUE_MODE);		//启动水泵
+			osal_lyh_delay_task(Ms_10000);		
+			sta = 8;
+			break;
+		case 8:
+			ac_pumb_stop();						//关闭水泵
+			osal_lyh_delay_task(Ms_6000);		
+			sta = 9;
+			break;
+		/* 萃取电机向原点转动 */
+		case 9:
+			dc_motor_Start(MOTOR_RIGHT);
+			osal_lyh_delay_task(Ms_1000);			//此处delay应保持较大的数（>500ms），否则电机还未转出触点就开始检测，
+													//容易误判为已经触碰到原点开关，导致电机无法回转到原位
+			run_max_time = RIGHT_TIMER(Ms_6000, Ms_100);		
+			sta = 10;
+			break;	
+		/* 判断电机是否到原点触点 */	
+		case 10:													
+			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (TRUE == app_motor_ready())
+				|| (--run_max_time == 0)){
+				dc_motor_Stop();
+				sta = 11;				
+			}
+			else {
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 电机回转到原位 */
+		case 11:												
+			dc_motor_Start(MOTOR_LEFT);
+			osal_lyh_delay_task(Ms_100);
+			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
+			sta = 12;
+			break;	
+		/* 判断电机是否回转到原位 */	
+		case 12:													
+			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
+				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
+				|| (--run_max_time == 0))){
+				dc_motor_Stop();
+				app_turn_heat_off();
+				sta = 0;
+				return TRUE;
 			}
 			else {
 				osal_lyh_delay_task(Ms_100);
@@ -2174,6 +2460,7 @@ void app_running_onoff_flush_handler(void)
 		default:
 			break;
 	}
+	return FAIL;
 }
 
 /**************************************************************************
@@ -2185,24 +2472,99 @@ void app_running_onoff_flush_handler(void)
  *************************************************************************/
 void app_running_onoff_handler(void)
 {
-
 	switch(app_task_substep)
 	{
-		case RUNNING_ONOFF_GRIND_STATE:		//研磨状态
-			app_running_onoff_grind_handler();
+		/* 进入ON/OFF处理函数初始化 */
+		case RUNNING_ONOFF_INIT_STATE:			
+			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);	//屏蔽ON/OFF按键			
+			app_led_show_init();	//初始化流水灯		
+			switch(CERRNT_STATE)	//判断当前运行的状态，并进入对应的处理流程
+			{
+				/* 空运行状态 */	
+				case NULL_STATE:
+					if(1 == flush_flag){
+						flush_flag = 0;
+						app_task_substep = RUNNING_ONOFF_FLUSH;
+					}
+					else{
+						app_task_substep = RUNNING_ONOFF_COMPLETE;
+					}
+					break;			
+				/* 初始化和研磨 */
+				case INIT_AND_GRIND_STATE:
+					app_task_substep = RUNNING_ONOFF_GRIND_STATE;
+					break;
+				/* 前往萃取中 */	
+				case GO_BREW_STATE:
+					app_task_substep = RUNNING_ONOFF_GO_BREW_STATE;				
+					break;
+				/* 预冲煮 */	
+				case PRE_BREW_STATE:
+					app_task_substep = RUNNING_ONOFF_PRE_BREW_STATE;				
+					break;
+				/* 冲煮 */	
+				case BREW_STATE:
+					app_task_substep = RUNNING_ONOFF_BREW_STATE;				
+					break;
+				/* 丢咖啡渣 */		
+				case DROP_BEANS_STATE:
+					drop_beans_time = run_max_time;
+					app_task_substep = RUNNING_ONOFF_DROP_BEANS_STATE;				
+					break;
+				case RST_STATE:
+					app_task_substep = RUNNING_ONOFF_RST_STATE;
+					break;
+				default:
+					break;
+			}			
 			break;
-		case RUNNING_ONOFF_GO_WATER_STATE:		//去接水状态
-			app_running_onoff_go_water_handler();
+		/* 研磨时处理 */	
+		case RUNNING_ONOFF_GRIND_STATE:		
+			if(TRUE == app_running_onoff_grind_handler()){
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}
 			break;
-		case RUNNING_ONOFF_PRE_BREW_STATE:		//预冲煮状态
-			app_running_onoff_pre_brew_handler();
+		/* 去萃取时处理 */	
+		case RUNNING_ONOFF_GO_BREW_STATE:		
+			if(TRUE == app_running_onoff_go_water_handler()){
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}
 			break;
-		case RUNNING_ONOFF_BREW_STATE:		//冲煮状态
-			app_running_onoff_brew_handler();
+		/* 预冲煮时处理 */
+		case RUNNING_ONOFF_PRE_BREW_STATE:		
+			if(TRUE == app_running_onoff_pre_brew_handler()){	
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}		
 			break;
-		case RUNNING_ONOFF_FLUSH:					//清洗管路状态
-			app_running_onoff_flush_handler();		//此处是以上4个状态下按下ON/OFF键的处理流程的最后一个子状态，
-													//在以上4个流程的最后进入此清洗函数并复位关机进入IDLE状态
+		/* 冲煮时处理 */
+		case RUNNING_ONOFF_BREW_STATE:		
+			if(TRUE == app_running_onoff_brew_handler()){
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}
+			break;
+		/* 丢咖啡渣时处理 */	
+		case RUNNING_ONOFF_DROP_BEANS_STATE:
+			if(TRUE == app_running_onoff_drop_beans_handler()){
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}
+			break;
+		/* 复位时处理 */
+		case RUNNING_ONOFF_RST_STATE:
+			if(TRUE == app_running_onoff_rst_handler()){
+				app_task_substep = RUNNING_ONOFF_FLUSH;
+			}
+			break;
+		/* 冲洗流程 */	
+		case RUNNING_ONOFF_FLUSH:
+			if(TRUE == app_running_onoff_flush_handler()){
+				app_task_substep = RUNNING_ONOFF_COMPLETE;
+			}												
+			break;
+		/* 完成ON/OFF流程，进入IDLE状态 */	
+		case RUNNING_ONOFF_COMPLETE:
+			key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
+			osal_lyh_kill_over_timer(OS_LED_TIME);
+			app_task_nextstep(APP_IDLE_STATE, IDLE_INIT_STATE);
 			break;
 		default:
 			break;

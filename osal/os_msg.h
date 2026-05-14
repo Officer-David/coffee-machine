@@ -30,7 +30,9 @@
 #define Ms_700				700
 #define Ms_800				800
 #define Ms_1000				1000
+#define Ms_1500				1500
 #define Ms_2000				2000
+#define Ms_2900				2900
 #define Ms_3000				3000
 #define Ms_4000				4000
 #define Ms_5000				5000
@@ -40,8 +42,15 @@
 #define Ms_9000				9000
 #define Ms_10000			10000
 #define Ms_12000			12000
+#define Ms_19000			19000
 #define Ms_30000			30000
+#define Ms_33000			33000
+#define Ms_36000			36000
+#define Ms_51000			51000
 #define Ms_60000			60000
+#define Ms_62000			62000
+#define Ms_72000			72000
+#define Ms_105000			105000
 #define Ms_120000			120000
 #define Ms_130000			130000
 

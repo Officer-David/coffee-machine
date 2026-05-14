@@ -457,26 +457,26 @@
  346              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gd32f30x_wwdgt.c
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:16     .text.wwdgt_deinit:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:24     .text.wwdgt_deinit:00000000 wwdgt_deinit
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:50     .text.wwdgt_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:57     .text.wwdgt_enable:00000000 wwdgt_enable
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:87     .text.wwdgt_enable:00000018 $d
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:92     .text.wwdgt_counter_update:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:99     .text.wwdgt_counter_update:00000000 wwdgt_counter_update
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:137    .text.wwdgt_counter_update:00000020 $d
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:142    .text.wwdgt_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:149    .text.wwdgt_config:00000000 wwdgt_config
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:200    .text.wwdgt_config:00000034 $d
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:206    .text.wwdgt_flag_get:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:213    .text.wwdgt_flag_get:00000000 wwdgt_flag_get
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:252    .text.wwdgt_flag_get:00000020 $d
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:257    .text.wwdgt_flag_clear:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:264    .text.wwdgt_flag_clear:00000000 wwdgt_flag_clear
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:293    .text.wwdgt_flag_clear:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:298    .text.wwdgt_interrupt_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:305    .text.wwdgt_interrupt_enable:00000000 wwdgt_interrupt_enable
-C:\Users\user001\AppData\Local\Temp\cc2tpFT4.s:335    .text.wwdgt_interrupt_enable:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:16     .text.wwdgt_deinit:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:24     .text.wwdgt_deinit:00000000 wwdgt_deinit
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:50     .text.wwdgt_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:57     .text.wwdgt_enable:00000000 wwdgt_enable
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:87     .text.wwdgt_enable:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:92     .text.wwdgt_counter_update:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:99     .text.wwdgt_counter_update:00000000 wwdgt_counter_update
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:137    .text.wwdgt_counter_update:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:142    .text.wwdgt_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:149    .text.wwdgt_config:00000000 wwdgt_config
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:200    .text.wwdgt_config:00000034 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:206    .text.wwdgt_flag_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:213    .text.wwdgt_flag_get:00000000 wwdgt_flag_get
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:252    .text.wwdgt_flag_get:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:257    .text.wwdgt_flag_clear:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:264    .text.wwdgt_flag_clear:00000000 wwdgt_flag_clear
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:293    .text.wwdgt_flag_clear:00000014 $d
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:298    .text.wwdgt_interrupt_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:305    .text.wwdgt_interrupt_enable:00000000 wwdgt_interrupt_enable
+C:\Users\user001\AppData\Local\Temp\ccKl9hDK.s:335    .text.wwdgt_interrupt_enable:00000018 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
