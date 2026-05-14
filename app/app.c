@@ -358,10 +358,7 @@ void app_led_finish_step(void)
 /**************************************************************************
  * @brief on/off键处理函数
  * @return none
- * @note 1.在INIT和IDLE状态下，按下on/off键进入开机流程STARTUP
- * 		 2.在STARTUP、NORMAL、HOTWATER和STEAM状态下，
- * 		   按下on/off键根据冲洗标志位flush_flag判断是否需要进入冲洗流程
- * 		 3.在冲煮流程ESPRESSO和AMERICANO状态下，按下on/off键根据当前子状态判断对应的on/off流程（AMERICANO未添加）
+ * @note none
  *************************************************************************/
 void app_onoff_key_deal(void)
 {
@@ -818,7 +815,9 @@ void app_startup_handler(void)
 {
 	switch(app_task_substep)
 	{
+		/* 启动流程初始化 */
 		case STARTUP_INIT_STATE:
+			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);		//屏蔽on/off
 			app_task_substep = STARTUP_ENTRY_STATE;
 			if (FAIL == app_pallet_ready()){
 				display_led(PALLET_ERR_LED, LED_ON);
@@ -829,15 +828,17 @@ void app_startup_handler(void)
 				app_task_substep = STARTUP_FAIL_STATE;
 			}
 			break;
+		/* 流程开始：LED流水灯、电机动作、开启加热 */	
 		case STARTUP_ENTRY_STATE:
 			app_led_show_init();
 			dc_motor_ClearFault();
 			dc_motor_Start(MOTOR_RIGHT);
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);
+			app_turn_heat_on(TARGET_TEMP_107D);
 			app_task_substep = STARTUP_RIGHT_RST_STATE;
 			run_max_time = RIGHT_TIMER(Ms_2000, Ms_100);
 			osal_lyh_delay_task(Ms_100);
 			break;
+		/* 判断电机是否到触点 */	
 		case STARTUP_RIGHT_RST_STATE:
 			if ((MOTOR_STATE_STOPED == dc_motor_GetState())
 				|| (TRUE == app_motor_ready())
@@ -850,12 +851,14 @@ void app_startup_handler(void)
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
+		/* 电机回转到原点 */	
 		case STARTUP_LEFT_STATE:
 			dc_motor_Start(MOTOR_LEFT);
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
 			app_task_substep = STARTUP_LEFT_RST_STATE;
 			break;
+		/* 判断电机是否转回原点 */	
 		case STARTUP_LEFT_RST_STATE:
 			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel) 
 				&& ((MOTOR_STATE_STOPED == dc_motor_GetState())
@@ -866,31 +869,33 @@ void app_startup_handler(void)
 			}
 			osal_lyh_delay_task(Ms_100);
 			break;
+		/* 判断温度是否到达 */	
 		case STARTUP_HEAT_RDY_STATE:
-			if (TRUE == app_temperature_state(TARGET_TEMP_90D)){
+			if (TRUE == app_temperature_state(TARGET_TEMP_107D)){
 				app_task_substep = STARTUP_COMPLETE_STATE;
 			}
 			else {
-				app_turn_heat_on(TARGET_TEMP_90D);
 				run_max_time = HEAT_MAX_TIMER(Ms_100);
 				app_task_substep = STARTUP_HEAT_ING_STATE;
 			}
 			osal_lyh_delay_task(Ms_100);
-			break;
+			break;	
 		case STARTUP_HEAT_ING_STATE:
-			if ((TRUE == app_temperature_state(TARGET_TEMP_90D))
+			if ((TRUE == app_temperature_state(TARGET_TEMP_107D))
 				|| (--run_max_time == 0)){
 				display_led(START_LED, LED_ON);
 				app_task_substep = STARTUP_HEAT_END_STATE;
 			}
 			osal_lyh_delay_task(Ms_100);
 			break;
+		/* 电机转向萃取位置 */	
 		case STARTUP_HEAT_END_STATE:
 			dc_motor_Start(MOTOR_LEFT);
 			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(Ms_6000, Ms_100);
 			app_task_substep = STARTUP_LEFT_MOVE_STATE;
 			break;
+		/* 判断电机是否到达萃取位置 */	
 		case STARTUP_LEFT_MOVE_STATE:
 			if ((MOTOR_STATE_STOPED == dc_motor_GetState())
 				|| (TRUE == app_motor_ready())
@@ -900,11 +905,12 @@ void app_startup_handler(void)
 			}
 			osal_lyh_delay_task(Ms_100);
 			break;
+		/* 抽水冲洗 */	
 		case STARTUP_WATER_RDY_STATE:
 			ac_pumb_start(CONTINUE_MODE);
 			run_max_time = WATER_MAX_TIMER(Ms_100);
 			app_task_substep = STARTUP_WATER_ING_STATE;
-			break;
+			break;	
 		case STARTUP_WATER_ING_STATE:
 			if (--run_max_time == 0){
 				ac_pumb_stop();
@@ -915,13 +921,14 @@ void app_startup_handler(void)
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
+		/* 电机转回原位 */	
 		case STARTUP_WATER_END_STATE:
-			key_prohibit_setup(KEY_ONOFF_MASK, TRUE);
-			osal_lyh_delay_task(Ms_500);	// wait motor to move the detecting point
+			osal_lyh_delay_task(Ms_1500);	// wait motor to move the detecting point
 			dc_motor_Start(MOTOR_RIGHT);
 			run_max_time = RIGHT_TIMER(Ms_6000, Ms_100);
 			app_task_substep = STARTUP_RIGHT_MOVE_STATE;
 			break;
+		/* 判断电机是否触碰触点 */	
 		case STARTUP_RIGHT_MOVE_STATE:
 			if ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (TRUE == app_motor_ready())
@@ -934,13 +941,14 @@ void app_startup_handler(void)
 				osal_lyh_delay_task(Ms_100);
 			}
 			break;
+		/* 电机回转 */	
 		case STARTUP_LEFT_START_STATE:
 			display_led(START_LED, LED_OFF);
 			dc_motor_Start(MOTOR_LEFT);
-			osal_lyh_delay_task(Ms_100);
 			run_max_time = LEFT_TIMER(MOTOR_FIX_TIME, Ms_100);
 			app_task_substep = STARTUP_LEFT_END_STATE;
 			break;
+		/* 判断电机是否回转完成 */	
 		case STARTUP_LEFT_END_STATE:
 			if (1/*(FAIL == app_motor_ready())*/	// deleting point,(temp to cancel)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
@@ -950,8 +958,10 @@ void app_startup_handler(void)
 			}
 			osal_lyh_delay_task(Ms_100);
 			break;
+		/* 启动完成 */	
 		case STARTUP_COMPLETE_STATE:
 			key_prohibit_setup(KEY_ONOFF_MASK, FAIL);
+			app_turn_heat_off();
 			if (TRUE == app_led_oneloop()){
 				app_leds_all_fun(LED_ON);
 				osal_lyh_kill_over_timer(OS_LED_TIME);
@@ -1565,7 +1575,7 @@ void app_american_handler(void)
 			CERRNT_STATE = BREW_STATE;	//记录进度
 			if(0 == manual_setup.water){			//根据杯量决定抽水时间：x1=19s,x2=36s,x3=51s		
 				ac_pumb_start(CONTINUE_MODE);
-				if(1 == manual_setup.cup){
+				if(0 == manual_setup.cup){
 					osal_lyh_delay_task(Ms_19000);
 				}
 				else{
@@ -1575,7 +1585,7 @@ void app_american_handler(void)
 			}
 			else if (1 == manual_setup.water){
 				ac_pumb_start(CONTINUE_MODE);
-				if(1 == manual_setup.cup){
+				if(0 == manual_setup.cup){
 					osal_lyh_delay_task(Ms_36000);
 				}
 				else{
@@ -1585,7 +1595,7 @@ void app_american_handler(void)
 			}
 			else if (2 == manual_setup.water){
 				ac_pumb_start(CONTINUE_MODE);
-				if(1 == manual_setup.cup){
+				if(0 == manual_setup.cup){
 					osal_lyh_delay_task(Ms_51000);
 				}
 				else{
@@ -2380,6 +2390,7 @@ uint8_t app_running_onoff_flush_handler(void)
 				&& ((MOTOR_STATE_STOPED ==dc_motor_GetState())
 				|| (--run_max_time == 0))){
 				dc_motor_Stop();
+				osal_lyh_delay_task(Ms_1500);
 				sta = 5;				
 			}
 			else {

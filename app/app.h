@@ -226,7 +226,7 @@ typedef struct
 	uint8_t water;
 }st_opDef;
 
-#define HEAT_MAX_TIMER(x)		(15000/x)
+#define HEAT_MAX_TIMER(x)		(20000/x)
 #define WATER_MAX_TIMER(x)		(10000/x)
 #define COFFEE_MAX_TIMER(x)		(11900/x)
 #define PRECOFFEE_MAX_TIMER(x)	(2100/x)
