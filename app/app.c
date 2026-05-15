@@ -171,6 +171,16 @@ uint8_t app_temperature_state(uint16_t target)
 	return heat_get_temp(target);
 }
 
+void app_relay_set(uint8_t MODE)
+{
+	if(MODE == COFFEE_MODE){
+		Relay2_OFF();
+	}
+	else if(MODE == WATER_MODE){
+		Relay2_ON();
+	}
+}
+
 uint8_t app_step_state(uint8_t step)
 {
 	return (app_task_step == step)? TRUE:FAIL;
@@ -261,25 +271,25 @@ void app_led_americano_init(void)
 void app_led_hotwater_cbfunc(void)
 {
 	display_led(HOT_WATER, LED_TOGGLE);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_hotwater_cbfunc);
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_hotwater_cbfunc);
 }
 
 void app_led_hotwater_init(void)
 {
 	display_led(HOT_WATER, LED_ON);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_hotwater_cbfunc);
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_hotwater_cbfunc);
 }
 
 void app_led_steam_cbfunc(void)
 {
 	display_led(STEAM_LED, LED_TOGGLE);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_steam_cbfunc);
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_steam_cbfunc);
 }
 
 void app_led_steam_init(void)
 {
 	display_led(STEAM_LED, LED_ON);
-	osal_lyh_over_timer(OS_LED_TIME, Ms_1000, app_led_steam_cbfunc);
+	osal_lyh_over_timer(OS_LED_TIME, Ms_500, app_led_steam_cbfunc);
 }
 
 void app_led_aqua_cbfunc(void)
@@ -1672,13 +1682,59 @@ void app_hotwater_handler(void)
 {
 	switch(app_task_substep)
 	{
+		/* 热水流程初始化 */
 		case HOTWATER_INIT_STATE:
+			app_leds_all_fun(LED_OFF);
+			app_leds_all_ind(LED_OFF);		
 			display_led(START_LED, LED_ON);
 			app_led_hotwater_init();
-			app_task_substep = HOTWATER_RUN_STATE;
+			app_turn_heat_on(TARGET_TEMP_HOTWATER);
+			run_max_time = 100;		//仅调试用，设置加热时间为10s
+			app_task_substep = HOTWATER_WAIT_TEMP_STATE;
 			break;
-		case HOTWATER_RUN_STATE:
-			osal_lyh_delay_task(Ms_500);
+		/* 等待加热完成 */	
+		case HOTWATER_WAIT_TEMP_STATE:
+			if((TRUE == app_temperature_state(TARGET_TEMP_HOTWATER))
+				|| --run_max_time == 0){
+				app_task_substep = HOTWATER_CHANGE_PIPE_STATE;
+			}
+			else{
+				osal_lyh_delay_task(Ms_100);
+			}
+			break;
+		/* 切换出水口 */	
+		case HOTWATER_CHANGE_PIPE_STATE:
+			app_relay_set(WATER_MODE);
+			app_task_substep = HOTWATER_JUDGE_WATER_STATE;
+			break;
+		/* 判断水量 */	
+		case HOTWATER_JUDGE_WATER_STATE:
+			if(0 == manual_setup.water){
+				ac_pumb_start(CONTINUE_MODE);
+				osal_lyh_delay_task(Ms_14000);
+				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;
+			}
+			else if(1 == manual_setup.water){
+				ac_pumb_start(CONTINUE_MODE);
+				osal_lyh_delay_task(Ms_39000);
+				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;
+			}
+			else if(2 == manual_setup.water){
+				ac_pumb_start(CONTINUE_MODE);
+				osal_lyh_delay_task(Ms_97000);
+				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;				
+			}
+			break;
+		/* 等待时间结束 */	
+		case HOTWATER_WAIT_WATER_END_STATE:
+			ac_pumb_stop();
+			app_relay_set(COFFEE_MODE);
+			app_task_substep = HOTWATER_COMPLETE_STATE;	
+			break;
+		case HOTWATER_COMPLETE_STATE:
+			app_turn_heat_off();
+			app_led_finish_step();
+			app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
 			break;
 		default:
 			break;

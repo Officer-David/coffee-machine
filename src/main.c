@@ -58,6 +58,8 @@ int main(void)
     /* motor init */
     gd_acmotor_Init();
     gd_dcmotor_Init();
+    /* relay init */
+    gd_realy_init();
     /* configure com */
     gd_usart_Init();
     /* init ext. interrupt */

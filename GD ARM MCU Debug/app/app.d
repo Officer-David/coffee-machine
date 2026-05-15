@@ -31,7 +31,8 @@ app/app.o: ../app/app.c ../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h \
  ../osal/os_lyh_config.h ../osal/os_msg.h ../osal/os_msg.h \
  ../app/configboard.h ../app/keyboard.h ../app/acmotor.h ../app/dcmotor.h \
  ../app/display.h ../app/extint.h ../app/timer.h ../app/usart.h \
- ../app/gpio.h ../app/heat.h ../app/adc.h ../app/app.h ../app/bus.h
+ ../app/gpio.h ../app/heat.h ../app/adc.h ../app/app.h ../app/bus.h \
+ ../app/relay.h
 
 ../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h:
 
@@ -132,3 +133,5 @@ app/app.o: ../app/app.c ../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h \
 ../app/app.h:
 
 ../app/bus.h:
+
+../app/relay.h:

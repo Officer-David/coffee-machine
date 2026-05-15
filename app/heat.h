@@ -22,6 +22,12 @@
 #define TARGET_TEMP_100D	(uint16_t)(1.70 / (REFVAL / (float)4096))	// ?
 #define TARGET_TEMP_90D		(uint16_t)(1.38 / (REFVAL / (float)4096))  // 90 degress
 
+#define TARGET_TEMP_STARTUP		(uint16_t)(2.4 / (REFVAL / (float)4096))  
+#define TARGET_TEMP_COFFEE		(uint16_t)(2.24 / (REFVAL / (float)4096)) 
+#define TARGET_TEMP_HOTWATER	(uint16_t)(2.08 / (REFVAL / (float)4096))  
+#define TARGET_TEMP_STEAM		(uint16_t)(2.64 / (REFVAL / (float)4096))  
+
+
 // motor detect.
 #define MOTOR_DETECT_1P80	(uint16_t)(1.80 / (REFVAL / (float)4096))	
 #define MOTOR_DETECT_1P70	(uint16_t)(1.70 / (REFVAL / (float)4096))	

@@ -543,22 +543,22 @@ DEFINED SYMBOLS
                             *COM*:00000001 heat_id
                             *COM*:00000001 heat_task_step
                             *COM*:00000002 target_temp
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:19     .text.heat_task_nextstep:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:27     .text.heat_task_nextstep:00000000 heat_task_nextstep
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:64     .text.heat_task_nextstep:00000024 $d
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:70     .text.heat_temp_deal:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:77     .text.heat_temp_deal:00000000 heat_temp_deal
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:133    .text.heat_get_temp:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:140    .text.heat_get_temp:00000000 heat_get_temp
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:195    .text.init_heat_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:202    .text.init_heat_task:00000000 init_heat_task
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:240    .text.init_heat_task:00000020 $d
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:246    .text.heat_task_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:253    .text.heat_task_handler:00000000 heat_task_handler
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:313    .text.heat_task_handler:00000044 $d
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:319    .text.heat_event_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:326    .text.heat_event_handler:00000000 heat_event_handler
-C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:400    .text.heat_event_handler:00000054 $d
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:19     .text.heat_task_nextstep:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:27     .text.heat_task_nextstep:00000000 heat_task_nextstep
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:64     .text.heat_task_nextstep:00000024 $d
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:70     .text.heat_temp_deal:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:77     .text.heat_temp_deal:00000000 heat_temp_deal
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:133    .text.heat_get_temp:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:140    .text.heat_get_temp:00000000 heat_get_temp
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:195    .text.init_heat_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:202    .text.init_heat_task:00000000 init_heat_task
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:240    .text.init_heat_task:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:246    .text.heat_task_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:253    .text.heat_task_handler:00000000 heat_task_handler
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:313    .text.heat_task_handler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:319    .text.heat_event_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:326    .text.heat_event_handler:00000000 heat_event_handler
+C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:400    .text.heat_event_handler:00000054 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
                            .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
@@ -625,7 +625,7 @@ C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:400    .text.heat_event_handler:0
                            .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
                            .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
                            .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
-                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
+                           .group:00000000 wm4.os_msg.h.10.a94e4ae0955bd46ca3a4d1a43d60b65d
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
@@ -634,10 +634,11 @@ C:\Users\user001\AppData\Local\Temp\cc2qIvpA.s:400    .text.heat_event_handler:0
                            .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
                            .group:00000000 wm4.timer.h.19.a82f4ede3cad5645e78e3c71f10c984d
                            .group:00000000 wm4.usart.h.19.b0b7cc356d4f06c8ed965d5c47dabfa0
-                           .group:00000000 wm4.heat.h.3.c5505329d800fdba1d98ba08bc0b743e
+                           .group:00000000 wm4.heat.h.3.3a68ec833c99ebcc67be58e5fd618605
                            .group:00000000 wm4.adc.h.19.b7b71ccc5b83f495b1d7f2c83649d46d
-                           .group:00000000 wm4.app.h.3.832bf133db86c9b5783895aba11d0e00
+                           .group:00000000 wm4.app.h.3.cc1bae33111ee09aa181500e2732cd22
                            .group:00000000 wm4.bus.h.3.006a12bb937063aa955474032db251cd
+                           .group:00000000 wm4.relay.h.2.68d8ff0db7f3799b00c17eb83273c2f3
 
 UNDEFINED SYMBOLS
 osal_lyh_restore_task

@@ -548,29 +548,29 @@
  442              		.file 16 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 dcmotor.c
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:18     .bss.motor_state:00000000 motor_state
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:19     .bss.motor_state:00000000 $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:21     .text.dc_motor_SetPins:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:28     .text.dc_motor_SetPins:00000000 dc_motor_SetPins
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:105    .text.dc_motor_SetPins:00000064 $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:110    .text.dc_motor_Stop:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:117    .text.dc_motor_Stop:00000000 dc_motor_Stop
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:150    .text.dc_motor_Stop:00000020 $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:155    .text.dc_motor_Start:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:162    .text.dc_motor_Start:00000000 dc_motor_Start
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:232    .text.dc_motor_Start:0000004c $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:237    .text.dc_motor_GetState:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:244    .text.dc_motor_GetState:00000000 dc_motor_GetState
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:271    .text.dc_motor_GetState:00000010 $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:276    .text.dc_motor_ClearFault:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:283    .text.dc_motor_ClearFault:00000000 dc_motor_ClearFault
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:314    .text.dc_motor_ClearFault:0000001c $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:319    .text.dc_motor_reach_irqHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:326    .text.dc_motor_reach_irqHandler:00000000 dc_motor_reach_irqHandler
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:355    .text.dc_motor_reach_irqHandler:0000001c $d
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:360    .text.gd_dcmotor_Init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:367    .text.gd_dcmotor_Init:00000000 gd_dcmotor_Init
-C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:420    .text.gd_dcmotor_Init:00000058 $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:18     .bss.motor_state:00000000 motor_state
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:19     .bss.motor_state:00000000 $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:21     .text.dc_motor_SetPins:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:28     .text.dc_motor_SetPins:00000000 dc_motor_SetPins
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:105    .text.dc_motor_SetPins:00000064 $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:110    .text.dc_motor_Stop:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:117    .text.dc_motor_Stop:00000000 dc_motor_Stop
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:150    .text.dc_motor_Stop:00000020 $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:155    .text.dc_motor_Start:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:162    .text.dc_motor_Start:00000000 dc_motor_Start
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:232    .text.dc_motor_Start:0000004c $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:237    .text.dc_motor_GetState:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:244    .text.dc_motor_GetState:00000000 dc_motor_GetState
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:271    .text.dc_motor_GetState:00000010 $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:276    .text.dc_motor_ClearFault:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:283    .text.dc_motor_ClearFault:00000000 dc_motor_ClearFault
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:314    .text.dc_motor_ClearFault:0000001c $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:319    .text.dc_motor_reach_irqHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:326    .text.dc_motor_reach_irqHandler:00000000 dc_motor_reach_irqHandler
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:355    .text.dc_motor_reach_irqHandler:0000001c $d
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:360    .text.gd_dcmotor_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:367    .text.gd_dcmotor_Init:00000000 gd_dcmotor_Init
+C:\Users\user001\AppData\Local\Temp\cc6o2YM9.s:420    .text.gd_dcmotor_Init:00000058 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.ieeefp.h.77.d5685ba212d3ed6e914898d045f873e3
                            .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
@@ -626,7 +626,7 @@ C:\Users\user001\AppData\Local\Temp\ccWRKuBx.s:420    .text.gd_dcmotor_Init:0000
                            .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
                            .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
                            .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
-                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
+                           .group:00000000 wm4.os_msg.h.10.a94e4ae0955bd46ca3a4d1a43d60b65d
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.dcmotor.h.2.1caa1708509315681b04efde390218ee

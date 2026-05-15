@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "app.h"
 #include "bus.h"
+#include "relay.h"
 
 #endif
 

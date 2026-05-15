@@ -1,0 +1,233 @@
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 6
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"relay.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.Relay2_ON,"ax",%progbits
+  16              		.align	1
+  17              		.global	Relay2_ON
+  18              		.arch armv7e-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	Relay2_ON:
+  25              	.LFB116:
+  26              		.file 1 "../app/relay.c"
+   1:../app/relay.c **** #include "gd32f30x.h"
+   2:../app/relay.c **** #include "os_lyh_core.h"
+   3:../app/relay.c **** #include "configboard.h"
+   4:../app/relay.c **** 
+   5:../app/relay.c **** 
+   6:../app/relay.c **** void Relay2_ON(void)
+   7:../app/relay.c **** {
+  27              		.loc 1 7 1
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 1, uses_anonymous_args = 0
+  31 0000 80B5     		push	{r7, lr}
+  32              		.cfi_def_cfa_offset 8
+  33              		.cfi_offset 7, -8
+  34              		.cfi_offset 14, -4
+  35 0002 00AF     		add	r7, sp, #0
+  36              		.cfi_def_cfa_register 7
+   8:../app/relay.c ****     SetRelay2_On();
+  37              		.loc 1 8 5
+  38 0004 4021     		movs	r1, #64
+  39 0006 0248     		ldr	r0, .L2
+  40 0008 FFF7FEFF 		bl	gpio_bit_set
+   9:../app/relay.c **** }
+  41              		.loc 1 9 1
+  42 000c 00BF     		nop
+  43 000e 80BD     		pop	{r7, pc}
+  44              	.L3:
+  45              		.align	2
+  46              	.L2:
+  47 0010 00080140 		.word	1073809408
+  48              		.cfi_endproc
+  49              	.LFE116:
+  51              		.section	.text.Relay2_OFF,"ax",%progbits
+  52              		.align	1
+  53              		.global	Relay2_OFF
+  54              		.syntax unified
+  55              		.thumb
+  56              		.thumb_func
+  57              		.fpu softvfp
+  59              	Relay2_OFF:
+  60              	.LFB117:
+  10:../app/relay.c **** 
+  11:../app/relay.c **** void Relay2_OFF(void)
+  12:../app/relay.c **** {
+  61              		.loc 1 12 1
+  62              		.cfi_startproc
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 1, uses_anonymous_args = 0
+  65 0000 80B5     		push	{r7, lr}
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 7, -8
+  68              		.cfi_offset 14, -4
+  69 0002 00AF     		add	r7, sp, #0
+  70              		.cfi_def_cfa_register 7
+  13:../app/relay.c ****     ClrRelay2_Off();
+  71              		.loc 1 13 5
+  72 0004 4021     		movs	r1, #64
+  73 0006 0248     		ldr	r0, .L5
+  74 0008 FFF7FEFF 		bl	gpio_bit_reset
+  14:../app/relay.c **** }
+  75              		.loc 1 14 1
+  76 000c 00BF     		nop
+  77 000e 80BD     		pop	{r7, pc}
+  78              	.L6:
+  79              		.align	2
+  80              	.L5:
+  81 0010 00080140 		.word	1073809408
+  82              		.cfi_endproc
+  83              	.LFE117:
+  85              		.section	.text.Relay2_GPIO_INIT,"ax",%progbits
+  86              		.align	1
+  87              		.syntax unified
+  88              		.thumb
+  89              		.thumb_func
+  90              		.fpu softvfp
+  92              	Relay2_GPIO_INIT:
+  93              	.LFB118:
+  15:../app/relay.c **** 
+  16:../app/relay.c **** static void Relay2_GPIO_INIT(void)
+  17:../app/relay.c **** {
+  94              		.loc 1 17 1
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 0
+  97              		@ frame_needed = 1, uses_anonymous_args = 0
+  98 0000 80B5     		push	{r7, lr}
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 7, -8
+ 101              		.cfi_offset 14, -4
+ 102 0002 00AF     		add	r7, sp, #0
+ 103              		.cfi_def_cfa_register 7
+  18:../app/relay.c ****     RELAY2_CONFIG();
+ 104              		.loc 1 18 5
+ 105 0004 4023     		movs	r3, #64
+ 106 0006 0122     		movs	r2, #1
+ 107 0008 1021     		movs	r1, #16
+ 108 000a 0348     		ldr	r0, .L8
+ 109 000c FFF7FEFF 		bl	gpio_init
+  19:../app/relay.c ****     Relay2_OFF();
+ 110              		.loc 1 19 5
+ 111 0010 FFF7FEFF 		bl	Relay2_OFF
+  20:../app/relay.c **** }
+ 112              		.loc 1 20 1
+ 113 0014 00BF     		nop
+ 114 0016 80BD     		pop	{r7, pc}
+ 115              	.L9:
+ 116              		.align	2
+ 117              	.L8:
+ 118 0018 00080140 		.word	1073809408
+ 119              		.cfi_endproc
+ 120              	.LFE118:
+ 122              		.section	.text.gd_realy_init,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	gd_realy_init
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 128              		.fpu softvfp
+ 130              	gd_realy_init:
+ 131              	.LFB119:
+  21:../app/relay.c **** 
+  22:../app/relay.c **** void gd_realy_init(void)
+  23:../app/relay.c **** {
+ 132              		.loc 1 23 1
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 80B5     		push	{r7, lr}
+ 137              		.cfi_def_cfa_offset 8
+ 138              		.cfi_offset 7, -8
+ 139              		.cfi_offset 14, -4
+ 140 0002 00AF     		add	r7, sp, #0
+ 141              		.cfi_def_cfa_register 7
+  24:../app/relay.c ****     Relay2_GPIO_INIT();
+ 142              		.loc 1 24 5
+ 143 0004 FFF7FEFF 		bl	Relay2_GPIO_INIT
+  25:../app/relay.c **** }
+ 144              		.loc 1 25 1
+ 145 0008 00BF     		nop
+ 146 000a 80BD     		pop	{r7, pc}
+ 147              		.cfi_endproc
+ 148              	.LFE119:
+ 150              		.text
+ 151              	.Letext0:
+ 152              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 153              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 154              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 155              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 156              		.file 6 "../osal/os_lyh_core.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 relay.c
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:16     .text.Relay2_ON:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:24     .text.Relay2_ON:00000000 Relay2_ON
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:47     .text.Relay2_ON:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:52     .text.Relay2_OFF:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:59     .text.Relay2_OFF:00000000 Relay2_OFF
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:81     .text.Relay2_OFF:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:86     .text.Relay2_GPIO_INIT:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:92     .text.Relay2_GPIO_INIT:00000000 Relay2_GPIO_INIT
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:118    .text.Relay2_GPIO_INIT:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:123    .text.gd_realy_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccObew3j.s:130    .text.gd_realy_init:00000000 gd_realy_init
+                           .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
+                           .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
+                           .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
+                           .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
+                           .group:00000000 wm4.features.h.33.318b64d71e0957639cfb30f1db1f7ec8
+                           .group:00000000 wm4._default_types.h.15.247e5cd201eca3442cbf5404108c4935
+                           .group:00000000 wm4._intsup.h.10.cce27fed8484c08a33f522034c30d2b5
+                           .group:00000000 wm4._stdint.h.10.c24fa3af3bc1706662bb5593a907e841
+                           .group:00000000 wm4.stdint.h.23.d53047a68f4a85177f80b422d52785ed
+                           .group:00000000 wm4.core_cmInstr.h.25.d8165482ef3061013a2fc83e2d85f3d9
+                           .group:00000000 wm4.core_cm4_simd.h.43.bf657009d9c246d6ac6e7b120cdd899a
+                           .group:00000000 wm4.core_cm4.h.196.6f0a9ac4bbc7fecc10f22e6a71f29e52
+                           .group:00000000 wm4.system_gd32f30x.h.38.120525a84dcd3d76a4734e6bcde7b49c
+                           .group:00000000 wm4.gd32f30x.h.294.5e6753de52124d3e3ab34f8aafd628cc
+                           .group:00000000 wm4.gd32f30x_rcu.h.41.eb7011467c51e1274d4ea5dfbe3b7403
+                           .group:00000000 wm4.gd32f30x_adc.h.36.124b47377c29d63ea85a6515ff99e7d0
+                           .group:00000000 wm4.gd32f30x_can.h.36.85eb2b9bdffce148e9f2cf53e35a47f8
+                           .group:00000000 wm4.gd32f30x_crc.h.36.3e50e7397bf79ecca0d280169ab2b7e1
+                           .group:00000000 wm4.gd32f30x_ctc.h.36.42aeab0e42f8a7b6cc58608cdc08a712
+                           .group:00000000 wm4.gd32f30x_dac.h.36.f867e713911fc6770d5f38223b88a122
+                           .group:00000000 wm4.gd32f30x_dbg.h.36.4d3777753862ded915f1f9e71f4c290a
+                           .group:00000000 wm4.gd32f30x_dma.h.36.00aa3536820feed4ebeab0c0060e7723
+                           .group:00000000 wm4.gd32f30x_exti.h.36.64affc4e75ae7f53393e90b0bfc38f38
+                           .group:00000000 wm4.gd32f30x_fmc.h.37.17b3f65aacec1755989aca30031b6a7c
+                           .group:00000000 wm4.gd32f30x_fwdgt.h.36.1e7c1bfe259ede52150f5b1c58591a95
+                           .group:00000000 wm4.gd32f30x_gpio.h.36.faffc48a681d1163918cf519d3cc7454
+                           .group:00000000 wm4.gd32f30x_i2c.h.36.5765e4fd7e67145781f52c3602fdf526
+                           .group:00000000 wm4.gd32f30x_pmu.h.37.9dd0def5d1159a6e20d49fadc0da3d91
+                           .group:00000000 wm4.gd32f30x_bkp.h.36.74dcfa31c344ae6ddc6f3a850e1b1f1c
+                           .group:00000000 wm4.gd32f30x_rtc.h.37.6e2dc4b1c1143d8443b19d8b8578e187
+                           .group:00000000 wm4.gd32f30x_sdio.h.36.6dde0ac1ffebc8ac87750ca48ebf5355
+                           .group:00000000 wm4.gd32f30x_spi.h.36.761dbcfdf151612384a2a7e1dfbd70a2
+                           .group:00000000 wm4.gd32f30x_timer.h.36.aa3a076608594e31d0be360d6248cd0c
+                           .group:00000000 wm4.gd32f30x_usart.h.36.c16033d6419d9317c5e1d5c9a4db894a
+                           .group:00000000 wm4.gd32f30x_wwdgt.h.37.074fc90df4806e0bcba242ad61cb154f
+                           .group:00000000 wm4.gd32f30x_misc.h.36.ca5ec56efc9d42fdcdbc33fa419c4320
+                           .group:00000000 wm4.gd32f30x_enet.h.36.7f39b2eaaae239e349e809a8bdf838ed
+                           .group:00000000 wm4.gd32f30x_exmc.h.36.6a5eb51a45aba96edb0f318836bccfc7
+                           .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
+                           .group:00000000 wm4.os_msg.h.10.a94e4ae0955bd46ca3a4d1a43d60b65d
+                           .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
+                           .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
+
+UNDEFINED SYMBOLS
+gpio_bit_set
+gpio_bit_reset
+gpio_init

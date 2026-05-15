@@ -141,304 +141,308 @@
   60:../src/main.c ****     gd_dcmotor_Init();
   67              		.loc 1 60 5
   68 001a FFF7FEFF 		bl	gd_dcmotor_Init
-  61:../src/main.c ****     /* configure com */
-  62:../src/main.c ****     gd_usart_Init();
+  61:../src/main.c ****     /* relay init */
+  62:../src/main.c ****     gd_realy_init();
   69              		.loc 1 62 5
-  70 001e FFF7FEFF 		bl	gd_usart_Init
-  63:../src/main.c ****     /* init ext. interrupt */
-  64:../src/main.c ****     gd_exti_Init();
+  70 001e FFF7FEFF 		bl	gd_realy_init
+  63:../src/main.c ****     /* configure com */
+  64:../src/main.c ****     gd_usart_Init();
   71              		.loc 1 64 5
-  72 0022 FFF7FEFF 		bl	gd_exti_Init
-  65:../src/main.c ****     /* init timer  */
-  66:../src/main.c ****     gd_timer_Init();
+  72 0022 FFF7FEFF 		bl	gd_usart_Init
+  65:../src/main.c ****     /* init ext. interrupt */
+  66:../src/main.c ****     gd_exti_Init();
   73              		.loc 1 66 5
-  74 0026 FFF7FEFF 		bl	gd_timer_Init
-  67:../src/main.c ****     /* init adc  */
-  68:../src/main.c ****     gd_adc_Init();
+  74 0026 FFF7FEFF 		bl	gd_exti_Init
+  67:../src/main.c ****     /* init timer  */
+  68:../src/main.c ****     gd_timer_Init();
   75              		.loc 1 68 5
-  76 002a FFF7FEFF 		bl	gd_adc_Init
-  69:../src/main.c ****     /* init watchdog */
-  70:../src/main.c ****     gd_watchdog_init();
+  76 002a FFF7FEFF 		bl	gd_timer_Init
+  69:../src/main.c ****     /* init adc  */
+  70:../src/main.c ****     gd_adc_Init();
   77              		.loc 1 70 5
-  78 002e FFF7FEFF 		bl	gd_watchdog_init
-  71:../src/main.c ****     /* print out the clock frequency of system, AHB, APB1 and APB2 */
-  72:../src/main.c ****     printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
+  78 002e FFF7FEFF 		bl	gd_adc_Init
+  71:../src/main.c ****     /* init watchdog */
+  72:../src/main.c ****     gd_watchdog_init();
   79              		.loc 1 72 5
-  80 0032 0020     		movs	r0, #0
-  81 0034 FFF7FEFF 		bl	rcu_clock_freq_get
-  82 0038 0346     		mov	r3, r0
-  83 003a 1946     		mov	r1, r3
-  84 003c 2448     		ldr	r0, .L3
-  85 003e FFF7FEFF 		bl	printf
-  73:../src/main.c ****     printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
-  86              		.loc 1 73 5
-  87 0042 0120     		movs	r0, #1
-  88 0044 FFF7FEFF 		bl	rcu_clock_freq_get
-  89 0048 0346     		mov	r3, r0
-  90 004a 1946     		mov	r1, r3
-  91 004c 2148     		ldr	r0, .L3+4
-  92 004e FFF7FEFF 		bl	printf
-  74:../src/main.c ****     printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
-  93              		.loc 1 74 5
-  94 0052 0220     		movs	r0, #2
-  95 0054 FFF7FEFF 		bl	rcu_clock_freq_get
-  96 0058 0346     		mov	r3, r0
-  97 005a 1946     		mov	r1, r3
-  98 005c 1E48     		ldr	r0, .L3+8
-  99 005e FFF7FEFF 		bl	printf
-  75:../src/main.c ****     printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
- 100              		.loc 1 75 5
- 101 0062 0320     		movs	r0, #3
- 102 0064 FFF7FEFF 		bl	rcu_clock_freq_get
- 103 0068 0346     		mov	r3, r0
- 104 006a 1946     		mov	r1, r3
- 105 006c 1B48     		ldr	r0, .L3+12
- 106 006e FFF7FEFF 		bl	printf
-  76:../src/main.c **** #ifdef __FIRMWARE_VERSION_DEFINE
-  77:../src/main.c ****     fw_ver = gd32f30x_firmware_version_get();
- 107              		.loc 1 77 14
- 108 0072 FFF7FEFF 		bl	gd32f30x_firmware_version_get
- 109 0076 7860     		str	r0, [r7, #4]
-  78:../src/main.c ****     /* print firmware version */
-  79:../src/main.c ****     printf("\r\nGD32F30x series firmware version: V%d.%d.%d\r\n", (uint8_t)(fw_ver >> 24), (uint8_t
- 110              		.loc 1 79 84
- 111 0078 7B68     		ldr	r3, [r7, #4]
- 112 007a 1B0E     		lsrs	r3, r3, #24
- 113              		.loc 1 79 67
- 114 007c DBB2     		uxtb	r3, r3
- 115              		.loc 1 79 5
- 116 007e 1946     		mov	r1, r3
- 117              		.loc 1 79 109
- 118 0080 7B68     		ldr	r3, [r7, #4]
- 119 0082 1B0C     		lsrs	r3, r3, #16
- 120              		.loc 1 79 92
- 121 0084 DBB2     		uxtb	r3, r3
- 122              		.loc 1 79 5
- 123 0086 1A46     		mov	r2, r3
- 124              		.loc 1 79 134
- 125 0088 7B68     		ldr	r3, [r7, #4]
- 126 008a 1B0A     		lsrs	r3, r3, #8
- 127              		.loc 1 79 117
- 128 008c DBB2     		uxtb	r3, r3
- 129              		.loc 1 79 5
- 130 008e 1448     		ldr	r0, .L3+16
- 131 0090 FFF7FEFF 		bl	printf
-  80:../src/main.c **** #endif /* __FIRMWARE_VERSION_DEFINE */
-  81:../src/main.c ****   //while (1)
-  82:../src/main.c ****   {
-  83:../src/main.c ****     /* USER CODE END WHILE */
-  84:../src/main.c ****     osal_lyh_core_init();
- 132              		.loc 1 84 5
- 133 0094 FFF7FEFF 		bl	osal_lyh_core_init
-  85:../src/main.c ****     osal_create_task(init_key_task, key_task_handler, key_event_handler);
- 134              		.loc 1 85 5
- 135 0098 124A     		ldr	r2, .L3+20
- 136 009a 1349     		ldr	r1, .L3+24
- 137 009c 1348     		ldr	r0, .L3+28
- 138 009e FFF7FEFF 		bl	osal_create_task
-  86:../src/main.c ****     osal_create_task(init_bus_task, bus_task_handler, bus_event_handler);
- 139              		.loc 1 86 5
- 140 00a2 134A     		ldr	r2, .L3+32
- 141 00a4 1349     		ldr	r1, .L3+36
- 142 00a6 1448     		ldr	r0, .L3+40
- 143 00a8 FFF7FEFF 		bl	osal_create_task
-  87:../src/main.c ****     osal_create_task(init_app_task, app_task_handler, app_event_handler);
- 144              		.loc 1 87 5
- 145 00ac 134A     		ldr	r2, .L3+44
- 146 00ae 1449     		ldr	r1, .L3+48
- 147 00b0 1448     		ldr	r0, .L3+52
- 148 00b2 FFF7FEFF 		bl	osal_create_task
-  88:../src/main.c ****     osal_create_task(init_heat_task, heat_task_handler, heat_event_handler);
- 149              		.loc 1 88 5
- 150 00b6 144A     		ldr	r2, .L3+56
- 151 00b8 1449     		ldr	r1, .L3+60
- 152 00ba 1548     		ldr	r0, .L3+64
- 153 00bc FFF7FEFF 		bl	osal_create_task
-  89:../src/main.c ****     //osal_create_task(init_test_task, test_task_handler, test_event_handler);
-  90:../src/main.c ****     osal_start_system();
- 154              		.loc 1 90 5
- 155 00c0 FFF7FEFF 		bl	osal_start_system
- 156 00c4 0023     		movs	r3, #0
-  91:../src/main.c ****     /* USER CODE BEGIN 3 */
-  92:../src/main.c ****   }
-  93:../src/main.c **** }
- 157              		.loc 1 93 1
- 158 00c6 1846     		mov	r0, r3
- 159 00c8 0837     		adds	r7, r7, #8
- 160              		.cfi_def_cfa_offset 8
- 161 00ca BD46     		mov	sp, r7
- 162              		.cfi_def_cfa_register 13
- 163              		@ sp needed
- 164 00cc 80BD     		pop	{r7, pc}
- 165              	.L4:
- 166 00ce 00BF     		.align	2
- 167              	.L3:
- 168 00d0 00000000 		.word	.LC0
- 169 00d4 10000000 		.word	.LC1
- 170 00d8 20000000 		.word	.LC2
- 171 00dc 30000000 		.word	.LC3
- 172 00e0 40000000 		.word	.LC4
- 173 00e4 00000000 		.word	key_event_handler
- 174 00e8 00000000 		.word	key_task_handler
- 175 00ec 00000000 		.word	init_key_task
- 176 00f0 00000000 		.word	bus_event_handler
- 177 00f4 00000000 		.word	bus_task_handler
- 178 00f8 00000000 		.word	init_bus_task
- 179 00fc 00000000 		.word	app_event_handler
- 180 0100 00000000 		.word	app_task_handler
- 181 0104 00000000 		.word	init_app_task
- 182 0108 00000000 		.word	heat_event_handler
- 183 010c 00000000 		.word	heat_task_handler
- 184 0110 00000000 		.word	init_heat_task
- 185              		.cfi_endproc
- 186              	.LFE119:
- 188              		.section	.text.__io_putchar,"ax",%progbits
- 189              		.align	1
- 190              		.global	__io_putchar
- 191              		.syntax unified
- 192              		.thumb
- 193              		.thumb_func
- 194              		.fpu softvfp
- 196              	__io_putchar:
- 197              	.LFB120:
-  94:../src/main.c **** 
-  95:../src/main.c **** #ifdef GD_ECLIPSE_GCC
-  96:../src/main.c **** /* retarget the C library printf function to the USART, in Eclipse GCC environment */
-  97:../src/main.c **** int __io_putchar(int ch)
-  98:../src/main.c **** {
- 198              		.loc 1 98 1
- 199              		.cfi_startproc
- 200              		@ args = 0, pretend = 0, frame = 16
- 201              		@ frame_needed = 1, uses_anonymous_args = 0
- 202 0000 80B5     		push	{r7, lr}
- 203              		.cfi_def_cfa_offset 8
- 204              		.cfi_offset 7, -8
- 205              		.cfi_offset 14, -4
- 206 0002 84B0     		sub	sp, sp, #16
- 207              		.cfi_def_cfa_offset 24
- 208 0004 00AF     		add	r7, sp, #0
- 209              		.cfi_def_cfa_register 7
- 210 0006 7860     		str	r0, [r7, #4]
-  99:../src/main.c ****     uint8_t txdata = (uint8_t)ch;
- 211              		.loc 1 99 22
- 212 0008 7B68     		ldr	r3, [r7, #4]
- 213 000a DBB2     		uxtb	r3, r3
- 214              		.loc 1 99 13
- 215 000c FB73     		strb	r3, [r7, #15]
- 100:../src/main.c ****     gd_usart1_upload(&txdata, 1);
- 216              		.loc 1 100 5
- 217 000e 07F10F03 		add	r3, r7, #15
- 218 0012 0121     		movs	r1, #1
- 219 0014 1846     		mov	r0, r3
- 220 0016 FFF7FEFF 		bl	gd_usart1_upload
- 101:../src/main.c ****     return ch;
- 221              		.loc 1 101 12
- 222 001a 7B68     		ldr	r3, [r7, #4]
- 102:../src/main.c **** }
- 223              		.loc 1 102 1
- 224 001c 1846     		mov	r0, r3
- 225 001e 1037     		adds	r7, r7, #16
- 226              		.cfi_def_cfa_offset 8
- 227 0020 BD46     		mov	sp, r7
- 228              		.cfi_def_cfa_register 13
- 229              		@ sp needed
- 230 0022 80BD     		pop	{r7, pc}
- 231              		.cfi_endproc
- 232              	.LFE120:
- 234              		.section	.text.gd_watchdog_init,"ax",%progbits
- 235              		.align	1
- 236              		.global	gd_watchdog_init
- 237              		.syntax unified
- 238              		.thumb
- 239              		.thumb_func
- 240              		.fpu softvfp
- 242              	gd_watchdog_init:
- 243              	.LFB121:
- 103:../src/main.c **** #else
- 104:../src/main.c **** /* retarget the C library printf function to the USART */
- 105:../src/main.c **** int fputc(int ch, FILE *f)
- 106:../src/main.c **** {
- 107:../src/main.c ****     uint8_t txdata = (uint8_t)ch;
- 108:../src/main.c ****     gd_usart1_upload(&txdata, 1);
- 109:../src/main.c ****     return ch;
- 110:../src/main.c **** }
- 111:../src/main.c **** #endif /* GD_ECLIPSE_GCC */
- 112:../src/main.c **** 
- 113:../src/main.c **** /**
- 114:../src/main.c ****   * @brief  Initialize independent watchdog (FWDGT) for system monitoring
- 115:../src/main.c ****   * @param  None
- 116:../src/main.c ****   * @retval None
- 117:../src/main.c ****   */
- 118:../src/main.c **** void gd_watchdog_init(void)
- 119:../src/main.c **** {
- 244              		.loc 1 119 1
- 245              		.cfi_startproc
- 246              		@ args = 0, pretend = 0, frame = 0
- 247              		@ frame_needed = 1, uses_anonymous_args = 0
- 248 0000 80B5     		push	{r7, lr}
- 249              		.cfi_def_cfa_offset 8
- 250              		.cfi_offset 7, -8
- 251              		.cfi_offset 14, -4
- 252 0002 00AF     		add	r7, sp, #0
- 253              		.cfi_def_cfa_register 7
- 120:../src/main.c ****     /* Enable write access to FWDGT registers */
- 121:../src/main.c ****     fwdgt_write_enable();
- 254              		.loc 1 121 5
- 255 0004 FFF7FEFF 		bl	fwdgt_write_enable
- 122:../src/main.c ****     
- 123:../src/main.c ****     /* Configure watchdog: 40kHz / 256 = 156.25Hz, reload = 0x0FFF -> ~26 seconds */
- 124:../src/main.c ****     fwdgt_config(0xFFF, FWDGT_PSC_DIV256);
- 256              		.loc 1 124 5
- 257 0008 0621     		movs	r1, #6
- 258 000a 40F6FF70 		movw	r0, #4095
- 259 000e FFF7FEFF 		bl	fwdgt_config
- 125:../src/main.c ****     
- 126:../src/main.c ****     /* Start watchdog */
- 127:../src/main.c ****     fwdgt_enable();
- 260              		.loc 1 127 5
- 261 0012 FFF7FEFF 		bl	fwdgt_enable
- 128:../src/main.c ****     
- 129:../src/main.c ****     /* Lock registers */
- 130:../src/main.c ****     fwdgt_write_disable();
- 262              		.loc 1 130 5
- 263 0016 FFF7FEFF 		bl	fwdgt_write_disable
- 131:../src/main.c **** }
- 264              		.loc 1 131 1
- 265 001a 00BF     		nop
- 266 001c 80BD     		pop	{r7, pc}
- 267              		.cfi_endproc
- 268              	.LFE121:
- 270              		.text
- 271              	.Letext0:
- 272              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 273              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 274              		.file 4 "../Firmware/CMSIS/core_cm4.h"
- 275              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
- 276              		.file 6 "../inc/systick.h"
- 277              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 278              		.file 8 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 279              		.file 9 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 280              		.file 10 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-
- 281              		.file 11 "../osal/os_lyh_core.h"
- 282              		.file 12 "../app/keyboard.h"
- 283              		.file 13 "../app/acmotor.h"
- 284              		.file 14 "../app/display.h"
- 285              		.file 15 "../app/usart.h"
- 286              		.file 16 "../app/heat.h"
- 287              		.file 17 "../app/adc.h"
- 288              		.file 18 "../app/app.h"
- 289              		.file 19 "../app/bus.h"
- 290              		.file 20 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
+  80 0032 FFF7FEFF 		bl	gd_watchdog_init
+  73:../src/main.c ****     /* print out the clock frequency of system, AHB, APB1 and APB2 */
+  74:../src/main.c ****     printf("\r\nCK_SYS is %d", rcu_clock_freq_get(CK_SYS));
+  81              		.loc 1 74 5
+  82 0036 0020     		movs	r0, #0
+  83 0038 FFF7FEFF 		bl	rcu_clock_freq_get
+  84 003c 0346     		mov	r3, r0
+  85 003e 1946     		mov	r1, r3
+  86 0040 2448     		ldr	r0, .L3
+  87 0042 FFF7FEFF 		bl	printf
+  75:../src/main.c ****     printf("\r\nCK_AHB is %d", rcu_clock_freq_get(CK_AHB));
+  88              		.loc 1 75 5
+  89 0046 0120     		movs	r0, #1
+  90 0048 FFF7FEFF 		bl	rcu_clock_freq_get
+  91 004c 0346     		mov	r3, r0
+  92 004e 1946     		mov	r1, r3
+  93 0050 2148     		ldr	r0, .L3+4
+  94 0052 FFF7FEFF 		bl	printf
+  76:../src/main.c ****     printf("\r\nCK_APB1 is %d", rcu_clock_freq_get(CK_APB1));
+  95              		.loc 1 76 5
+  96 0056 0220     		movs	r0, #2
+  97 0058 FFF7FEFF 		bl	rcu_clock_freq_get
+  98 005c 0346     		mov	r3, r0
+  99 005e 1946     		mov	r1, r3
+ 100 0060 1E48     		ldr	r0, .L3+8
+ 101 0062 FFF7FEFF 		bl	printf
+  77:../src/main.c ****     printf("\r\nCK_APB2 is %d", rcu_clock_freq_get(CK_APB2));
+ 102              		.loc 1 77 5
+ 103 0066 0320     		movs	r0, #3
+ 104 0068 FFF7FEFF 		bl	rcu_clock_freq_get
+ 105 006c 0346     		mov	r3, r0
+ 106 006e 1946     		mov	r1, r3
+ 107 0070 1B48     		ldr	r0, .L3+12
+ 108 0072 FFF7FEFF 		bl	printf
+  78:../src/main.c **** #ifdef __FIRMWARE_VERSION_DEFINE
+  79:../src/main.c ****     fw_ver = gd32f30x_firmware_version_get();
+ 109              		.loc 1 79 14
+ 110 0076 FFF7FEFF 		bl	gd32f30x_firmware_version_get
+ 111 007a 7860     		str	r0, [r7, #4]
+  80:../src/main.c ****     /* print firmware version */
+  81:../src/main.c ****     printf("\r\nGD32F30x series firmware version: V%d.%d.%d\r\n", (uint8_t)(fw_ver >> 24), (uint8_t
+ 112              		.loc 1 81 84
+ 113 007c 7B68     		ldr	r3, [r7, #4]
+ 114 007e 1B0E     		lsrs	r3, r3, #24
+ 115              		.loc 1 81 67
+ 116 0080 DBB2     		uxtb	r3, r3
+ 117              		.loc 1 81 5
+ 118 0082 1946     		mov	r1, r3
+ 119              		.loc 1 81 109
+ 120 0084 7B68     		ldr	r3, [r7, #4]
+ 121 0086 1B0C     		lsrs	r3, r3, #16
+ 122              		.loc 1 81 92
+ 123 0088 DBB2     		uxtb	r3, r3
+ 124              		.loc 1 81 5
+ 125 008a 1A46     		mov	r2, r3
+ 126              		.loc 1 81 134
+ 127 008c 7B68     		ldr	r3, [r7, #4]
+ 128 008e 1B0A     		lsrs	r3, r3, #8
+ 129              		.loc 1 81 117
+ 130 0090 DBB2     		uxtb	r3, r3
+ 131              		.loc 1 81 5
+ 132 0092 1448     		ldr	r0, .L3+16
+ 133 0094 FFF7FEFF 		bl	printf
+  82:../src/main.c **** #endif /* __FIRMWARE_VERSION_DEFINE */
+  83:../src/main.c ****   //while (1)
+  84:../src/main.c ****   {
+  85:../src/main.c ****     /* USER CODE END WHILE */
+  86:../src/main.c ****     osal_lyh_core_init();
+ 134              		.loc 1 86 5
+ 135 0098 FFF7FEFF 		bl	osal_lyh_core_init
+  87:../src/main.c ****     osal_create_task(init_key_task, key_task_handler, key_event_handler);
+ 136              		.loc 1 87 5
+ 137 009c 124A     		ldr	r2, .L3+20
+ 138 009e 1349     		ldr	r1, .L3+24
+ 139 00a0 1348     		ldr	r0, .L3+28
+ 140 00a2 FFF7FEFF 		bl	osal_create_task
+  88:../src/main.c ****     osal_create_task(init_bus_task, bus_task_handler, bus_event_handler);
+ 141              		.loc 1 88 5
+ 142 00a6 134A     		ldr	r2, .L3+32
+ 143 00a8 1349     		ldr	r1, .L3+36
+ 144 00aa 1448     		ldr	r0, .L3+40
+ 145 00ac FFF7FEFF 		bl	osal_create_task
+  89:../src/main.c ****     osal_create_task(init_app_task, app_task_handler, app_event_handler);
+ 146              		.loc 1 89 5
+ 147 00b0 134A     		ldr	r2, .L3+44
+ 148 00b2 1449     		ldr	r1, .L3+48
+ 149 00b4 1448     		ldr	r0, .L3+52
+ 150 00b6 FFF7FEFF 		bl	osal_create_task
+  90:../src/main.c ****     osal_create_task(init_heat_task, heat_task_handler, heat_event_handler);
+ 151              		.loc 1 90 5
+ 152 00ba 144A     		ldr	r2, .L3+56
+ 153 00bc 1449     		ldr	r1, .L3+60
+ 154 00be 1548     		ldr	r0, .L3+64
+ 155 00c0 FFF7FEFF 		bl	osal_create_task
+  91:../src/main.c ****     //osal_create_task(init_test_task, test_task_handler, test_event_handler);
+  92:../src/main.c ****     osal_start_system();
+ 156              		.loc 1 92 5
+ 157 00c4 FFF7FEFF 		bl	osal_start_system
+ 158 00c8 0023     		movs	r3, #0
+  93:../src/main.c ****     /* USER CODE BEGIN 3 */
+  94:../src/main.c ****   }
+  95:../src/main.c **** }
+ 159              		.loc 1 95 1
+ 160 00ca 1846     		mov	r0, r3
+ 161 00cc 0837     		adds	r7, r7, #8
+ 162              		.cfi_def_cfa_offset 8
+ 163 00ce BD46     		mov	sp, r7
+ 164              		.cfi_def_cfa_register 13
+ 165              		@ sp needed
+ 166 00d0 80BD     		pop	{r7, pc}
+ 167              	.L4:
+ 168 00d2 00BF     		.align	2
+ 169              	.L3:
+ 170 00d4 00000000 		.word	.LC0
+ 171 00d8 10000000 		.word	.LC1
+ 172 00dc 20000000 		.word	.LC2
+ 173 00e0 30000000 		.word	.LC3
+ 174 00e4 40000000 		.word	.LC4
+ 175 00e8 00000000 		.word	key_event_handler
+ 176 00ec 00000000 		.word	key_task_handler
+ 177 00f0 00000000 		.word	init_key_task
+ 178 00f4 00000000 		.word	bus_event_handler
+ 179 00f8 00000000 		.word	bus_task_handler
+ 180 00fc 00000000 		.word	init_bus_task
+ 181 0100 00000000 		.word	app_event_handler
+ 182 0104 00000000 		.word	app_task_handler
+ 183 0108 00000000 		.word	init_app_task
+ 184 010c 00000000 		.word	heat_event_handler
+ 185 0110 00000000 		.word	heat_task_handler
+ 186 0114 00000000 		.word	init_heat_task
+ 187              		.cfi_endproc
+ 188              	.LFE119:
+ 190              		.section	.text.__io_putchar,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	__io_putchar
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 196              		.fpu softvfp
+ 198              	__io_putchar:
+ 199              	.LFB120:
+  96:../src/main.c **** 
+  97:../src/main.c **** #ifdef GD_ECLIPSE_GCC
+  98:../src/main.c **** /* retarget the C library printf function to the USART, in Eclipse GCC environment */
+  99:../src/main.c **** int __io_putchar(int ch)
+ 100:../src/main.c **** {
+ 200              		.loc 1 100 1
+ 201              		.cfi_startproc
+ 202              		@ args = 0, pretend = 0, frame = 16
+ 203              		@ frame_needed = 1, uses_anonymous_args = 0
+ 204 0000 80B5     		push	{r7, lr}
+ 205              		.cfi_def_cfa_offset 8
+ 206              		.cfi_offset 7, -8
+ 207              		.cfi_offset 14, -4
+ 208 0002 84B0     		sub	sp, sp, #16
+ 209              		.cfi_def_cfa_offset 24
+ 210 0004 00AF     		add	r7, sp, #0
+ 211              		.cfi_def_cfa_register 7
+ 212 0006 7860     		str	r0, [r7, #4]
+ 101:../src/main.c ****     uint8_t txdata = (uint8_t)ch;
+ 213              		.loc 1 101 22
+ 214 0008 7B68     		ldr	r3, [r7, #4]
+ 215 000a DBB2     		uxtb	r3, r3
+ 216              		.loc 1 101 13
+ 217 000c FB73     		strb	r3, [r7, #15]
+ 102:../src/main.c ****     gd_usart1_upload(&txdata, 1);
+ 218              		.loc 1 102 5
+ 219 000e 07F10F03 		add	r3, r7, #15
+ 220 0012 0121     		movs	r1, #1
+ 221 0014 1846     		mov	r0, r3
+ 222 0016 FFF7FEFF 		bl	gd_usart1_upload
+ 103:../src/main.c ****     return ch;
+ 223              		.loc 1 103 12
+ 224 001a 7B68     		ldr	r3, [r7, #4]
+ 104:../src/main.c **** }
+ 225              		.loc 1 104 1
+ 226 001c 1846     		mov	r0, r3
+ 227 001e 1037     		adds	r7, r7, #16
+ 228              		.cfi_def_cfa_offset 8
+ 229 0020 BD46     		mov	sp, r7
+ 230              		.cfi_def_cfa_register 13
+ 231              		@ sp needed
+ 232 0022 80BD     		pop	{r7, pc}
+ 233              		.cfi_endproc
+ 234              	.LFE120:
+ 236              		.section	.text.gd_watchdog_init,"ax",%progbits
+ 237              		.align	1
+ 238              		.global	gd_watchdog_init
+ 239              		.syntax unified
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.fpu softvfp
+ 244              	gd_watchdog_init:
+ 245              	.LFB121:
+ 105:../src/main.c **** #else
+ 106:../src/main.c **** /* retarget the C library printf function to the USART */
+ 107:../src/main.c **** int fputc(int ch, FILE *f)
+ 108:../src/main.c **** {
+ 109:../src/main.c ****     uint8_t txdata = (uint8_t)ch;
+ 110:../src/main.c ****     gd_usart1_upload(&txdata, 1);
+ 111:../src/main.c ****     return ch;
+ 112:../src/main.c **** }
+ 113:../src/main.c **** #endif /* GD_ECLIPSE_GCC */
+ 114:../src/main.c **** 
+ 115:../src/main.c **** /**
+ 116:../src/main.c ****   * @brief  Initialize independent watchdog (FWDGT) for system monitoring
+ 117:../src/main.c ****   * @param  None
+ 118:../src/main.c ****   * @retval None
+ 119:../src/main.c ****   */
+ 120:../src/main.c **** void gd_watchdog_init(void)
+ 121:../src/main.c **** {
+ 246              		.loc 1 121 1
+ 247              		.cfi_startproc
+ 248              		@ args = 0, pretend = 0, frame = 0
+ 249              		@ frame_needed = 1, uses_anonymous_args = 0
+ 250 0000 80B5     		push	{r7, lr}
+ 251              		.cfi_def_cfa_offset 8
+ 252              		.cfi_offset 7, -8
+ 253              		.cfi_offset 14, -4
+ 254 0002 00AF     		add	r7, sp, #0
+ 255              		.cfi_def_cfa_register 7
+ 122:../src/main.c ****     /* Enable write access to FWDGT registers */
+ 123:../src/main.c ****     fwdgt_write_enable();
+ 256              		.loc 1 123 5
+ 257 0004 FFF7FEFF 		bl	fwdgt_write_enable
+ 124:../src/main.c ****     
+ 125:../src/main.c ****     /* Configure watchdog: 40kHz / 256 = 156.25Hz, reload = 0x0FFF -> ~26 seconds */
+ 126:../src/main.c ****     fwdgt_config(0xFFF, FWDGT_PSC_DIV256);
+ 258              		.loc 1 126 5
+ 259 0008 0621     		movs	r1, #6
+ 260 000a 40F6FF70 		movw	r0, #4095
+ 261 000e FFF7FEFF 		bl	fwdgt_config
+ 127:../src/main.c ****     
+ 128:../src/main.c ****     /* Start watchdog */
+ 129:../src/main.c ****     fwdgt_enable();
+ 262              		.loc 1 129 5
+ 263 0012 FFF7FEFF 		bl	fwdgt_enable
+ 130:../src/main.c ****     
+ 131:../src/main.c ****     /* Lock registers */
+ 132:../src/main.c ****     fwdgt_write_disable();
+ 264              		.loc 1 132 5
+ 265 0016 FFF7FEFF 		bl	fwdgt_write_disable
+ 133:../src/main.c **** }
+ 266              		.loc 1 133 1
+ 267 001a 00BF     		nop
+ 268 001c 80BD     		pop	{r7, pc}
+ 269              		.cfi_endproc
+ 270              	.LFE121:
+ 272              		.text
+ 273              	.Letext0:
+ 274              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 275              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 276              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 277              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 278              		.file 6 "../inc/systick.h"
+ 279              		.file 7 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 280              		.file 8 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 281              		.file 9 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 282              		.file 10 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-
+ 283              		.file 11 "../osal/os_lyh_core.h"
+ 284              		.file 12 "../app/keyboard.h"
+ 285              		.file 13 "../app/acmotor.h"
+ 286              		.file 14 "../app/display.h"
+ 287              		.file 15 "../app/usart.h"
+ 288              		.file 16 "../app/heat.h"
+ 289              		.file 17 "../app/adc.h"
+ 290              		.file 18 "../app/app.h"
+ 291              		.file 19 "../app/bus.h"
+ 292              		.file 20 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:16     .rodata:00000000 $d
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:33     .text.main:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:41     .text.main:00000000 main
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:242    .text.gd_watchdog_init:00000000 gd_watchdog_init
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:168    .text.main:000000d0 $d
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:189    .text.__io_putchar:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:196    .text.__io_putchar:00000000 __io_putchar
-C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:235    .text.gd_watchdog_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:16     .rodata:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:33     .text.main:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:41     .text.main:00000000 main
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:244    .text.gd_watchdog_init:00000000 gd_watchdog_init
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:170    .text.main:000000d4 $d
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:191    .text.__io_putchar:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:198    .text.__io_putchar:00000000 __io_putchar
+C:\Users\user001\AppData\Local\Temp\ccfAciAb.s:237    .text.gd_watchdog_init:00000000 $t
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
@@ -504,7 +508,7 @@ C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:235    .text.gd_watchdog_init:000
                            .group:00000000 wm4.stdio.h.2.4aa87247282eca6c8f36f9de33d8df1a
                            .group:00000000 wm4.stdio.h.81.932d0c162786b883f622b8d05c120c78
                            .group:00000000 wm4.os_lyh_config.h.10.bc2c4655df284899727d3a1ab69fe55d
-                           .group:00000000 wm4.os_msg.h.10.fe3f17adf7eb2f4399d30018543e6717
+                           .group:00000000 wm4.os_msg.h.10.a94e4ae0955bd46ca3a4d1a43d60b65d
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
@@ -513,10 +517,11 @@ C:\Users\user001\AppData\Local\Temp\ccm73wNt.s:235    .text.gd_watchdog_init:000
                            .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
                            .group:00000000 wm4.timer.h.19.a82f4ede3cad5645e78e3c71f10c984d
                            .group:00000000 wm4.usart.h.19.b0b7cc356d4f06c8ed965d5c47dabfa0
-                           .group:00000000 wm4.heat.h.3.eebcbd497599b7d3b5ba1473788cee79
+                           .group:00000000 wm4.heat.h.3.e369736d2e46d50970c9988935448f3e
                            .group:00000000 wm4.adc.h.19.b7b71ccc5b83f495b1d7f2c83649d46d
-                           .group:00000000 wm4.app.h.3.832bf133db86c9b5783895aba11d0e00
+                           .group:00000000 wm4.app.h.3.cc1bae33111ee09aa181500e2732cd22
                            .group:00000000 wm4.bus.h.3.006a12bb937063aa955474032db251cd
+                           .group:00000000 wm4.relay.h.2.68d8ff0db7f3799b00c17eb83273c2f3
 
 UNDEFINED SYMBOLS
 systick_config
@@ -524,6 +529,7 @@ gd_remap_Init
 gd_gpio_Init
 gd_acmotor_Init
 gd_dcmotor_Init
+gd_realy_init
 gd_usart_Init
 gd_exti_Init
 gd_timer_Init
