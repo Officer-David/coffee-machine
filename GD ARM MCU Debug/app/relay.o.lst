@@ -173,17 +173,17 @@
  156              		.file 6 "../osal/os_lyh_core.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 relay.c
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:16     .text.Relay2_ON:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:24     .text.Relay2_ON:00000000 Relay2_ON
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:47     .text.Relay2_ON:00000010 $d
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:52     .text.Relay2_OFF:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:59     .text.Relay2_OFF:00000000 Relay2_OFF
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:81     .text.Relay2_OFF:00000010 $d
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:86     .text.Relay2_GPIO_INIT:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:92     .text.Relay2_GPIO_INIT:00000000 Relay2_GPIO_INIT
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:118    .text.Relay2_GPIO_INIT:00000018 $d
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:123    .text.gd_realy_init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccObew3j.s:130    .text.gd_realy_init:00000000 gd_realy_init
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:16     .text.Relay2_ON:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:24     .text.Relay2_ON:00000000 Relay2_ON
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:47     .text.Relay2_ON:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:52     .text.Relay2_OFF:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:59     .text.Relay2_OFF:00000000 Relay2_OFF
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:81     .text.Relay2_OFF:00000010 $d
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:86     .text.Relay2_GPIO_INIT:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:92     .text.Relay2_GPIO_INIT:00000000 Relay2_GPIO_INIT
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:118    .text.Relay2_GPIO_INIT:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:123    .text.gd_realy_init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccztEOO8.s:130    .text.gd_realy_init:00000000 gd_realy_init
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

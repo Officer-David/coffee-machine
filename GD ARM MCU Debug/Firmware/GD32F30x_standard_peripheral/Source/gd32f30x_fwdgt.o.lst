@@ -774,30 +774,30 @@
  570              		.file 6 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gd32f30x_fwdgt.c
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:16     .text.fwdgt_write_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:24     .text.fwdgt_write_enable:00000000 fwdgt_write_enable
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:54     .text.fwdgt_write_enable:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:59     .text.fwdgt_write_disable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:66     .text.fwdgt_write_disable:00000000 fwdgt_write_disable
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:95     .text.fwdgt_write_disable:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:100    .text.fwdgt_enable:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:107    .text.fwdgt_enable:00000000 fwdgt_enable
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:136    .text.fwdgt_enable:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:141    .text.fwdgt_prescaler_value_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:148    .text.fwdgt_prescaler_value_config:00000000 fwdgt_prescaler_value_config
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:225    .text.fwdgt_prescaler_value_config:00000054 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:233    .text.fwdgt_reload_value_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:240    .text.fwdgt_reload_value_config:00000000 fwdgt_reload_value_config
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:319    .text.fwdgt_reload_value_config:00000058 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:327    .text.fwdgt_counter_reload:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:334    .text.fwdgt_counter_reload:00000000 fwdgt_counter_reload
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:363    .text.fwdgt_counter_reload:00000014 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:368    .text.fwdgt_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:375    .text.fwdgt_config:00000000 fwdgt_config
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:498    .text.fwdgt_config:00000094 $d
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:507    .text.fwdgt_flag_get:00000000 $t
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:514    .text.fwdgt_flag_get:00000000 fwdgt_flag_get
-C:\Users\user001\AppData\Local\Temp\cc7msYqC.s:560    .text.fwdgt_flag_get:00000028 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:16     .text.fwdgt_write_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:24     .text.fwdgt_write_enable:00000000 fwdgt_write_enable
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:54     .text.fwdgt_write_enable:00000014 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:59     .text.fwdgt_write_disable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:66     .text.fwdgt_write_disable:00000000 fwdgt_write_disable
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:95     .text.fwdgt_write_disable:00000014 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:100    .text.fwdgt_enable:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:107    .text.fwdgt_enable:00000000 fwdgt_enable
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:136    .text.fwdgt_enable:00000014 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:141    .text.fwdgt_prescaler_value_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:148    .text.fwdgt_prescaler_value_config:00000000 fwdgt_prescaler_value_config
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:225    .text.fwdgt_prescaler_value_config:00000054 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:233    .text.fwdgt_reload_value_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:240    .text.fwdgt_reload_value_config:00000000 fwdgt_reload_value_config
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:319    .text.fwdgt_reload_value_config:00000058 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:327    .text.fwdgt_counter_reload:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:334    .text.fwdgt_counter_reload:00000000 fwdgt_counter_reload
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:363    .text.fwdgt_counter_reload:00000014 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:368    .text.fwdgt_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:375    .text.fwdgt_config:00000000 fwdgt_config
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:498    .text.fwdgt_config:00000094 $d
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:507    .text.fwdgt_flag_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:514    .text.fwdgt_flag_get:00000000 fwdgt_flag_get
+C:\Users\user001\AppData\Local\Temp\cc4ytOkw.s:560    .text.fwdgt_flag_get:00000028 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

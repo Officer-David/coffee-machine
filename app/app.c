@@ -436,6 +436,9 @@ uint8_t app_start_key_deal(void)
 		case APP_HOTWATER_STATE:
 			app_task_nextstep(APP_HOTWATER_STATE, HOTWATER_COMPLETE_STATE);		//进入完成状态
 			break;
+		case APP_STEAM_STATE:
+			app_task_nextstep(APP_STEAM_STATE, STEAM_COMPLETE_STATE);		//进入完成状态
+			break;
 		default:
 			break;
 	}
@@ -846,7 +849,7 @@ void app_startup_handler(void)
 			app_led_show_init();
 			dc_motor_ClearFault();
 			dc_motor_Start(MOTOR_RIGHT);
-			app_turn_heat_on(TARGET_TEMP_107D);
+			app_turn_heat_on(TARGET_TEMP_STARTUP);
 			app_task_substep = STARTUP_RIGHT_RST_STATE;
 			run_max_time = RIGHT_TIMER(Ms_2000, Ms_100);
 			osal_lyh_delay_task(Ms_100);
@@ -884,8 +887,8 @@ void app_startup_handler(void)
 			break;
 		/* 判断温度是否到达 */	
 		case STARTUP_HEAT_RDY_STATE:
-			if (TRUE == app_temperature_state(TARGET_TEMP_107D)){
-				app_task_substep = STARTUP_COMPLETE_STATE;
+			if (TRUE == app_temperature_state(TARGET_TEMP_STARTUP)){
+				app_task_substep = STARTUP_HEAT_END_STATE;
 			}
 			else {
 				run_max_time = HEAT_MAX_TIMER(Ms_100);
@@ -894,7 +897,7 @@ void app_startup_handler(void)
 			osal_lyh_delay_task(Ms_100);
 			break;	
 		case STARTUP_HEAT_ING_STATE:
-			if ((TRUE == app_temperature_state(TARGET_TEMP_107D))
+			if ((TRUE == app_temperature_state(TARGET_TEMP_STARTUP))
 				|| (--run_max_time == 0)){
 				display_led(START_LED, LED_ON);
 				app_task_substep = STARTUP_HEAT_END_STATE;
@@ -981,6 +984,7 @@ void app_startup_handler(void)
 				app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);
 			}
 			break;
+		/* 启动异常情况 */	
 		case STARTUP_FAIL_STATE:
 			if (TRUE == app_pallet_ready()){
 				display_led(PALLET_ERR_LED, LED_OFF);
@@ -1153,7 +1157,7 @@ void app_espresso_handler(void)
 			break;
 		/* 研磨咖啡豆 */
 		case ESPRESSO_GRIND_ING_STATE:
-			app_turn_heat_on(TARGET_TEMP_100D);
+			app_turn_heat_on(TARGET_TEMP_COFFEE);
 			if(0 == manual_setup.coffee)	//研磨时间根据coffee程度调整：x1=8s,x2=9s,x3=10s
 			{
 				ac_grind_start(1000);		//启动研磨电机
@@ -1385,7 +1389,7 @@ void app_american_handler(void)
 			break;
 		/* 研磨咖啡豆 */
 		case AMERICANO_GRIND_TIME_JUDGE_STATE:
-			app_turn_heat_on(TARGET_TEMP_100D);		//开启加热
+			app_turn_heat_on(TARGET_TEMP_COFFEE);		//开启加热
 			if(0 == manual_setup.coffee)	//研磨时间根据coffee程度调整：x1=8s,x2=9s,x3=10s
 			{
 				ac_grind_start(1000);		//启动研磨电机
@@ -1728,7 +1732,7 @@ void app_hotwater_handler(void)
 				app_task_substep = HOTWATER_COMPLETE_STATE;				
 			}
 			break;
-		/* 等待时间结束 */	
+		/* 时间结束 */	
 		case HOTWATER_COMPLETE_STATE:
 			ac_pumb_stop();
 			app_relay_set(COFFEE_MODE);
@@ -1751,14 +1755,38 @@ void app_steam_handler(void)
 {
 	switch(app_task_substep)
 	{
+		/* 初始化 */
 		case STEAM_INIT_STATE:
+			app_leds_all_fun(LED_OFF);
+			app_leds_all_ind(LED_OFF);		
 			display_led(START_LED, LED_ON);
 			app_led_steam_init();
-			app_task_substep = STEAM_RUN_STATE;
+			app_turn_heat_on(TARGET_TEMP_STEAM);
+			run_max_time = 100;		//仅调试用，设置加热时间为10s
+			app_task_substep = STEAM_WAIT_TEMP_STATE;
 			break;
-		case STEAM_RUN_STATE:
-			osal_lyh_delay_task(Ms_500);
+		/* 等待温度升高 */	
+		case STEAM_WAIT_TEMP_STATE:
+			if((TRUE == app_temperature_state(TARGET_TEMP_HOTWATER))
+				|| --run_max_time == 0){
+				app_task_substep = STEAM_TEMP_OK_STATE;
+			}
+			else{
+				osal_lyh_delay_task(Ms_100);
+			}
 			break;
+		/* 温度达到，开始出蒸汽 */	
+		case STEAM_TEMP_OK_STATE:
+			app_relay_set(WATER_MODE);
+			ac_pumb_start(STEAM_MODE);
+			break;
+		/* 结束 */	
+		case STEAM_COMPLETE_STATE:
+			app_relay_set(COFFEE_MODE);
+			ac_pumb_stop();
+			app_turn_heat_off();
+			app_led_finish_step();
+			app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
 		default:
 			break;
 	}
@@ -2410,7 +2438,7 @@ uint8_t app_running_onoff_flush_handler(void)
 		/* 进入清洗初始化 */
 		case 0:
 			dc_motor_Stop();
-			app_turn_heat_on(TARGET_TEMP_90D);
+			app_turn_heat_on(TARGET_TEMP_HOTWATER);
 			osal_lyh_delay_task(Ms_100);
 			sta = 1;
 			break;

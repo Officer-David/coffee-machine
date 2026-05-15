@@ -463,6 +463,7 @@ void ac_pumb_start(uint8_t mode)
     }
     pumb_motor_mode = mode;
     pumb_motor_duty = 0;
+    steam_cycle_counter = 0;
     
     /* Update state */
     pumb_motor_state = MOTOR_STATE_RUNNING;
@@ -531,6 +532,7 @@ void ac_pumb_stop(void)
     __disable_irq();
     pumb_motor_state = MOTOR_STATE_STOPPED;
     motor_error = ERROR_NONE;
+    steam_cycle_counter = 0;
     __enable_irq();
     ac_pumb_turnoff();
 }

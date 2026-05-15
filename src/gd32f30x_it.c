@@ -270,11 +270,27 @@ void TIMER5_IRQHandler(void)
             SetGrind_On();
         }
         else if (pumb_motor_state == MOTOR_STATE_RUNNING){
-            if ((pumb_motor_mode != DUTY_MODE) || (pumb_motor_duty < DUTY_ON)){
-                SetPumb_On();
+            if (pumb_motor_mode == DUTY_MODE) {
+                if (pumb_motor_duty < DUTY_ON){
+                    SetPumb_On();
+                }
+                if (++pumb_motor_duty == DUTY_PERIOD){
+                    pumb_motor_duty = 0;
+                }
             }
-            if (++pumb_motor_duty == DUTY_PERIOD){
-                pumb_motor_duty = 0;
+            else if (pumb_motor_mode == STEAM_MODE) {
+                /* STEAM_MODE: Turn on at position 0 and 1 in cycle, wait 3-36 */
+                if (steam_cycle_counter == 0 || steam_cycle_counter == 1) {
+                    SetPumb_On();
+                }
+                steam_cycle_counter++;
+                if (steam_cycle_counter >= STEAM_CYCLE_PERIOD) {
+                    steam_cycle_counter = 0;
+                }
+            }
+            else {
+                /* CONTINUE_MODE or other modes: turn on every time */
+                SetPumb_On();
             }
         }
         timer_disable(TIMER5);

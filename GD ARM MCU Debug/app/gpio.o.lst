@@ -397,12 +397,12 @@
  295              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_rcu.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gpio.c
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:16     .text.gd_remap_Init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:24     .text.gd_remap_Init:00000000 gd_remap_Init
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:54     .text.gd_remap_Init:00000024 $d
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:59     .text.gd_gpio_Init:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:66     .text.gd_gpio_Init:00000000 gd_gpio_Init
-C:\Users\user001\AppData\Local\Temp\ccUQ49Ne.s:282    .text.gd_gpio_Init:000001c4 $d
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:16     .text.gd_remap_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:24     .text.gd_remap_Init:00000000 gd_remap_Init
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:54     .text.gd_remap_Init:00000024 $d
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:59     .text.gd_gpio_Init:00000000 $t
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:66     .text.gd_gpio_Init:00000000 gd_gpio_Init
+C:\Users\user001\AppData\Local\Temp\cchAJBj4.s:282    .text.gd_gpio_Init:000001c4 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

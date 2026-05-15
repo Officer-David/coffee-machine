@@ -543,22 +543,22 @@ DEFINED SYMBOLS
                             *COM*:00000001 heat_id
                             *COM*:00000001 heat_task_step
                             *COM*:00000002 target_temp
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:19     .text.heat_task_nextstep:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:27     .text.heat_task_nextstep:00000000 heat_task_nextstep
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:64     .text.heat_task_nextstep:00000024 $d
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:70     .text.heat_temp_deal:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:77     .text.heat_temp_deal:00000000 heat_temp_deal
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:133    .text.heat_get_temp:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:140    .text.heat_get_temp:00000000 heat_get_temp
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:195    .text.init_heat_task:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:202    .text.init_heat_task:00000000 init_heat_task
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:240    .text.init_heat_task:00000020 $d
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:246    .text.heat_task_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:253    .text.heat_task_handler:00000000 heat_task_handler
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:313    .text.heat_task_handler:00000044 $d
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:319    .text.heat_event_handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:326    .text.heat_event_handler:00000000 heat_event_handler
-C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:400    .text.heat_event_handler:00000054 $d
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:19     .text.heat_task_nextstep:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:27     .text.heat_task_nextstep:00000000 heat_task_nextstep
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:64     .text.heat_task_nextstep:00000024 $d
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:70     .text.heat_temp_deal:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:77     .text.heat_temp_deal:00000000 heat_temp_deal
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:133    .text.heat_get_temp:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:140    .text.heat_get_temp:00000000 heat_get_temp
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:195    .text.init_heat_task:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:202    .text.init_heat_task:00000000 init_heat_task
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:240    .text.init_heat_task:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:246    .text.heat_task_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:253    .text.heat_task_handler:00000000 heat_task_handler
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:313    .text.heat_task_handler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:319    .text.heat_event_handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:326    .text.heat_event_handler:00000000 heat_event_handler
+C:\Users\user001\AppData\Local\Temp\ccjrwMV5.s:400    .text.heat_event_handler:00000054 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4._newlib_version.h.4.9ba035841e762c3308916a0ce96032e7
                            .group:00000000 wm4.newlib.h.18.ac66930cc5dc086504ebba5cc05ab7f1
@@ -629,14 +629,14 @@ C:\Users\user001\AppData\Local\Temp\ccFfGy7a.s:400    .text.heat_event_handler:0
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
-                           .group:00000000 wm4.acmotor.h.19.e32e17b82447380c9631c8ecb160ec50
+                           .group:00000000 wm4.acmotor.h.19.e31b7283161a116b359300c51c0efda0
                            .group:00000000 wm4.dcmotor.h.2.f0e751b97a118431bbabf05c3c943b2b
                            .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
                            .group:00000000 wm4.timer.h.19.a82f4ede3cad5645e78e3c71f10c984d
                            .group:00000000 wm4.usart.h.19.b0b7cc356d4f06c8ed965d5c47dabfa0
                            .group:00000000 wm4.heat.h.3.3a68ec833c99ebcc67be58e5fd618605
                            .group:00000000 wm4.adc.h.19.b7b71ccc5b83f495b1d7f2c83649d46d
-                           .group:00000000 wm4.app.h.3.cc1bae33111ee09aa181500e2732cd22
+                           .group:00000000 wm4.app.h.3.bd7eba50cf915311ea2fdb2260fe426a
                            .group:00000000 wm4.bus.h.3.006a12bb937063aa955474032db251cd
                            .group:00000000 wm4.relay.h.2.68d8ff0db7f3799b00c17eb83273c2f3
 

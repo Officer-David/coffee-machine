@@ -44,9 +44,11 @@ extern "C" {
 
 #define CONTINUE_MODE			0
 #define DUTY_MODE				1
+#define STEAM_MODE				2
 
 #define DUTY_ON					2
 #define DUTY_PERIOD				10
+#define STEAM_CYCLE_PERIOD		34
 
 PUBLIC uint8_t heat_motor_state;
 PUBLIC uint8_t grind_motor_state;
@@ -54,6 +56,7 @@ PUBLIC uint8_t pumb_motor_state;
 PUBLIC uint8_t pumb_motor_duty;
 PUBLIC uint8_t pumb_motor_mode;
 PUBLIC uint8_t motor_error;
+PUBLIC uint16_t steam_cycle_counter;
 
 
 /* USER CODE BEGIN Includes */

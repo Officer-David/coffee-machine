@@ -1921,24 +1921,24 @@
  837              		.file 6 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_dbg.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 system_gd32f30x.c
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:20     .data.SystemCoreClock:00000000 SystemCoreClock
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:17     .data.SystemCoreClock:00000000 $d
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:23     .text._soft_delay_:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:30     .text._soft_delay_:00000000 _soft_delay_
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:85     .text.SystemInit:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:92     .text.SystemInit:00000000 SystemInit
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:316    .text.system_clock_config:00000000 system_clock_config
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:302    .text.SystemInit:00000144 $d
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:310    .text.system_clock_config:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:343    .text.system_clock_120m_hxtal:00000000 system_clock_120m_hxtal
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:337    .text.system_clock_120m_hxtal:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:551    .text.system_clock_120m_hxtal:00000138 $d
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:560    .rodata:00000000 $d
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:565    .text.SystemCoreClockUpdate:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:572    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:787    .text.SystemCoreClockUpdate:00000128 $d
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:798    .text.gd32f30x_firmware_version_get:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccFwrVw3.s:805    .text.gd32f30x_firmware_version_get:00000000 gd32f30x_firmware_version_get
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:20     .data.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:17     .data.SystemCoreClock:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:23     .text._soft_delay_:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:30     .text._soft_delay_:00000000 _soft_delay_
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:85     .text.SystemInit:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:92     .text.SystemInit:00000000 SystemInit
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:316    .text.system_clock_config:00000000 system_clock_config
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:302    .text.SystemInit:00000144 $d
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:310    .text.system_clock_config:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:343    .text.system_clock_120m_hxtal:00000000 system_clock_120m_hxtal
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:337    .text.system_clock_120m_hxtal:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:551    .text.system_clock_120m_hxtal:00000138 $d
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:560    .rodata:00000000 $d
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:565    .text.SystemCoreClockUpdate:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:572    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:787    .text.SystemCoreClockUpdate:00000128 $d
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:798    .text.gd32f30x_firmware_version_get:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccuUUzK5.s:805    .text.gd32f30x_firmware_version_get:00000000 gd32f30x_firmware_version_get
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7

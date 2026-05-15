@@ -915,16 +915,16 @@
  267:../src/gd32f30x_it.c ****     if (timer_interrupt_flag_get(TIMER5, TIMER_INT_FLAG_UP) == SET) {
  682              		.loc 1 267 9
  683 0004 0121     		movs	r1, #1
- 684 0006 2048     		ldr	r0, .L54
+ 684 0006 3248     		ldr	r0, .L57
  685 0008 FFF7FEFF 		bl	timer_interrupt_flag_get
  686 000c 0346     		mov	r3, r0
  687              		.loc 1 267 8
  688 000e 012B     		cmp	r3, #1
- 689 0010 38D1     		bne	.L53
+ 689 0010 5BD1     		bne	.L56
  268:../src/gd32f30x_it.c ****         /* Turn on drive output */
  269:../src/gd32f30x_it.c ****         if (grind_motor_state == MOTOR_STATE_RUNNING){
  690              		.loc 1 269 31
- 691 0012 1E4B     		ldr	r3, .L54+4
+ 691 0012 304B     		ldr	r3, .L57+4
  692 0014 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
  693              		.loc 1 269 12
  694 0016 012B     		cmp	r3, #1
@@ -932,237 +932,302 @@
  270:../src/gd32f30x_it.c ****             SetGrind_On();
  696              		.loc 1 270 13
  697 001a 8021     		movs	r1, #128
- 698 001c 1C48     		ldr	r0, .L54+8
+ 698 001c 2E48     		ldr	r0, .L57+8
  699 001e FFF7FEFF 		bl	gpio_bit_set
- 700 0022 1CE0     		b	.L50
+ 700 0022 3FE0     		b	.L50
  701              	.L49:
  271:../src/gd32f30x_it.c ****         }
  272:../src/gd32f30x_it.c ****         else if (pumb_motor_state == MOTOR_STATE_RUNNING){
  702              		.loc 1 272 35
- 703 0024 1B4B     		ldr	r3, .L54+12
+ 703 0024 2D4B     		ldr	r3, .L57+12
  704 0026 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
  705              		.loc 1 272 17
  706 0028 012B     		cmp	r3, #1
- 707 002a 18D1     		bne	.L50
- 273:../src/gd32f30x_it.c ****             if ((pumb_motor_mode != DUTY_MODE) || (pumb_motor_duty < DUTY_ON)){
- 708              		.loc 1 273 34
- 709 002c 1A4B     		ldr	r3, .L54+16
+ 707 002a 3BD1     		bne	.L50
+ 273:../src/gd32f30x_it.c ****             if (pumb_motor_mode == DUTY_MODE) {
+ 708              		.loc 1 273 33
+ 709 002c 2C4B     		ldr	r3, .L57+16
  710 002e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
  711              		.loc 1 273 16
  712 0030 012B     		cmp	r3, #1
- 713 0032 03D1     		bne	.L51
- 714              		.loc 1 273 68 discriminator 1
- 715 0034 194B     		ldr	r3, .L54+20
+ 713 0032 15D1     		bne	.L51
+ 274:../src/gd32f30x_it.c ****                 if (pumb_motor_duty < DUTY_ON){
+ 714              		.loc 1 274 37
+ 715 0034 2B4B     		ldr	r3, .L57+20
  716 0036 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 717              		.loc 1 273 48 discriminator 1
+ 717              		.loc 1 274 20
  718 0038 012B     		cmp	r3, #1
  719 003a 03D8     		bhi	.L52
- 720              	.L51:
- 274:../src/gd32f30x_it.c ****                 SetPumb_On();
- 721              		.loc 1 274 17
- 722 003c 4021     		movs	r1, #64
- 723 003e 1848     		ldr	r0, .L54+24
- 724 0040 FFF7FEFF 		bl	gpio_bit_set
- 725              	.L52:
- 275:../src/gd32f30x_it.c ****             }
- 276:../src/gd32f30x_it.c ****             if (++pumb_motor_duty == DUTY_PERIOD){
- 726              		.loc 1 276 17
- 727 0044 154B     		ldr	r3, .L54+20
- 728 0046 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 729 0048 0133     		adds	r3, r3, #1
- 730 004a DAB2     		uxtb	r2, r3
- 731              		.loc 1 276 16
- 732 004c 134B     		ldr	r3, .L54+20
- 733 004e 1A70     		strb	r2, [r3]
- 734              		.loc 1 276 17
- 735 0050 124B     		ldr	r3, .L54+20
- 736 0052 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 737              		.loc 1 276 16
- 738 0054 0A2B     		cmp	r3, #10
- 739 0056 02D1     		bne	.L50
- 277:../src/gd32f30x_it.c ****                 pumb_motor_duty = 0;
- 740              		.loc 1 277 33
- 741 0058 104B     		ldr	r3, .L54+20
- 742 005a 0022     		movs	r2, #0
- 743 005c 1A70     		strb	r2, [r3]
- 744              	.L50:
- 278:../src/gd32f30x_it.c ****             }
- 279:../src/gd32f30x_it.c ****         }
- 280:../src/gd32f30x_it.c ****         timer_disable(TIMER5);
- 745              		.loc 1 280 9
- 746 005e 0A48     		ldr	r0, .L54
- 747 0060 FFF7FEFF 		bl	timer_disable
- 281:../src/gd32f30x_it.c ****         timer_interrupt_flag_clear(TIMER5, TIMER_INT_FLAG_UP);
- 748              		.loc 1 281 9
- 749 0064 0121     		movs	r1, #1
- 750 0066 0848     		ldr	r0, .L54
- 751 0068 FFF7FEFF 		bl	timer_interrupt_flag_clear
- 282:../src/gd32f30x_it.c **** 
- 283:../src/gd32f30x_it.c ****         timer_counter_value_config(TIMER6, 0);
- 752              		.loc 1 283 9
- 753 006c 0021     		movs	r1, #0
- 754 006e 0D48     		ldr	r0, .L54+28
- 755 0070 FFF7FEFF 		bl	timer_counter_value_config
- 284:../src/gd32f30x_it.c ****         timer_autoreload_value_config(TIMER6, 6300);	// triger pluse
- 756              		.loc 1 284 9
- 757 0074 41F69C01 		movw	r1, #6300
- 758 0078 0A48     		ldr	r0, .L54+28
- 759 007a FFF7FEFF 		bl	timer_autoreload_value_config
- 285:../src/gd32f30x_it.c ****         timer_enable(TIMER6);
- 760              		.loc 1 285 9
- 761 007e 0948     		ldr	r0, .L54+28
- 762 0080 FFF7FEFF 		bl	timer_enable
- 763              	.L53:
- 286:../src/gd32f30x_it.c ****     }
- 287:../src/gd32f30x_it.c **** }
- 764              		.loc 1 287 1
- 765 0084 00BF     		nop
- 766 0086 80BD     		pop	{r7, pc}
- 767              	.L55:
- 768              		.align	2
- 769              	.L54:
- 770 0088 00100040 		.word	1073745920
- 771 008c 00000000 		.word	grind_motor_state
- 772 0090 00080140 		.word	1073809408
- 773 0094 00000000 		.word	pumb_motor_state
- 774 0098 00000000 		.word	pumb_motor_mode
- 775 009c 00000000 		.word	pumb_motor_duty
- 776 00a0 000C0140 		.word	1073810432
- 777 00a4 00140040 		.word	1073746944
- 778              		.cfi_endproc
- 779              	.LFE132:
- 781              		.section	.text.TIMER6_IRQHandler,"ax",%progbits
- 782              		.align	1
- 783              		.global	TIMER6_IRQHandler
- 784              		.syntax unified
- 785              		.thumb
- 786              		.thumb_func
- 787              		.fpu softvfp
- 789              	TIMER6_IRQHandler:
- 790              	.LFB133:
- 288:../src/gd32f30x_it.c **** 
- 289:../src/gd32f30x_it.c **** /**
- 290:../src/gd32f30x_it.c ****   * @brief  TIMER6 interrupt - phase control update (output off)
- 291:../src/gd32f30x_it.c ****   */
- 292:../src/gd32f30x_it.c **** void TIMER6_IRQHandler(void)
- 293:../src/gd32f30x_it.c **** {
- 791              		.loc 1 293 1
- 792              		.cfi_startproc
- 793              		@ args = 0, pretend = 0, frame = 0
- 794              		@ frame_needed = 1, uses_anonymous_args = 0
- 795 0000 80B5     		push	{r7, lr}
- 796              		.cfi_def_cfa_offset 8
- 797              		.cfi_offset 7, -8
- 798              		.cfi_offset 14, -4
- 799 0002 00AF     		add	r7, sp, #0
- 800              		.cfi_def_cfa_register 7
- 294:../src/gd32f30x_it.c ****     if (timer_interrupt_flag_get(TIMER6, TIMER_INT_FLAG_UP) == SET) {
- 801              		.loc 1 294 9
- 802 0004 0121     		movs	r1, #1
- 803 0006 0B48     		ldr	r0, .L59
- 804 0008 FFF7FEFF 		bl	timer_interrupt_flag_get
- 805 000c 0346     		mov	r3, r0
- 806              		.loc 1 294 8
- 807 000e 012B     		cmp	r3, #1
- 808 0010 0ED1     		bne	.L58
- 295:../src/gd32f30x_it.c ****         /* Turn off drive output */
- 296:../src/gd32f30x_it.c ****         ClrGrind_Off();
- 809              		.loc 1 296 9
- 810 0012 8021     		movs	r1, #128
- 811 0014 0848     		ldr	r0, .L59+4
- 812 0016 FFF7FEFF 		bl	gpio_bit_reset
- 297:../src/gd32f30x_it.c ****         ClrPumb_Off();
- 813              		.loc 1 297 9
- 814 001a 4021     		movs	r1, #64
- 815 001c 0748     		ldr	r0, .L59+8
- 816 001e FFF7FEFF 		bl	gpio_bit_reset
- 298:../src/gd32f30x_it.c ****         timer_disable(TIMER6);
- 817              		.loc 1 298 9
- 818 0022 0448     		ldr	r0, .L59
- 819 0024 FFF7FEFF 		bl	timer_disable
- 299:../src/gd32f30x_it.c ****         timer_interrupt_flag_clear(TIMER6, TIMER_INT_FLAG_UP);
- 820              		.loc 1 299 9
- 821 0028 0121     		movs	r1, #1
- 822 002a 0248     		ldr	r0, .L59
- 823 002c FFF7FEFF 		bl	timer_interrupt_flag_clear
- 824              	.L58:
- 300:../src/gd32f30x_it.c ****     }
- 301:../src/gd32f30x_it.c **** }
- 825              		.loc 1 301 1
- 826 0030 00BF     		nop
- 827 0032 80BD     		pop	{r7, pc}
- 828              	.L60:
- 829              		.align	2
- 830              	.L59:
- 831 0034 00140040 		.word	1073746944
- 832 0038 00080140 		.word	1073809408
- 833 003c 000C0140 		.word	1073810432
- 834              		.cfi_endproc
- 835              	.LFE133:
- 837              		.text
- 838              	.Letext0:
- 839              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 840              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
- 841              		.file 4 "../Firmware/CMSIS/core_cm4.h"
- 842              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
- 843              		.file 6 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
- 844              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_exti.h"
- 845              		.file 8 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_usart.h"
- 846              		.file 9 "../inc/systick.h"
- 847              		.file 10 "../osal/os_lyh_core.h"
- 848              		.file 11 "../app/keyboard.h"
- 849              		.file 12 "../app/acmotor.h"
- 850              		.file 13 "../app/display.h"
- 851              		.file 14 "../app/usart.h"
- 852              		.file 15 "../app/heat.h"
- 853              		.file 16 "../app/adc.h"
- 854              		.file 17 "../app/app.h"
- 855              		.file 18 "../app/bus.h"
+ 275:../src/gd32f30x_it.c ****                     SetPumb_On();
+ 720              		.loc 1 275 21
+ 721 003c 4021     		movs	r1, #64
+ 722 003e 2A48     		ldr	r0, .L57+24
+ 723 0040 FFF7FEFF 		bl	gpio_bit_set
+ 724              	.L52:
+ 276:../src/gd32f30x_it.c ****                 }
+ 277:../src/gd32f30x_it.c ****                 if (++pumb_motor_duty == DUTY_PERIOD){
+ 725              		.loc 1 277 21
+ 726 0044 274B     		ldr	r3, .L57+20
+ 727 0046 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 728 0048 0133     		adds	r3, r3, #1
+ 729 004a DAB2     		uxtb	r2, r3
+ 730              		.loc 1 277 20
+ 731 004c 254B     		ldr	r3, .L57+20
+ 732 004e 1A70     		strb	r2, [r3]
+ 733              		.loc 1 277 21
+ 734 0050 244B     		ldr	r3, .L57+20
+ 735 0052 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 736              		.loc 1 277 20
+ 737 0054 0A2B     		cmp	r3, #10
+ 738 0056 25D1     		bne	.L50
+ 278:../src/gd32f30x_it.c ****                     pumb_motor_duty = 0;
+ 739              		.loc 1 278 37
+ 740 0058 224B     		ldr	r3, .L57+20
+ 741 005a 0022     		movs	r2, #0
+ 742 005c 1A70     		strb	r2, [r3]
+ 743 005e 21E0     		b	.L50
+ 744              	.L51:
+ 279:../src/gd32f30x_it.c ****                 }
+ 280:../src/gd32f30x_it.c ****             }
+ 281:../src/gd32f30x_it.c ****             else if (pumb_motor_mode == STEAM_MODE) {
+ 745              		.loc 1 281 38
+ 746 0060 1F4B     		ldr	r3, .L57+16
+ 747 0062 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 748              		.loc 1 281 21
+ 749 0064 022B     		cmp	r3, #2
+ 750 0066 19D1     		bne	.L53
+ 282:../src/gd32f30x_it.c ****                 /* STEAM_MODE: Turn on at position 0 and 1 in cycle, wait 3-36 */
+ 283:../src/gd32f30x_it.c ****                 if (steam_cycle_counter == 0 || steam_cycle_counter == 1) {
+ 751              		.loc 1 283 41
+ 752 0068 204B     		ldr	r3, .L57+28
+ 753 006a 1B88     		ldrh	r3, [r3]
+ 754              		.loc 1 283 20
+ 755 006c 002B     		cmp	r3, #0
+ 756 006e 03D0     		beq	.L54
+ 757              		.loc 1 283 69 discriminator 1
+ 758 0070 1E4B     		ldr	r3, .L57+28
+ 759 0072 1B88     		ldrh	r3, [r3]
+ 760              		.loc 1 283 46 discriminator 1
+ 761 0074 012B     		cmp	r3, #1
+ 762 0076 03D1     		bne	.L55
+ 763              	.L54:
+ 284:../src/gd32f30x_it.c ****                     SetPumb_On();
+ 764              		.loc 1 284 21
+ 765 0078 4021     		movs	r1, #64
+ 766 007a 1B48     		ldr	r0, .L57+24
+ 767 007c FFF7FEFF 		bl	gpio_bit_set
+ 768              	.L55:
+ 285:../src/gd32f30x_it.c ****                 }
+ 286:../src/gd32f30x_it.c ****                 steam_cycle_counter++;
+ 769              		.loc 1 286 36
+ 770 0080 1A4B     		ldr	r3, .L57+28
+ 771 0082 1B88     		ldrh	r3, [r3]
+ 772 0084 0133     		adds	r3, r3, #1
+ 773 0086 9AB2     		uxth	r2, r3
+ 774 0088 184B     		ldr	r3, .L57+28
+ 775 008a 1A80     		strh	r2, [r3]	@ movhi
+ 287:../src/gd32f30x_it.c ****                 if (steam_cycle_counter >= STEAM_CYCLE_PERIOD) {
+ 776              		.loc 1 287 41
+ 777 008c 174B     		ldr	r3, .L57+28
+ 778 008e 1B88     		ldrh	r3, [r3]
+ 779              		.loc 1 287 20
+ 780 0090 212B     		cmp	r3, #33
+ 781 0092 07D9     		bls	.L50
+ 288:../src/gd32f30x_it.c ****                     steam_cycle_counter = 0;
+ 782              		.loc 1 288 41
+ 783 0094 154B     		ldr	r3, .L57+28
+ 784 0096 0022     		movs	r2, #0
+ 785 0098 1A80     		strh	r2, [r3]	@ movhi
+ 786 009a 03E0     		b	.L50
+ 787              	.L53:
+ 289:../src/gd32f30x_it.c ****                 }
+ 290:../src/gd32f30x_it.c ****             }
+ 291:../src/gd32f30x_it.c ****             else {
+ 292:../src/gd32f30x_it.c ****                 /* CONTINUE_MODE or other modes: turn on every time */
+ 293:../src/gd32f30x_it.c ****                 SetPumb_On();
+ 788              		.loc 1 293 17
+ 789 009c 4021     		movs	r1, #64
+ 790 009e 1248     		ldr	r0, .L57+24
+ 791 00a0 FFF7FEFF 		bl	gpio_bit_set
+ 792              	.L50:
+ 294:../src/gd32f30x_it.c ****             }
+ 295:../src/gd32f30x_it.c ****         }
+ 296:../src/gd32f30x_it.c ****         timer_disable(TIMER5);
+ 793              		.loc 1 296 9
+ 794 00a4 0A48     		ldr	r0, .L57
+ 795 00a6 FFF7FEFF 		bl	timer_disable
+ 297:../src/gd32f30x_it.c ****         timer_interrupt_flag_clear(TIMER5, TIMER_INT_FLAG_UP);
+ 796              		.loc 1 297 9
+ 797 00aa 0121     		movs	r1, #1
+ 798 00ac 0848     		ldr	r0, .L57
+ 799 00ae FFF7FEFF 		bl	timer_interrupt_flag_clear
+ 298:../src/gd32f30x_it.c **** 
+ 299:../src/gd32f30x_it.c ****         timer_counter_value_config(TIMER6, 0);
+ 800              		.loc 1 299 9
+ 801 00b2 0021     		movs	r1, #0
+ 802 00b4 0E48     		ldr	r0, .L57+32
+ 803 00b6 FFF7FEFF 		bl	timer_counter_value_config
+ 300:../src/gd32f30x_it.c ****         timer_autoreload_value_config(TIMER6, 6300);	// triger pluse
+ 804              		.loc 1 300 9
+ 805 00ba 41F69C01 		movw	r1, #6300
+ 806 00be 0C48     		ldr	r0, .L57+32
+ 807 00c0 FFF7FEFF 		bl	timer_autoreload_value_config
+ 301:../src/gd32f30x_it.c ****         timer_enable(TIMER6);
+ 808              		.loc 1 301 9
+ 809 00c4 0A48     		ldr	r0, .L57+32
+ 810 00c6 FFF7FEFF 		bl	timer_enable
+ 811              	.L56:
+ 302:../src/gd32f30x_it.c ****     }
+ 303:../src/gd32f30x_it.c **** }
+ 812              		.loc 1 303 1
+ 813 00ca 00BF     		nop
+ 814 00cc 80BD     		pop	{r7, pc}
+ 815              	.L58:
+ 816 00ce 00BF     		.align	2
+ 817              	.L57:
+ 818 00d0 00100040 		.word	1073745920
+ 819 00d4 00000000 		.word	grind_motor_state
+ 820 00d8 00080140 		.word	1073809408
+ 821 00dc 00000000 		.word	pumb_motor_state
+ 822 00e0 00000000 		.word	pumb_motor_mode
+ 823 00e4 00000000 		.word	pumb_motor_duty
+ 824 00e8 000C0140 		.word	1073810432
+ 825 00ec 00000000 		.word	steam_cycle_counter
+ 826 00f0 00140040 		.word	1073746944
+ 827              		.cfi_endproc
+ 828              	.LFE132:
+ 830              		.section	.text.TIMER6_IRQHandler,"ax",%progbits
+ 831              		.align	1
+ 832              		.global	TIMER6_IRQHandler
+ 833              		.syntax unified
+ 834              		.thumb
+ 835              		.thumb_func
+ 836              		.fpu softvfp
+ 838              	TIMER6_IRQHandler:
+ 839              	.LFB133:
+ 304:../src/gd32f30x_it.c **** 
+ 305:../src/gd32f30x_it.c **** /**
+ 306:../src/gd32f30x_it.c ****   * @brief  TIMER6 interrupt - phase control update (output off)
+ 307:../src/gd32f30x_it.c ****   */
+ 308:../src/gd32f30x_it.c **** void TIMER6_IRQHandler(void)
+ 309:../src/gd32f30x_it.c **** {
+ 840              		.loc 1 309 1
+ 841              		.cfi_startproc
+ 842              		@ args = 0, pretend = 0, frame = 0
+ 843              		@ frame_needed = 1, uses_anonymous_args = 0
+ 844 0000 80B5     		push	{r7, lr}
+ 845              		.cfi_def_cfa_offset 8
+ 846              		.cfi_offset 7, -8
+ 847              		.cfi_offset 14, -4
+ 848 0002 00AF     		add	r7, sp, #0
+ 849              		.cfi_def_cfa_register 7
+ 310:../src/gd32f30x_it.c ****     if (timer_interrupt_flag_get(TIMER6, TIMER_INT_FLAG_UP) == SET) {
+ 850              		.loc 1 310 9
+ 851 0004 0121     		movs	r1, #1
+ 852 0006 0B48     		ldr	r0, .L62
+ 853 0008 FFF7FEFF 		bl	timer_interrupt_flag_get
+ 854 000c 0346     		mov	r3, r0
+ 855              		.loc 1 310 8
+ 856 000e 012B     		cmp	r3, #1
+ 857 0010 0ED1     		bne	.L61
+ 311:../src/gd32f30x_it.c ****         /* Turn off drive output */
+ 312:../src/gd32f30x_it.c ****         ClrGrind_Off();
+ 858              		.loc 1 312 9
+ 859 0012 8021     		movs	r1, #128
+ 860 0014 0848     		ldr	r0, .L62+4
+ 861 0016 FFF7FEFF 		bl	gpio_bit_reset
+ 313:../src/gd32f30x_it.c ****         ClrPumb_Off();
+ 862              		.loc 1 313 9
+ 863 001a 4021     		movs	r1, #64
+ 864 001c 0748     		ldr	r0, .L62+8
+ 865 001e FFF7FEFF 		bl	gpio_bit_reset
+ 314:../src/gd32f30x_it.c ****         timer_disable(TIMER6);
+ 866              		.loc 1 314 9
+ 867 0022 0448     		ldr	r0, .L62
+ 868 0024 FFF7FEFF 		bl	timer_disable
+ 315:../src/gd32f30x_it.c ****         timer_interrupt_flag_clear(TIMER6, TIMER_INT_FLAG_UP);
+ 869              		.loc 1 315 9
+ 870 0028 0121     		movs	r1, #1
+ 871 002a 0248     		ldr	r0, .L62
+ 872 002c FFF7FEFF 		bl	timer_interrupt_flag_clear
+ 873              	.L61:
+ 316:../src/gd32f30x_it.c ****     }
+ 317:../src/gd32f30x_it.c **** }
+ 874              		.loc 1 317 1
+ 875 0030 00BF     		nop
+ 876 0032 80BD     		pop	{r7, pc}
+ 877              	.L63:
+ 878              		.align	2
+ 879              	.L62:
+ 880 0034 00140040 		.word	1073746944
+ 881 0038 00080140 		.word	1073809408
+ 882 003c 000C0140 		.word	1073810432
+ 883              		.cfi_endproc
+ 884              	.LFE133:
+ 886              		.text
+ 887              	.Letext0:
+ 888              		.file 2 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 889              		.file 3 "d:\\project\\coffee\\ide\\tools\\gnu tools arm embedded\\xpack-arm-none-eabi-gcc\\9.2.1-1
+ 890              		.file 4 "../Firmware/CMSIS/core_cm4.h"
+ 891              		.file 5 "../Firmware/CMSIS/GD/GD32F30x/Include/system_gd32f30x.h"
+ 892              		.file 6 "../Firmware/CMSIS/GD/GD32F30x/Include/gd32f30x.h"
+ 893              		.file 7 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_exti.h"
+ 894              		.file 8 "../Firmware/GD32F30x_standard_peripheral/Include/gd32f30x_usart.h"
+ 895              		.file 9 "../inc/systick.h"
+ 896              		.file 10 "../osal/os_lyh_core.h"
+ 897              		.file 11 "../app/keyboard.h"
+ 898              		.file 12 "../app/acmotor.h"
+ 899              		.file 13 "../app/display.h"
+ 900              		.file 14 "../app/usart.h"
+ 901              		.file 15 "../app/heat.h"
+ 902              		.file 16 "../app/adc.h"
+ 903              		.file 17 "../app/app.h"
+ 904              		.file 18 "../app/bus.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gd32f30x_it.c
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:16     .text.NMI_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:24     .text.NMI_Handler:00000000 NMI_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:50     .text.HardFault_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:57     .text.HardFault_Handler:00000000 HardFault_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:76     .text.MemManage_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:83     .text.MemManage_Handler:00000000 MemManage_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:102    .text.BusFault_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:109    .text.BusFault_Handler:00000000 BusFault_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:128    .text.UsageFault_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:135    .text.UsageFault_Handler:00000000 UsageFault_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:154    .text.SVC_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:161    .text.SVC_Handler:00000000 SVC_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:186    .text.DebugMon_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:193    .text.DebugMon_Handler:00000000 DebugMon_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:218    .text.PendSV_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:225    .text.PendSV_Handler:00000000 PendSV_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:250    .text.SysTick_Handler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:257    .text.SysTick_Handler:00000000 SysTick_Handler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:283    .text.SysTick_Handler:00000018 $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:288    .text.USART1_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:295    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:350    .text.USART1_IRQHandler:00000044 $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:358    .text.EXTI0_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:365    .text.EXTI0_IRQHandler:00000000 EXTI0_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:395    .text.EXTI5_9_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:402    .text.EXTI5_9_IRQHandler:00000000 EXTI5_9_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:447    .text.TIMER1_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:454    .text.TIMER1_IRQHandler:00000000 TIMER1_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:506    .text.TIMER2_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:513    .text.TIMER2_IRQHandler:00000000 TIMER2_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:544    .text.TIMER2_IRQHandler:00000020 $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:549    .text.TIMER3_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:556    .text.TIMER3_IRQHandler:00000000 TIMER3_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:605    .text.TIMER3_IRQHandler:00000044 $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:612    .text.TIMER4_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:619    .text.TIMER4_IRQHandler:00000000 TIMER4_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:657    .text.TIMER4_IRQHandler:0000002c $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:663    .text.TIMER5_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:670    .text.TIMER5_IRQHandler:00000000 TIMER5_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:770    .text.TIMER5_IRQHandler:00000088 $d
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:782    .text.TIMER6_IRQHandler:00000000 $t
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:789    .text.TIMER6_IRQHandler:00000000 TIMER6_IRQHandler
-C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:831    .text.TIMER6_IRQHandler:00000034 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:16     .text.NMI_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:24     .text.NMI_Handler:00000000 NMI_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:50     .text.HardFault_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:57     .text.HardFault_Handler:00000000 HardFault_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:76     .text.MemManage_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:83     .text.MemManage_Handler:00000000 MemManage_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:102    .text.BusFault_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:109    .text.BusFault_Handler:00000000 BusFault_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:128    .text.UsageFault_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:135    .text.UsageFault_Handler:00000000 UsageFault_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:154    .text.SVC_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:161    .text.SVC_Handler:00000000 SVC_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:186    .text.DebugMon_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:193    .text.DebugMon_Handler:00000000 DebugMon_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:218    .text.PendSV_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:225    .text.PendSV_Handler:00000000 PendSV_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:250    .text.SysTick_Handler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:257    .text.SysTick_Handler:00000000 SysTick_Handler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:283    .text.SysTick_Handler:00000018 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:288    .text.USART1_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:295    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:350    .text.USART1_IRQHandler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:358    .text.EXTI0_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:365    .text.EXTI0_IRQHandler:00000000 EXTI0_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:395    .text.EXTI5_9_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:402    .text.EXTI5_9_IRQHandler:00000000 EXTI5_9_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:447    .text.TIMER1_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:454    .text.TIMER1_IRQHandler:00000000 TIMER1_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:506    .text.TIMER2_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:513    .text.TIMER2_IRQHandler:00000000 TIMER2_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:544    .text.TIMER2_IRQHandler:00000020 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:549    .text.TIMER3_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:556    .text.TIMER3_IRQHandler:00000000 TIMER3_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:605    .text.TIMER3_IRQHandler:00000044 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:612    .text.TIMER4_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:619    .text.TIMER4_IRQHandler:00000000 TIMER4_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:657    .text.TIMER4_IRQHandler:0000002c $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:663    .text.TIMER5_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:670    .text.TIMER5_IRQHandler:00000000 TIMER5_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:818    .text.TIMER5_IRQHandler:000000d0 $d
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:831    .text.TIMER6_IRQHandler:00000000 $t
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:838    .text.TIMER6_IRQHandler:00000000 TIMER6_IRQHandler
+C:\Users\user001\AppData\Local\Temp\ccFerMyO.s:880    .text.TIMER6_IRQHandler:00000034 $d
                            .group:00000000 wm4.0.0b2cbd0a579afdcbc37120f4ceb86892
                            .group:00000000 wm4.gd32f30x.h.39.a203e36f89dbb1753b66e1e665732b11
                            .group:00000000 wm4.core_cm4.h.47.434d5634a5df7142236685d6945e71d7
@@ -1207,14 +1272,14 @@ C:\Users\user001\AppData\Local\Temp\ccPUjRvb.s:831    .text.TIMER6_IRQHandler:00
                            .group:00000000 wm4.os_lyh_core.h.21.da159c9c8e09d857b8c2a987141693aa
                            .group:00000000 wm4.configboard.h.3.5d7999deb151db360ef411cbf30581d9
                            .group:00000000 wm4.keyboard.h.3.89e82c2c5604c80a5d29f84b207feee3
-                           .group:00000000 wm4.acmotor.h.19.e32e17b82447380c9631c8ecb160ec50
+                           .group:00000000 wm4.acmotor.h.19.e31b7283161a116b359300c51c0efda0
                            .group:00000000 wm4.dcmotor.h.2.f0e751b97a118431bbabf05c3c943b2b
                            .group:00000000 wm4.display.h.19.4afe06d8dfd6c2f3df25f7cc51049b44
                            .group:00000000 wm4.timer.h.19.a82f4ede3cad5645e78e3c71f10c984d
                            .group:00000000 wm4.usart.h.19.b0b7cc356d4f06c8ed965d5c47dabfa0
                            .group:00000000 wm4.heat.h.3.e369736d2e46d50970c9988935448f3e
                            .group:00000000 wm4.adc.h.19.b7b71ccc5b83f495b1d7f2c83649d46d
-                           .group:00000000 wm4.app.h.3.cc1bae33111ee09aa181500e2732cd22
+                           .group:00000000 wm4.app.h.3.bd7eba50cf915311ea2fdb2260fe426a
                            .group:00000000 wm4.bus.h.3.006a12bb937063aa955474032db251cd
                            .group:00000000 wm4.relay.h.2.68d8ff0db7f3799b00c17eb83273c2f3
 
@@ -1243,3 +1308,4 @@ grind_motor_state
 pumb_motor_state
 pumb_motor_mode
 pumb_motor_duty
+steam_cycle_counter
