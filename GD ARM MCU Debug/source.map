@@ -5755,7 +5755,7 @@ LOAD d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/
                 0x08000130                __Vectors_End = .
                 0x08000130                __Vectors_Size = (__Vectors_End - __gVectors)
 
-.text           0x08000130     0x9250
+.text           0x08000130     0x9264
                 0x08000130                . = ALIGN (0x4)
  *(.text)
  .text          0x08000130       0xa0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memchr.o)
@@ -6106,851 +6106,851 @@ LOAD d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/
                 0x08001e60       0x44 ./app/app.o
                 0x08001e60                app_onoff_key_deal
  .text.app_start_key_deal
-                0x08001ea4       0xcc ./app/app.o
+                0x08001ea4       0xe8 ./app/app.o
                 0x08001ea4                app_start_key_deal
  .text.app_hotwater_key_deal
-                0x08001f70       0x40 ./app/app.o
-                0x08001f70                app_hotwater_key_deal
+                0x08001f8c       0x40 ./app/app.o
+                0x08001f8c                app_hotwater_key_deal
  .text.app_espresso_key_deal
-                0x08001fb0       0x88 ./app/app.o
-                0x08001fb0                app_espresso_key_deal
+                0x08001fcc       0x88 ./app/app.o
+                0x08001fcc                app_espresso_key_deal
  .text.app_steam_key_deal
-                0x08002038       0x40 ./app/app.o
-                0x08002038                app_steam_key_deal
+                0x08002054       0x40 ./app/app.o
+                0x08002054                app_steam_key_deal
  .text.app_ame_key_deal
-                0x08002078       0x88 ./app/app.o
-                0x08002078                app_ame_key_deal
+                0x08002094       0x88 ./app/app.o
+                0x08002094                app_ame_key_deal
  .text.app_coffee_key_deal
-                0x08002100       0x90 ./app/app.o
-                0x08002100                app_coffee_key_deal
+                0x0800211c       0x90 ./app/app.o
+                0x0800211c                app_coffee_key_deal
  .text.app_water_key_deal
-                0x08002190       0xac ./app/app.o
-                0x08002190                app_water_key_deal
+                0x080021ac       0xac ./app/app.o
+                0x080021ac                app_water_key_deal
  .text.app_calc_key_deal
-                0x0800223c       0x40 ./app/app.o
-                0x0800223c                app_calc_key_deal
+                0x08002258       0x40 ./app/app.o
+                0x08002258                app_calc_key_deal
  .text.app_aqua_key_deal
-                0x0800227c       0x40 ./app/app.o
-                0x0800227c                app_aqua_key_deal
+                0x08002298       0x40 ./app/app.o
+                0x08002298                app_aqua_key_deal
  .text.app_pad_key_deal
-                0x080022bc       0x18 ./app/app.o
-                0x080022bc                app_pad_key_deal
+                0x080022d8       0x18 ./app/app.o
+                0x080022d8                app_pad_key_deal
  .text.app_key_handler
-                0x080022d4      0x16e ./app/app.o
-                0x080022d4                app_key_handler
- *fill*         0x08002442        0x2 
+                0x080022f0      0x16e ./app/app.o
+                0x080022f0                app_key_handler
+ *fill*         0x0800245e        0x2 
  .text.app_init_handler
-                0x08002444       0x54 ./app/app.o
-                0x08002444                app_init_handler
+                0x08002460       0x54 ./app/app.o
+                0x08002460                app_init_handler
  .text.app_idle_handler
-                0x08002498       0x34 ./app/app.o
-                0x08002498                app_idle_handler
+                0x080024b4       0x34 ./app/app.o
+                0x080024b4                app_idle_handler
  .text.app_startup_handler
-                0x080024cc      0x37c ./app/app.o
-                0x080024cc                app_startup_handler
+                0x080024e8      0x37c ./app/app.o
+                0x080024e8                app_startup_handler
  .text.app_normal_handler
-                0x08002848      0x1b4 ./app/app.o
-                0x08002848                app_normal_handler
+                0x08002864      0x1b4 ./app/app.o
+                0x08002864                app_normal_handler
  .text.app_espresso_handler
-                0x080029fc      0x450 ./app/app.o
-                0x080029fc                app_espresso_handler
+                0x08002a18      0x450 ./app/app.o
+                0x08002a18                app_espresso_handler
  .text.app_american_handler
-                0x08002e4c      0x6a8 ./app/app.o
-                0x08002e4c                app_american_handler
+                0x08002e68      0x6a8 ./app/app.o
+                0x08002e68                app_american_handler
  .text.app_hotwater_handler
-                0x080034f4      0x130 ./app/app.o
-                0x080034f4                app_hotwater_handler
+                0x08003510      0x128 ./app/app.o
+                0x08003510                app_hotwater_handler
  .text.app_steam_handler
-                0x08003624       0x38 ./app/app.o
-                0x08003624                app_steam_handler
+                0x08003638       0x38 ./app/app.o
+                0x08003638                app_steam_handler
  .text.app_aqua_handler
-                0x0800365c       0x38 ./app/app.o
-                0x0800365c                app_aqua_handler
+                0x08003670       0x38 ./app/app.o
+                0x08003670                app_aqua_handler
  .text.app_calc_handler
-                0x08003694       0x38 ./app/app.o
-                0x08003694                app_calc_handler
+                0x080036a8       0x38 ./app/app.o
+                0x080036a8                app_calc_handler
  .text.app_setup_handler
-                0x080036cc      0x180 ./app/app.o
-                0x080036cc                app_setup_handler
+                0x080036e0      0x180 ./app/app.o
+                0x080036e0                app_setup_handler
  .text.app_running_onoff_grind_handler
-                0x0800384c      0x1b4 ./app/app.o
-                0x0800384c                app_running_onoff_grind_handler
+                0x08003860      0x1b4 ./app/app.o
+                0x08003860                app_running_onoff_grind_handler
  .text.app_running_onoff_go_water_handler
-                0x08003a00      0x1b4 ./app/app.o
-                0x08003a00                app_running_onoff_go_water_handler
+                0x08003a14      0x1b4 ./app/app.o
+                0x08003a14                app_running_onoff_go_water_handler
  .text.app_running_onoff_pre_brew_handler
-                0x08003bb4      0x154 ./app/app.o
-                0x08003bb4                app_running_onoff_pre_brew_handler
+                0x08003bc8      0x154 ./app/app.o
+                0x08003bc8                app_running_onoff_pre_brew_handler
  .text.app_running_onoff_brew_handler
-                0x08003d08      0x124 ./app/app.o
-                0x08003d08                app_running_onoff_brew_handler
+                0x08003d1c      0x124 ./app/app.o
+                0x08003d1c                app_running_onoff_brew_handler
  .text.app_running_onoff_drop_beans_handler
-                0x08003e2c      0x150 ./app/app.o
-                0x08003e2c                app_running_onoff_drop_beans_handler
+                0x08003e40      0x150 ./app/app.o
+                0x08003e40                app_running_onoff_drop_beans_handler
  .text.app_running_onoff_rst_handler
-                0x08003f7c       0xe8 ./app/app.o
-                0x08003f7c                app_running_onoff_rst_handler
+                0x08003f90       0xe8 ./app/app.o
+                0x08003f90                app_running_onoff_rst_handler
  .text.app_running_onoff_flush_handler
-                0x08004064      0x248 ./app/app.o
-                0x08004064                app_running_onoff_flush_handler
+                0x08004078      0x248 ./app/app.o
+                0x08004078                app_running_onoff_flush_handler
  .text.app_running_onoff_handler
-                0x080042ac      0x198 ./app/app.o
-                0x080042ac                app_running_onoff_handler
+                0x080042c0      0x198 ./app/app.o
+                0x080042c0                app_running_onoff_handler
  .text.init_app_task
-                0x08004444       0x34 ./app/app.o
-                0x08004444                init_app_task
+                0x08004458       0x34 ./app/app.o
+                0x08004458                init_app_task
  .text.app_task_handler
-                0x08004478       0x98 ./app/app.o
-                0x08004478                app_task_handler
+                0x0800448c       0x98 ./app/app.o
+                0x0800448c                app_task_handler
  .text.app_event_handler
-                0x08004510       0x3c ./app/app.o
-                0x08004510                app_event_handler
+                0x08004524       0x3c ./app/app.o
+                0x08004524                app_event_handler
  .text.gd_addbg_out
-                0x0800454c       0x5c ./app/bus.o
-                0x0800454c                gd_addbg_out
+                0x08004560       0x5c ./app/bus.o
+                0x08004560                gd_addbg_out
  .text.init_bus_task
-                0x080045a8       0x28 ./app/bus.o
-                0x080045a8                init_bus_task
+                0x080045bc       0x28 ./app/bus.o
+                0x080045bc                init_bus_task
  .text.bus_task_handler
-                0x080045d0       0x50 ./app/bus.o
-                0x080045d0                bus_task_handler
+                0x080045e4       0x50 ./app/bus.o
+                0x080045e4                bus_task_handler
  .text.bus_event_handler
-                0x08004620       0x2c ./app/bus.o
-                0x08004620                bus_event_handler
+                0x08004634       0x2c ./app/bus.o
+                0x08004634                bus_event_handler
  .text.dc_motor_SetPins
-                0x0800464c       0x68 ./app/dcmotor.o
+                0x08004660       0x68 ./app/dcmotor.o
  .text.dc_motor_Stop
-                0x080046b4       0x24 ./app/dcmotor.o
-                0x080046b4                dc_motor_Stop
+                0x080046c8       0x24 ./app/dcmotor.o
+                0x080046c8                dc_motor_Stop
  .text.dc_motor_Start
-                0x080046d8       0x50 ./app/dcmotor.o
-                0x080046d8                dc_motor_Start
+                0x080046ec       0x50 ./app/dcmotor.o
+                0x080046ec                dc_motor_Start
  .text.dc_motor_GetState
-                0x08004728       0x14 ./app/dcmotor.o
-                0x08004728                dc_motor_GetState
+                0x0800473c       0x14 ./app/dcmotor.o
+                0x0800473c                dc_motor_GetState
  .text.dc_motor_ClearFault
-                0x0800473c       0x20 ./app/dcmotor.o
-                0x0800473c                dc_motor_ClearFault
+                0x08004750       0x20 ./app/dcmotor.o
+                0x08004750                dc_motor_ClearFault
  .text.dc_motor_reach_irqHandler
-                0x0800475c       0x20 ./app/dcmotor.o
-                0x0800475c                dc_motor_reach_irqHandler
+                0x08004770       0x20 ./app/dcmotor.o
+                0x08004770                dc_motor_reach_irqHandler
  .text.gd_dcmotor_Init
-                0x0800477c       0x64 ./app/dcmotor.o
-                0x0800477c                gd_dcmotor_Init
+                0x08004790       0x64 ./app/dcmotor.o
+                0x08004790                gd_dcmotor_Init
  .text.display_init
-                0x080047e0       0x18 ./app/display.o
-                0x080047e0                display_init
+                0x080047f4       0x18 ./app/display.o
+                0x080047f4                display_init
  .text.display_led
-                0x080047f8       0x64 ./app/display.o
-                0x080047f8                display_led
+                0x0800480c       0x64 ./app/display.o
+                0x0800480c                display_led
  .text.display_get_led
-                0x0800485c       0x2c ./app/display.o
-                0x0800485c                display_get_led
+                0x08004870       0x2c ./app/display.o
+                0x08004870                display_get_led
  .text.gd_exti_Init
-                0x08004888       0x56 ./app/extint.o
-                0x08004888                gd_exti_Init
- *fill*         0x080048de        0x2 
+                0x0800489c       0x56 ./app/extint.o
+                0x0800489c                gd_exti_Init
+ *fill*         0x080048f2        0x2 
  .text.gd_remap_Init
-                0x080048e0       0x28 ./app/gpio.o
-                0x080048e0                gd_remap_Init
+                0x080048f4       0x28 ./app/gpio.o
+                0x080048f4                gd_remap_Init
  .text.gd_gpio_Init
-                0x08004908      0x1d0 ./app/gpio.o
-                0x08004908                gd_gpio_Init
+                0x0800491c      0x1d0 ./app/gpio.o
+                0x0800491c                gd_gpio_Init
  .text.heat_task_nextstep
-                0x08004ad8       0x2c ./app/heat.o
-                0x08004ad8                heat_task_nextstep
+                0x08004aec       0x2c ./app/heat.o
+                0x08004aec                heat_task_nextstep
  .text.heat_temp_deal
-                0x08004b04       0x42 ./app/heat.o
-                0x08004b04                heat_temp_deal
+                0x08004b18       0x42 ./app/heat.o
+                0x08004b18                heat_temp_deal
  .text.heat_get_temp
-                0x08004b46       0x3e ./app/heat.o
-                0x08004b46                heat_get_temp
+                0x08004b5a       0x3e ./app/heat.o
+                0x08004b5a                heat_get_temp
  .text.init_heat_task
-                0x08004b84       0x28 ./app/heat.o
-                0x08004b84                init_heat_task
+                0x08004b98       0x28 ./app/heat.o
+                0x08004b98                init_heat_task
  .text.heat_task_handler
-                0x08004bac       0x4c ./app/heat.o
-                0x08004bac                heat_task_handler
+                0x08004bc0       0x4c ./app/heat.o
+                0x08004bc0                heat_task_handler
  .text.heat_event_handler
-                0x08004bf8       0x5c ./app/heat.o
-                0x08004bf8                heat_event_handler
+                0x08004c0c       0x5c ./app/heat.o
+                0x08004c0c                heat_event_handler
  .text.ini_keys_value
-                0x08004c54       0xdc ./app/keyboard.o
-                0x08004c54                ini_keys_value
+                0x08004c68       0xdc ./app/keyboard.o
+                0x08004c68                ini_keys_value
  .text.key_switch_debouncer
-                0x08004d30      0x238 ./app/keyboard.o
-                0x08004d30                key_switch_debouncer
+                0x08004d44      0x238 ./app/keyboard.o
+                0x08004d44                key_switch_debouncer
  .text.key_scan_process
-                0x08004f68      0x18c ./app/keyboard.o
-                0x08004f68                key_scan_process
+                0x08004f7c      0x18c ./app/keyboard.o
+                0x08004f7c                key_scan_process
  .text.init_key_task
-                0x080050f4       0x28 ./app/keyboard.o
-                0x080050f4                init_key_task
+                0x08005108       0x28 ./app/keyboard.o
+                0x08005108                init_key_task
  .text.key_task_handler
-                0x0800511c       0x48 ./app/keyboard.o
-                0x0800511c                key_task_handler
+                0x08005130       0x48 ./app/keyboard.o
+                0x08005130                key_task_handler
  .text.key_event_handler
-                0x08005164       0x2c ./app/keyboard.o
-                0x08005164                key_event_handler
+                0x08005178       0x2c ./app/keyboard.o
+                0x08005178                key_event_handler
  .text.key_prohibit_mask
-                0x08005190       0x40 ./app/keyboard.o
-                0x08005190                key_prohibit_mask
+                0x080051a4       0x40 ./app/keyboard.o
+                0x080051a4                key_prohibit_mask
  .text.key_prohibit_setup
-                0x080051d0       0x40 ./app/keyboard.o
-                0x080051d0                key_prohibit_setup
+                0x080051e4       0x40 ./app/keyboard.o
+                0x080051e4                key_prohibit_setup
  .text.Relay2_ON
-                0x08005210       0x14 ./app/relay.o
-                0x08005210                Relay2_ON
- .text.Relay2_OFF
                 0x08005224       0x14 ./app/relay.o
-                0x08005224                Relay2_OFF
+                0x08005224                Relay2_ON
+ .text.Relay2_OFF
+                0x08005238       0x14 ./app/relay.o
+                0x08005238                Relay2_OFF
  .text.Relay2_GPIO_INIT
-                0x08005238       0x1c ./app/relay.o
+                0x0800524c       0x1c ./app/relay.o
  .text.gd_realy_init
-                0x08005254        0xc ./app/relay.o
-                0x08005254                gd_realy_init
+                0x08005268        0xc ./app/relay.o
+                0x08005268                gd_realy_init
  .text.gpio_buz_config
-                0x08005260       0x24 ./app/timer.o
-                0x08005260                gpio_buz_config
+                0x08005274       0x24 ./app/timer.o
+                0x08005274                gpio_buz_config
  .text.timer0_pwm_config
-                0x08005284       0x9c ./app/timer.o
-                0x08005284                timer0_pwm_config
+                0x08005298       0x9c ./app/timer.o
+                0x08005298                timer0_pwm_config
  .text.timer0_init
-                0x08005320       0x10 ./app/timer.o
-                0x08005320                timer0_init
+                0x08005334       0x10 ./app/timer.o
+                0x08005334                timer0_init
  .text.gd_timer_Init
-                0x08005330        0xc ./app/timer.o
-                0x08005330                gd_timer_Init
+                0x08005344        0xc ./app/timer.o
+                0x08005344                gd_timer_Init
  .text.gd_timer_buz
-                0x0800533c       0x2c ./app/timer.o
-                0x0800533c                gd_timer_buz
+                0x08005350       0x2c ./app/timer.o
+                0x08005350                gd_timer_buz
  .text.gd_uart_counter_init
-                0x08005368       0x34 ./app/usart.o
-                0x08005368                gd_uart_counter_init
+                0x0800537c       0x34 ./app/usart.o
+                0x0800537c                gd_uart_counter_init
  .text.gd_uart_com_init
-                0x0800539c      0x118 ./app/usart.o
-                0x0800539c                gd_uart_com_init
+                0x080053b0      0x118 ./app/usart.o
+                0x080053b0                gd_uart_com_init
  .text.gd_usart0_dma_config
-                0x080054b4       0xc4 ./app/usart.o
-                0x080054b4                gd_usart0_dma_config
+                0x080054c8       0xc4 ./app/usart.o
+                0x080054c8                gd_usart0_dma_config
  .text.gd_usart_Init
-                0x08005578       0x38 ./app/usart.o
-                0x08005578                gd_usart_Init
+                0x0800558c       0x38 ./app/usart.o
+                0x0800558c                gd_usart_Init
  .text.gd_usart1_upload
-                0x080055b0       0x5c ./app/usart.o
-                0x080055b0                gd_usart1_upload
+                0x080055c4       0x5c ./app/usart.o
+                0x080055c4                gd_usart1_upload
  .text.gd_usart1_rx_decode
-                0x0800560c       0x4c ./app/usart.o
-                0x0800560c                gd_usart1_rx_decode
+                0x08005620       0x4c ./app/usart.o
+                0x08005620                gd_usart1_rx_decode
  .text.gd_usart1_download
-                0x08005658       0x5c ./app/usart.o
-                0x08005658                gd_usart1_download
+                0x0800566c       0x5c ./app/usart.o
+                0x0800566c                gd_usart1_download
  .text.gd_usart0_rx_decode
-                0x080056b4       0xf4 ./app/usart.o
-                0x080056b4                gd_usart0_rx_decode
+                0x080056c8       0xf4 ./app/usart.o
+                0x080056c8                gd_usart0_rx_decode
  .text.gd_usart0_upload
-                0x080057a8      0x10c ./app/usart.o
-                0x080057a8                gd_usart0_upload
+                0x080057bc      0x10c ./app/usart.o
+                0x080057bc                gd_usart0_upload
  .text.gd_usart0_download
-                0x080058b4       0xa4 ./app/usart.o
-                0x080058b4                gd_usart0_download
+                0x080058c8       0xa4 ./app/usart.o
+                0x080058c8                gd_usart0_download
  .text.gd_combus_cbfunc
-                0x08005958       0x14 ./app/usart.o
-                0x08005958                gd_combus_cbfunc
+                0x0800596c       0x14 ./app/usart.o
+                0x0800596c                gd_combus_cbfunc
  .text.adc_enable
-                0x0800596c       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x0800596c                adc_enable
+                0x08005980       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005980                adc_enable
  .text.adc_calibration_enable
-                0x0800599c       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x0800599c                adc_calibration_enable
+                0x080059b0       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x080059b0                adc_calibration_enable
  .text.adc_dma_mode_enable
-                0x080059f0       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x080059f0                adc_dma_mode_enable
- *fill*         0x08005a12        0x2 
+                0x08005a04       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005a04                adc_dma_mode_enable
+ *fill*         0x08005a26        0x2 
  .text.adc_mode_config
-                0x08005a14       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005a14                adc_mode_config
+                0x08005a28       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005a28                adc_mode_config
  .text.adc_special_function_config
-                0x08005a44       0xbc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005a44                adc_special_function_config
+                0x08005a58       0xbc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005a58                adc_special_function_config
  .text.adc_data_alignment_config
-                0x08005b00       0x3c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005b00                adc_data_alignment_config
+                0x08005b14       0x3c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005b14                adc_data_alignment_config
  .text.adc_channel_length_config
-                0x08005b3c       0x78 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005b3c                adc_channel_length_config
+                0x08005b50       0x78 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005b50                adc_channel_length_config
  .text.adc_regular_channel_config
-                0x08005bb4      0x178 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005bb4                adc_regular_channel_config
+                0x08005bc8      0x178 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005bc8                adc_regular_channel_config
  .text.adc_external_trigger_config
-                0x08005d2c       0x8a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005d2c                adc_external_trigger_config
+                0x08005d40       0x8a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005d40                adc_external_trigger_config
  .text.adc_external_trigger_source_config
-                0x08005db6       0x6c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005db6                adc_external_trigger_source_config
+                0x08005dca       0x6c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005dca                adc_external_trigger_source_config
  .text.adc_software_trigger_enable
-                0x08005e22       0x4a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
-                0x08005e22                adc_software_trigger_enable
+                0x08005e36       0x4a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08005e36                adc_software_trigger_enable
  .text.dma_deinit
-                0x08005e6c       0xcc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x08005e6c                dma_deinit
+                0x08005e80       0xcc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08005e80                dma_deinit
  .text.dma_init
-                0x08005f38      0x1f6 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x08005f38                dma_init
+                0x08005f4c      0x1f6 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08005f4c                dma_init
  .text.dma_circulation_enable
-                0x0800612e       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x0800612e                dma_circulation_enable
+                0x08006142       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08006142                dma_circulation_enable
  .text.dma_circulation_disable
-                0x08006182       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x08006182                dma_circulation_disable
+                0x08006196       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08006196                dma_circulation_disable
  .text.dma_memory_to_memory_disable
-                0x080061d6       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x080061d6                dma_memory_to_memory_disable
+                0x080061ea       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x080061ea                dma_memory_to_memory_disable
  .text.dma_channel_enable
-                0x0800622a       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x0800622a                dma_channel_enable
+                0x0800623e       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x0800623e                dma_channel_enable
  .text.dma_channel_disable
-                0x0800627e       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x0800627e                dma_channel_disable
+                0x08006292       0x54 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08006292                dma_channel_disable
  .text.dma_transfer_number_config
-                0x080062d2       0x42 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x080062d2                dma_transfer_number_config
+                0x080062e6       0x42 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x080062e6                dma_transfer_number_config
  .text.dma_transfer_number_get
-                0x08006314       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x08006314                dma_transfer_number_get
+                0x08006328       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08006328                dma_transfer_number_get
  .text.dma_flag_get
-                0x0800634e       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x0800634e                dma_flag_get
+                0x08006362       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08006362                dma_flag_get
  .text.dma_flag_clear
-                0x08006386       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
-                0x08006386                dma_flag_clear
- *fill*         0x080063b6        0x2 
+                0x0800639a       0x30 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x0800639a                dma_flag_clear
+ *fill*         0x080063ca        0x2 
  .text.dma_periph_and_channel_check
-                0x080063b8       0x34 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x080063cc       0x34 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
  .text.exti_init
-                0x080063ec       0xf4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
-                0x080063ec                exti_init
+                0x08006400       0xf4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
+                0x08006400                exti_init
  .text.exti_interrupt_flag_get
-                0x080064e0       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
-                0x080064e0                exti_interrupt_flag_get
+                0x080064f4       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
+                0x080064f4                exti_interrupt_flag_get
  .text.exti_interrupt_flag_clear
-                0x08006508       0x1c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
-                0x08006508                exti_interrupt_flag_clear
+                0x0800651c       0x1c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
+                0x0800651c                exti_interrupt_flag_clear
  .text.fwdgt_write_enable
-                0x08006524       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
-                0x08006524                fwdgt_write_enable
+                0x08006538       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x08006538                fwdgt_write_enable
  .text.fwdgt_write_disable
-                0x0800653c       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
-                0x0800653c                fwdgt_write_disable
+                0x08006550       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x08006550                fwdgt_write_disable
  .text.fwdgt_enable
-                0x08006554       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
-                0x08006554                fwdgt_enable
+                0x08006568       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x08006568                fwdgt_enable
  .text.fwdgt_counter_reload
-                0x0800656c       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
-                0x0800656c                fwdgt_counter_reload
+                0x08006580       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x08006580                fwdgt_counter_reload
  .text.fwdgt_config
-                0x08006584       0xa8 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
-                0x08006584                fwdgt_config
+                0x08006598       0xa8 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x08006598                fwdgt_config
  .text.gpio_init
-                0x0800662c      0x168 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x0800662c                gpio_init
+                0x08006640      0x168 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x08006640                gpio_init
  .text.gpio_bit_set
-                0x08006794       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x08006794                gpio_bit_set
+                0x080067a8       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x080067a8                gpio_bit_set
  .text.gpio_bit_reset
-                0x080067b2       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x080067b2                gpio_bit_reset
+                0x080067c6       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x080067c6                gpio_bit_reset
  .text.gpio_bit_write
-                0x080067d0       0x34 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x080067d0                gpio_bit_write
+                0x080067e4       0x34 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x080067e4                gpio_bit_write
  .text.gpio_input_bit_get
-                0x08006804       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x08006804                gpio_input_bit_get
+                0x08006818       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x08006818                gpio_input_bit_get
  .text.gpio_output_bit_get
-                0x0800682c       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x0800682c                gpio_output_bit_get
+                0x08006840       0x28 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x08006840                gpio_output_bit_get
  .text.gpio_pin_remap_config
-                0x08006854       0xe4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x08006854                gpio_pin_remap_config
+                0x08006868       0xe4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x08006868                gpio_pin_remap_config
  .text.gpio_exti_source_select
-                0x08006938       0xf0 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
-                0x08006938                gpio_exti_source_select
+                0x0800694c       0xf0 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x0800694c                gpio_exti_source_select
  .text.nvic_priority_group_set
-                0x08006a28       0x24 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
-                0x08006a28                nvic_priority_group_set
+                0x08006a3c       0x24 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
+                0x08006a3c                nvic_priority_group_set
  .text.nvic_irq_enable
-                0x08006a4c      0x110 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
-                0x08006a4c                nvic_irq_enable
+                0x08006a60      0x110 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
+                0x08006a60                nvic_irq_enable
  .text.rcu_periph_clock_enable
-                0x08006b5c       0x44 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
-                0x08006b5c                rcu_periph_clock_enable
+                0x08006b70       0x44 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08006b70                rcu_periph_clock_enable
  .text.rcu_periph_reset_enable
-                0x08006ba0       0x44 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
-                0x08006ba0                rcu_periph_reset_enable
+                0x08006bb4       0x44 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08006bb4                rcu_periph_reset_enable
  .text.rcu_periph_reset_disable
-                0x08006be4       0x48 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
-                0x08006be4                rcu_periph_reset_disable
+                0x08006bf8       0x48 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08006bf8                rcu_periph_reset_disable
  .text.rcu_adc_clock_config
-                0x08006c2c       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
-                0x08006c2c                rcu_adc_clock_config
+                0x08006c40       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08006c40                rcu_adc_clock_config
  .text.rcu_clock_freq_get
-                0x08006cf0      0x1e4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
-                0x08006cf0                rcu_clock_freq_get
+                0x08006d04      0x1e4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08006d04                rcu_clock_freq_get
  .text.timer_deinit
-                0x08006ed4      0x130 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08006ed4                timer_deinit
+                0x08006ee8      0x130 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08006ee8                timer_deinit
  .text.timer_struct_para_init
-                0x08007004       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007004                timer_struct_para_init
+                0x08007018       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007018                timer_struct_para_init
  .text.timer_init
-                0x0800703c       0xf8 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x0800703c                timer_init
+                0x08007050       0xf8 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007050                timer_init
  .text.timer_enable
-                0x08007134       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007134                timer_enable
+                0x08007148       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007148                timer_enable
  .text.timer_disable
-                0x08007152       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007152                timer_disable
+                0x08007166       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007166                timer_disable
  .text.timer_auto_reload_shadow_enable
-                0x08007170       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007170                timer_auto_reload_shadow_enable
+                0x08007184       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007184                timer_auto_reload_shadow_enable
  .text.timer_update_event_enable
-                0x0800718e       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x0800718e                timer_update_event_enable
+                0x080071a2       0x1e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080071a2                timer_update_event_enable
  .text.timer_autoreload_value_config
-                0x080071ac       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080071ac                timer_autoreload_value_config
+                0x080071c0       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080071c0                timer_autoreload_value_config
  .text.timer_counter_value_config
-                0x080071cc       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080071cc                timer_counter_value_config
+                0x080071e0       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080071e0                timer_counter_value_config
  .text.timer_single_pulse_mode_config
-                0x080071ec       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080071ec                timer_single_pulse_mode_config
+                0x08007200       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007200                timer_single_pulse_mode_config
  .text.timer_interrupt_enable
-                0x08007226       0x26 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007226                timer_interrupt_enable
+                0x0800723a       0x26 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x0800723a                timer_interrupt_enable
  .text.timer_interrupt_flag_get
-                0x0800724c       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x0800724c                timer_interrupt_flag_get
+                0x08007260       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007260                timer_interrupt_flag_get
  .text.timer_interrupt_flag_clear
-                0x08007286       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007286                timer_interrupt_flag_clear
+                0x0800729a       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x0800729a                timer_interrupt_flag_clear
  .text.timer_primary_output_config
-                0x080072a6       0x3e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080072a6                timer_primary_output_config
+                0x080072ba       0x3e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080072ba                timer_primary_output_config
  .text.timer_channel_output_config
-                0x080072e4      0x3dc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080072e4                timer_channel_output_config
+                0x080072f8      0x3dc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080072f8                timer_channel_output_config
  .text.timer_channel_output_mode_config
-                0x080076c0       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080076c0                timer_channel_output_mode_config
+                0x080076d4       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080076d4                timer_channel_output_mode_config
  .text.timer_channel_output_pulse_value_config
-                0x08007784       0x68 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007784                timer_channel_output_pulse_value_config
+                0x08007798       0x68 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007798                timer_channel_output_pulse_value_config
  .text.timer_channel_output_shadow_config
-                0x080077ec       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080077ec                timer_channel_output_shadow_config
+                0x08007800       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007800                timer_channel_output_shadow_config
  .text.timer_channel_input_struct_para_init
-                0x080078b0       0x2a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080078b0                timer_channel_input_struct_para_init
- *fill*         0x080078da        0x2 
+                0x080078c4       0x2a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080078c4                timer_channel_input_struct_para_init
+ *fill*         0x080078ee        0x2 
  .text.timer_input_capture_config
-                0x080078dc      0x27c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x080078dc                timer_input_capture_config
+                0x080078f0      0x27c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080078f0                timer_input_capture_config
  .text.timer_channel_input_capture_prescaler_config
-                0x08007b58       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007b58                timer_channel_input_capture_prescaler_config
+                0x08007b6c       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007b6c                timer_channel_input_capture_prescaler_config
  .text.timer_channel_capture_value_register_read
-                0x08007c1c       0x64 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
-                0x08007c1c                timer_channel_capture_value_register_read
+                0x08007c30       0x64 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x08007c30                timer_channel_capture_value_register_read
  .text.usart_deinit
-                0x08007c80       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007c80                usart_deinit
+                0x08007c94       0xc4 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007c94                usart_deinit
  .text.usart_baudrate_set
-                0x08007d44       0xe0 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007d44                usart_baudrate_set
+                0x08007d58       0xe0 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007d58                usart_baudrate_set
  .text.usart_enable
-                0x08007e24       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007e24                usart_enable
+                0x08007e38       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007e38                usart_enable
  .text.usart_transmit_config
-                0x08007e46       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007e46                usart_transmit_config
+                0x08007e5a       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007e5a                usart_transmit_config
  .text.usart_receive_config
-                0x08007e7e       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007e7e                usart_receive_config
+                0x08007e92       0x38 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007e92                usart_receive_config
  .text.usart_data_transmit
-                0x08007eb6       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007eb6                usart_data_transmit
+                0x08007eca       0x22 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007eca                usart_data_transmit
  .text.usart_data_receive
-                0x08007ed8       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007ed8                usart_data_receive
+                0x08007eec       0x20 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007eec                usart_data_receive
  .text.usart_dma_receive_config
-                0x08007ef8       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007ef8                usart_dma_receive_config
+                0x08007f0c       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007f0c                usart_dma_receive_config
  .text.usart_dma_transmit_config
-                0x08007f32       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007f32                usart_dma_transmit_config
+                0x08007f46       0x3a ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007f46                usart_dma_transmit_config
  .text.usart_flag_get
-                0x08007f6c       0x3c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007f6c                usart_flag_get
+                0x08007f80       0x3c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007f80                usart_flag_get
  .text.usart_interrupt_enable
-                0x08007fa8       0x40 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007fa8                usart_interrupt_enable
+                0x08007fbc       0x40 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007fbc                usart_interrupt_enable
  .text.usart_interrupt_flag_get
-                0x08007fe8       0x68 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
-                0x08007fe8                usart_interrupt_flag_get
- .text._sbrk    0x08008050       0x58 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x08008050                _sbrk
- .text._write   0x080080a8       0x3a ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x080080a8                _write
- .text._close   0x080080e2       0x16 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x080080e2                _close
- .text._fstat   0x080080f8       0x1e ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x080080f8                _fstat
- .text._isatty  0x08008116       0x14 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x08008116                _isatty
- .text._lseek   0x0800812a       0x18 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x0800812a                _lseek
- .text._read    0x08008142       0x3a ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
-                0x08008142                _read
+                0x08007ffc       0x68 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x08007ffc                usart_interrupt_flag_get
+ .text._sbrk    0x08008064       0x58 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x08008064                _sbrk
+ .text._write   0x080080bc       0x3a ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x080080bc                _write
+ .text._close   0x080080f6       0x16 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x080080f6                _close
+ .text._fstat   0x0800810c       0x1e ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x0800810c                _fstat
+ .text._isatty  0x0800812a       0x14 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x0800812a                _isatty
+ .text._lseek   0x0800813e       0x18 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x0800813e                _lseek
+ .text._read    0x08008156       0x3a ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x08008156                _read
  .text._soft_delay_
-                0x0800817c       0x32 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
- *fill*         0x080081ae        0x2 
+                0x08008190       0x32 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+ *fill*         0x080081c2        0x2 
  .text.SystemInit
-                0x080081b0      0x154 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
-                0x080081b0                SystemInit
+                0x080081c4      0x154 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+                0x080081c4                SystemInit
  .text.system_clock_config
-                0x08008304        0xc ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+                0x08008318        0xc ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
  .text.system_clock_120m_hxtal
-                0x08008310      0x14c ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+                0x08008324      0x14c ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
  .text.gd32f30x_firmware_version_get
-                0x0800845c       0x10 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
-                0x0800845c                gd32f30x_firmware_version_get
+                0x08008470       0x10 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+                0x08008470                gd32f30x_firmware_version_get
  .text.__libc_init_array
-                0x0800846c       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-init.o)
-                0x0800846c                __libc_init_array
- .text.memset   0x080084b4       0x10 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memset.o)
-                0x080084b4                memset
- .text.printf   0x080084c4       0x30 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-printf.o)
-                0x080084c4                iprintf
-                0x080084c4                printf
- .text.std      0x080084f4       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08008480       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-init.o)
+                0x08008480                __libc_init_array
+ .text.memset   0x080084c8       0x10 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memset.o)
+                0x080084c8                memset
+ .text.printf   0x080084d8       0x30 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-printf.o)
+                0x080084d8                iprintf
+                0x080084d8                printf
+ .text.std      0x08008508       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
  .text._cleanup_r
-                0x0800853c        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x0800853c                _cleanup_r
+                0x08008550        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08008550                _cleanup_r
  .text.__sfmoreglue
-                0x08008548       0x2c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08008548                __sfmoreglue
+                0x0800855c       0x2c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x0800855c                __sfmoreglue
  .text.__sfp_lock_acquire
-                0x08008574        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08008574                __sfp_lock_acquire
+                0x08008588        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08008588                __sfp_lock_acquire
  .text.__sfp_lock_release
-                0x08008580        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08008580                __sfp_lock_release
+                0x08008594        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08008594                __sfp_lock_release
  .text.__sinit_lock_acquire
-                0x0800858c        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x0800858c                __sinit_lock_acquire
+                0x080085a0        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x080085a0                __sinit_lock_acquire
  .text.__sinit_lock_release
-                0x08008598        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08008598                __sinit_lock_release
- .text.__sinit  0x080085a4       0x70 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x080085a4                __sinit
- .text.__sfp    0x08008614       0x8c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08008614                __sfp
+                0x080085ac        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x080085ac                __sinit_lock_release
+ .text.__sinit  0x080085b8       0x70 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x080085b8                __sinit
+ .text.__sfp    0x08008628       0x8c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08008628                __sfp
  .text._fwalk_reent
-                0x080086a0       0x3e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fwalk.o)
-                0x080086a0                _fwalk_reent
+                0x080086b4       0x3e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fwalk.o)
+                0x080086b4                _fwalk_reent
  .text.__retarget_lock_init_recursive
-                0x080086de        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
-                0x080086de                __retarget_lock_init_recursive
+                0x080086f2        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x080086f2                __retarget_lock_init_recursive
  .text.__retarget_lock_acquire_recursive
-                0x080086e0        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
-                0x080086e0                __retarget_lock_acquire_recursive
+                0x080086f4        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x080086f4                __retarget_lock_acquire_recursive
  .text.__retarget_lock_release_recursive
-                0x080086e2        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
-                0x080086e2                __retarget_lock_release_recursive
- .text._free_r  0x080086e4       0x9c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-freer.o)
-                0x080086e4                _free_r
+                0x080086f6        0x2 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x080086f6                __retarget_lock_release_recursive
+ .text._free_r  0x080086f8       0x9c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+                0x080086f8                _free_r
  .text._malloc_r
-                0x08008780       0xb4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
-                0x08008780                _malloc_r
+                0x08008794       0xb4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                0x08008794                _malloc_r
  .text.__sfputc_r
-                0x08008834       0x2a d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x08008848       0x2a d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
  .text.__sfputs_r
-                0x0800885e       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
-                0x0800885e                __sfputs_r
- *fill*         0x08008882        0x2 
+                0x08008872       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x08008872                __sfputs_r
+ *fill*         0x08008896        0x2 
  .text._vfprintf_r
-                0x08008884      0x260 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
-                0x08008884                _vfprintf_r
-                0x08008884                _vfiprintf_r
+                0x08008898      0x260 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x08008898                _vfprintf_r
+                0x08008898                _vfiprintf_r
  .text._printf_common
-                0x08008ae4       0xda d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x08008ae4                _printf_common
- *fill*         0x08008bbe        0x2 
+                0x08008af8       0xda d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08008af8                _printf_common
+ *fill*         0x08008bd2        0x2 
  .text._printf_i
-                0x08008bc0      0x24c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x08008bc0                _printf_i
- .text._sbrk_r  0x08008e0c       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-sbrkr.o)
-                0x08008e0c                _sbrk_r
- .text.__sread  0x08008e2c       0x22 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
-                0x08008e2c                __sread
+                0x08008bd4      0x24c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08008bd4                _printf_i
+ .text._sbrk_r  0x08008e20       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+                0x08008e20                _sbrk_r
+ .text.__sread  0x08008e40       0x22 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08008e40                __sread
  .text.__swrite
-                0x08008e4e       0x38 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
-                0x08008e4e                __swrite
- .text.__sseek  0x08008e86       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
-                0x08008e86                __sseek
+                0x08008e62       0x38 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08008e62                __swrite
+ .text.__sseek  0x08008e9a       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08008e9a                __sseek
  .text.__sclose
-                0x08008eaa        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
-                0x08008eaa                __sclose
- *fill*         0x08008eb2        0x2 
+                0x08008ebe        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08008ebe                __sclose
+ *fill*         0x08008ec6        0x2 
  .text.__swbuf_r
-                0x08008eb4       0xa4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wbuf.o)
-                0x08008eb4                __swbuf_r
+                0x08008ec8       0xa4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wbuf.o)
+                0x08008ec8                __swbuf_r
  .text._write_r
-                0x08008f58       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-writer.o)
-                0x08008f58                _write_r
+                0x08008f6c       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-writer.o)
+                0x08008f6c                _write_r
  .text.__swsetup_r
-                0x08008f7c       0xdc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wsetup.o)
-                0x08008f7c                __swsetup_r
+                0x08008f90       0xdc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wsetup.o)
+                0x08008f90                __swsetup_r
  .text._close_r
-                0x08009058       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-closer.o)
-                0x08009058                _close_r
+                0x0800906c       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-closer.o)
+                0x0800906c                _close_r
  .text.__sflush_r
-                0x08009078      0x10c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
-                0x08009078                __sflush_r
+                0x0800908c      0x10c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
+                0x0800908c                __sflush_r
  .text._fflush_r
-                0x08009184       0x78 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
-                0x08009184                _fflush_r
+                0x08009198       0x78 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
+                0x08009198                _fflush_r
  .text._lseek_r
-                0x080091fc       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lseekr.o)
-                0x080091fc                _lseek_r
+                0x08009210       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lseekr.o)
+                0x08009210                _lseek_r
  .text.__swhatbuf_r
-                0x08009220       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
-                0x08009220                __swhatbuf_r
+                0x08009234       0x48 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                0x08009234                __swhatbuf_r
  .text.__smakebuf_r
-                0x08009268       0x80 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
-                0x08009268                __smakebuf_r
+                0x0800927c       0x80 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                0x0800927c                __smakebuf_r
  .text.__malloc_lock
-                0x080092e8        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
-                0x080092e8                __malloc_lock
+                0x080092fc        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
+                0x080092fc                __malloc_lock
  .text.__malloc_unlock
-                0x080092f4        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
-                0x080092f4                __malloc_unlock
- .text._read_r  0x08009300       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-readr.o)
-                0x08009300                _read_r
+                0x08009308        0xc d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
+                0x08009308                __malloc_unlock
+ .text._read_r  0x08009314       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-readr.o)
+                0x08009314                _read_r
  .text._fstat_r
-                0x08009324       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fstatr.o)
-                0x08009324                _fstat_r
+                0x08009338       0x24 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fstatr.o)
+                0x08009338                _fstat_r
  .text._isatty_r
-                0x08009348       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-isattyr.o)
-                0x08009348                _isatty_r
+                0x0800935c       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-isattyr.o)
+                0x0800935c                _isatty_r
  *(.glue_7)
- .glue_7        0x08009368        0x0 linker stubs
+ .glue_7        0x0800937c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x08009368        0x0 linker stubs
+ .glue_7t       0x0800937c        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x08009368        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+ .eh_frame      0x0800937c        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
  *(.init)
- .init          0x08009368        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
-                0x08009368                _init
- .init          0x0800936c        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
+ .init          0x0800937c        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
+                0x0800937c                _init
+ .init          0x08009380        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
  *(.fini)
- .fini          0x08009374        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
-                0x08009374                _fini
- .fini          0x08009378        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
-                0x08009380                . = ALIGN (0x4)
-                0x08009380                _etext = .
+ .fini          0x08009388        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
+                0x08009388                _fini
+ .fini          0x0800938c        0x8 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
+                0x08009394                . = ALIGN (0x4)
+                0x08009394                _etext = .
 
-.vfp11_veneer   0x08009380        0x0
- .vfp11_veneer  0x08009380        0x0 linker stubs
+.vfp11_veneer   0x08009394        0x0
+ .vfp11_veneer  0x08009394        0x0 linker stubs
 
-.v4_bx          0x08009380        0x0
- .v4_bx         0x08009380        0x0 linker stubs
+.v4_bx          0x08009394        0x0
+ .v4_bx         0x08009394        0x0 linker stubs
 
-.iplt           0x08009380        0x0
- .iplt          0x08009380        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+.iplt           0x08009394        0x0
+ .iplt          0x08009394        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
 
-.rodata         0x08009380      0x154
-                0x08009380                . = ALIGN (0x4)
+.rodata         0x08009394      0x154
+                0x08009394                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x08009380       0x70 ./src/main.o
- .rodata        0x080093f0       0x13 ./app/bus.o
- *fill*         0x08009403        0x1 
- .rodata        0x08009404       0x20 ./app/usart.o
- .rodata        0x08009424       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+ .rodata        0x08009394       0x70 ./src/main.o
+ .rodata        0x08009404       0x13 ./app/bus.o
+ *fill*         0x08009417        0x1 
+ .rodata        0x08009418       0x20 ./app/usart.o
+ .rodata        0x08009438       0x18 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
  *(.rodata*)
  .rodata._global_impure_ptr
-                0x0800943c        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-impure.o)
-                0x0800943c                _global_impure_ptr
+                0x08009450        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-impure.o)
+                0x08009450                _global_impure_ptr
  .rodata.__sf_fake_stderr
-                0x08009440       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08009440                __sf_fake_stderr
+                0x08009454       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08009454                __sf_fake_stderr
  .rodata.__sf_fake_stdin
-                0x08009460       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08009460                __sf_fake_stdin
+                0x08009474       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08009474                __sf_fake_stdin
  .rodata.__sf_fake_stdout
-                0x08009480       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
-                0x08009480                __sf_fake_stdout
+                0x08009494       0x20 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08009494                __sf_fake_stdout
  .rodata._vfprintf_r.str1.1
-                0x080094a0       0x11 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x080094b4       0x11 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
  .rodata._printf_i.str1.1
-                0x080094b1       0x22 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
-                0x080094d4                . = ALIGN (0x4)
- *fill*         0x080094d3        0x1 
+                0x080094c5       0x22 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x080094e8                . = ALIGN (0x4)
+ *fill*         0x080094e7        0x1 
 
-.rel.dyn        0x080094d4        0x0
- .rel.iplt      0x080094d4        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+.rel.dyn        0x080094e8        0x0
+ .rel.iplt      0x080094e8        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x080094d4        0x0
-                0x080094d4                __exidx_start = .
+.ARM            0x080094e8        0x0
+                0x080094e8                __exidx_start = .
  *(.ARM.exidx*)
-                0x080094d4                __exidx_end = .
+                0x080094e8                __exidx_end = .
 
 .ARM.attributes
-                0x080094d4       0x2a
+                0x080094e8       0x2a
  *(.ARM.attributes)
  .ARM.attributes
-                0x080094d4       0x1e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
+                0x080094e8       0x1e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crti.o
  .ARM.attributes
-                0x080094f2       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+                0x08009506       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
  .ARM.attributes
-                0x08009520       0x2e ./src/gd32f30x_it.o
+                0x08009534       0x2e ./src/gd32f30x_it.o
  .ARM.attributes
-                0x0800954e       0x2e ./src/main.o
+                0x08009562       0x2e ./src/main.o
  .ARM.attributes
-                0x0800957c       0x2e ./src/systick.o
+                0x08009590       0x2e ./src/systick.o
  .ARM.attributes
-                0x080095aa       0x2e ./osal/os_lyh_core.o
+                0x080095be       0x2e ./osal/os_lyh_core.o
  .ARM.attributes
-                0x080095d8       0x21 ./gcc_startup/startup_gd32f30x_hd.o
+                0x080095ec       0x21 ./gcc_startup/startup_gd32f30x_hd.o
  .ARM.attributes
-                0x080095f9       0x2e ./app/acmotor.o
+                0x0800960d       0x2e ./app/acmotor.o
  .ARM.attributes
-                0x08009627       0x2e ./app/adc.o
+                0x0800963b       0x2e ./app/adc.o
  .ARM.attributes
-                0x08009655       0x2e ./app/app.o
+                0x08009669       0x2e ./app/app.o
  .ARM.attributes
-                0x08009683       0x2e ./app/bus.o
+                0x08009697       0x2e ./app/bus.o
  .ARM.attributes
-                0x080096b1       0x2e ./app/dcmotor.o
+                0x080096c5       0x2e ./app/dcmotor.o
  .ARM.attributes
-                0x080096df       0x2e ./app/display.o
+                0x080096f3       0x2e ./app/display.o
  .ARM.attributes
-                0x0800970d       0x2e ./app/extint.o
+                0x08009721       0x2e ./app/extint.o
  .ARM.attributes
-                0x0800973b       0x2e ./app/gpio.o
+                0x0800974f       0x2e ./app/gpio.o
  .ARM.attributes
-                0x08009769       0x2e ./app/heat.o
+                0x0800977d       0x2e ./app/heat.o
  .ARM.attributes
-                0x08009797       0x2e ./app/keyboard.o
+                0x080097ab       0x2e ./app/keyboard.o
  .ARM.attributes
-                0x080097c5       0x2e ./app/relay.o
+                0x080097d9       0x2e ./app/relay.o
  .ARM.attributes
-                0x080097f3       0x2e ./app/timer.o
+                0x08009807       0x2e ./app/timer.o
  .ARM.attributes
-                0x08009821       0x2e ./app/usart.o
+                0x08009835       0x2e ./app/usart.o
  .ARM.attributes
-                0x0800984f       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+                0x08009863       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
  .ARM.attributes
-                0x0800987d       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+                0x08009891       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
  .ARM.attributes
-                0x080098ab       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
+                0x080098bf       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
  .ARM.attributes
-                0x080098d9       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+                0x080098ed       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
  .ARM.attributes
-                0x08009907       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+                0x0800991b       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
  .ARM.attributes
-                0x08009935       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
+                0x08009949       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
  .ARM.attributes
-                0x08009963       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+                0x08009977       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
  .ARM.attributes
-                0x08009991       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+                0x080099a5       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
  .ARM.attributes
-                0x080099bf       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+                0x080099d3       0x2e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
  .ARM.attributes
-                0x080099ed       0x2e ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+                0x08009a01       0x2e ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
  .ARM.attributes
-                0x08009a1b       0x2e ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+                0x08009a2f       0x2e ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
  .ARM.attributes
-                0x08009a49       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-impure.o)
+                0x08009a5d       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-impure.o)
  .ARM.attributes
-                0x08009a77       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-init.o)
+                0x08009a8b       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-init.o)
  .ARM.attributes
-                0x08009aa5       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memset.o)
+                0x08009ab9       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memset.o)
  .ARM.attributes
-                0x08009ad3       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-printf.o)
+                0x08009ae7       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-printf.o)
  .ARM.attributes
-                0x08009b01       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-reent.o)
+                0x08009b15       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-reent.o)
  .ARM.attributes
-                0x08009b2f       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08009b43       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-findfp.o)
  .ARM.attributes
-                0x08009b5d       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fwalk.o)
+                0x08009b71       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fwalk.o)
  .ARM.attributes
-                0x08009b8b       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x08009b9f       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lock.o)
  .ARM.attributes
-                0x08009bb9       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+                0x08009bcd       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-freer.o)
  .ARM.attributes
-                0x08009be7       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                0x08009bfb       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
  .ARM.attributes
-                0x08009c15       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x08009c29       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
  .ARM.attributes
-                0x08009c43       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08009c57       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
  .ARM.attributes
-                0x08009c71       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+                0x08009c85       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-sbrkr.o)
  .ARM.attributes
-                0x08009c9f       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08009cb3       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-stdio.o)
  .ARM.attributes
-                0x08009ccd       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wbuf.o)
+                0x08009ce1       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wbuf.o)
  .ARM.attributes
-                0x08009cfb       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-writer.o)
+                0x08009d0f       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-writer.o)
  .ARM.attributes
-                0x08009d29       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wsetup.o)
+                0x08009d3d       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-wsetup.o)
  .ARM.attributes
-                0x08009d57       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-closer.o)
+                0x08009d6b       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-closer.o)
  .ARM.attributes
-                0x08009d85       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
+                0x08009d99       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fflush.o)
  .ARM.attributes
-                0x08009db3       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lseekr.o)
+                0x08009dc7       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-lseekr.o)
  .ARM.attributes
-                0x08009de1       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                0x08009df5       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-makebuf.o)
  .ARM.attributes
-                0x08009e0f       0x1c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memchr.o)
+                0x08009e23       0x1c d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-memchr.o)
  .ARM.attributes
-                0x08009e2b       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
+                0x08009e3f       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-mlock.o)
  .ARM.attributes
-                0x08009e59       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-readr.o)
+                0x08009e6d       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-readr.o)
  .ARM.attributes
-                0x08009e87       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fstatr.o)
+                0x08009e9b       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-fstatr.o)
  .ARM.attributes
-                0x08009eb5       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-isattyr.o)
+                0x08009ec9       0x2e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp\libg_nano.a(lib_a-isattyr.o)
  .ARM.attributes
-                0x08009ee3       0x1e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
+                0x08009ef7       0x1e d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtn.o
 
-.preinit_array  0x080094d4        0x0
-                0x080094d4                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080094e8        0x0
+                0x080094e8                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x080094d4                PROVIDE (__preinit_array_end = .)
+                0x080094e8                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x080094d4        0x4
-                0x080094d4                PROVIDE (__init_array_start = .)
+.init_array     0x080094e8        0x4
+                0x080094e8                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x080094d4        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
-                0x080094d8                PROVIDE (__init_array_end = .)
+ .init_array    0x080094e8        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+                0x080094ec                PROVIDE (__init_array_end = .)
 
-.fini_array     0x080094d8        0x4
+.fini_array     0x080094ec        0x4
                 [!provide]                PROVIDE (__fini_array_start = .)
  *(.fini_array*)
- .fini_array    0x080094d8        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
+ .fini_array    0x080094ec        0x4 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
  *(SORT_BY_NAME(.fini_array.*))
                 [!provide]                PROVIDE (__fini_array_end = .)
-                0x080094dc                _sidata = LOADADDR (.data)
+                0x080094f0                _sidata = LOADADDR (.data)
 
-.data           0x20000000       0x6c load address 0x080094dc
+.data           0x20000000       0x6c load address 0x080094f0
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _sdata = .
  *(.data)
@@ -6968,11 +6968,11 @@ LOAD d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/
                 0x2000006c                . = ALIGN (0x4)
                 0x2000006c                _edata = .
 
-.igot.plt       0x2000006c        0x0 load address 0x08009548
+.igot.plt       0x2000006c        0x0 load address 0x0800955c
  .igot.plt      0x2000006c        0x0 d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/9.2.1-1.1/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v7e-m/nofp/crtbegin.o
                 0x2000006c                . = ALIGN (0x4)
 
-.bss            0x2000006c      0x318 load address 0x08009548
+.bss            0x2000006c      0x318 load address 0x0800955c
                 0x2000006c                . = ALIGN (0x4)
                 0x2000006c                _sbss = .
                 0x2000006c                __bss_start__ = _sbss
@@ -7008,13 +7008,13 @@ LOAD d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/
  .bss.current_period_us
                 0x200000a0        0x4 ./app/acmotor.o
                 0x200000a0                current_period_us
- .bss.sta.8839  0x200000a4        0x1 ./app/app.o
- .bss.sta.8856  0x200000a5        0x1 ./app/app.o
- .bss.sta.8873  0x200000a6        0x1 ./app/app.o
- .bss.sta.8888  0x200000a7        0x1 ./app/app.o
- .bss.sta.8901  0x200000a8        0x1 ./app/app.o
- .bss.sta.8915  0x200000a9        0x1 ./app/app.o
- .bss.sta.8926  0x200000aa        0x1 ./app/app.o
+ .bss.sta.8840  0x200000a4        0x1 ./app/app.o
+ .bss.sta.8857  0x200000a5        0x1 ./app/app.o
+ .bss.sta.8874  0x200000a6        0x1 ./app/app.o
+ .bss.sta.8889  0x200000a7        0x1 ./app/app.o
+ .bss.sta.8902  0x200000a8        0x1 ./app/app.o
+ .bss.sta.8916  0x200000a9        0x1 ./app/app.o
+ .bss.sta.8927  0x200000aa        0x1 ./app/app.o
  .bss.motor_state
                 0x200000ab        0x1 ./app/dcmotor.o
  .bss.chksum.7746
@@ -7114,7 +7114,7 @@ LOAD d:/project/coffee/ide/tools/gnu tools arm embedded/xpack-arm-none-eabi-gcc/
                 0x20000384                _ebss = .
                 0x20000384                __bss_end__ = _ebss
 
-.heap_stack     0x20000384      0xc04 load address 0x08009548
+.heap_stack     0x20000384      0xc04 load address 0x0800955c
                 0x20000388                . = ALIGN (0x8)
  *fill*         0x20000384        0x4 
                 [!provide]                PROVIDE (end = _ebss)
@@ -7408,7 +7408,7 @@ OUTPUT(source.elf elf32-littlearm)
  .debug_macro   0x00008f27       0x3a ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
  .debug_macro   0x00008f61      0x1c7 ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
 
-.debug_line     0x00000000    0x104d5
+.debug_line     0x00000000    0x104cd
  .debug_line    0x00000000      0x863 ./src/gd32f30x_it.o
  .debug_line    0x00000863      0x7bf ./src/main.o
  .debug_line    0x00001022      0x604 ./src/systick.o
@@ -7416,28 +7416,28 @@ OUTPUT(source.elf elf32-littlearm)
  .debug_line    0x0000205f       0x7f ./gcc_startup/startup_gd32f30x_hd.o
  .debug_line    0x000020de      0xba5 ./app/acmotor.o
  .debug_line    0x00002c83      0x665 ./app/adc.o
- .debug_line    0x000032e8     0x1f0c ./app/app.o
- .debug_line    0x000051f4      0x76a ./app/bus.o
- .debug_line    0x0000595e      0x707 ./app/dcmotor.o
- .debug_line    0x00006065      0x5e8 ./app/display.o
- .debug_line    0x0000664d      0x545 ./app/extint.o
- .debug_line    0x00006b92      0x578 ./app/gpio.o
- .debug_line    0x0000710a      0x842 ./app/heat.o
- .debug_line    0x0000794c      0x8f0 ./app/keyboard.o
- .debug_line    0x0000823c      0x5ac ./app/relay.o
- .debug_line    0x000087e8      0x62e ./app/timer.o
- .debug_line    0x00008e16      0x865 ./app/usart.o
- .debug_line    0x0000967b      0xc4b ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
- .debug_line    0x0000a2c6      0xae6 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
- .debug_line    0x0000adac      0x6fc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
- .debug_line    0x0000b4a8      0x6e9 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
- .debug_line    0x0000bb91      0x96e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
- .debug_line    0x0000c4ff      0x6a2 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
- .debug_line    0x0000cba1      0xc5c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
- .debug_line    0x0000d7fd     0x1311 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
- .debug_line    0x0000eb0e      0xb53 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
- .debug_line    0x0000f661      0x6b9 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
- .debug_line    0x0000fd1a      0x7bb ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
+ .debug_line    0x000032e8     0x1f04 ./app/app.o
+ .debug_line    0x000051ec      0x76a ./app/bus.o
+ .debug_line    0x00005956      0x707 ./app/dcmotor.o
+ .debug_line    0x0000605d      0x5e8 ./app/display.o
+ .debug_line    0x00006645      0x545 ./app/extint.o
+ .debug_line    0x00006b8a      0x578 ./app/gpio.o
+ .debug_line    0x00007102      0x842 ./app/heat.o
+ .debug_line    0x00007944      0x8f0 ./app/keyboard.o
+ .debug_line    0x00008234      0x5ac ./app/relay.o
+ .debug_line    0x000087e0      0x62e ./app/timer.o
+ .debug_line    0x00008e0e      0x865 ./app/usart.o
+ .debug_line    0x00009673      0xc4b ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_adc.o
+ .debug_line    0x0000a2be      0xae6 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_dma.o
+ .debug_line    0x0000ada4      0x6fc ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_exti.o
+ .debug_line    0x0000b4a0      0x6e9 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_fwdgt.o
+ .debug_line    0x0000bb89      0x96e ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_gpio.o
+ .debug_line    0x0000c4f7      0x6a2 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_misc.o
+ .debug_line    0x0000cb99      0xc5c ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_rcu.o
+ .debug_line    0x0000d7f5     0x1311 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_timer.o
+ .debug_line    0x0000eb06      0xb53 ./Firmware/GD32F30x_standard_peripheral/Source/gd32f30x_usart.o
+ .debug_line    0x0000f659      0x6b9 ./Firmware/CMSIS/GD/GD32F30x/Source/syscalls.o
+ .debug_line    0x0000fd12      0x7bb ./Firmware/CMSIS/GD/GD32F30x/Source/system_gd32f30x.o
 
 .debug_str      0x00000000    0x3bba2
  .debug_str     0x00000000    0x2f6f7 ./src/gd32f30x_it.o

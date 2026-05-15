@@ -430,9 +430,12 @@ uint8_t app_start_key_deal(void)
 			break;
 	
 		case APP_ESPRESSO_STATE:
+		case APP_AMERICAN_STATE:
 			cup_loop = 0;	//将杯数循环清除，只执行本次冲煮流程
 			break;
-
+		case APP_HOTWATER_STATE:
+			app_task_nextstep(APP_HOTWATER_STATE, HOTWATER_COMPLETE_STATE);		//进入完成状态
+			break;
 		default:
 			break;
 	}
@@ -1712,26 +1715,23 @@ void app_hotwater_handler(void)
 			if(0 == manual_setup.water){
 				ac_pumb_start(CONTINUE_MODE);
 				osal_lyh_delay_task(Ms_14000);
-				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;
+				app_task_substep = HOTWATER_COMPLETE_STATE;
 			}
 			else if(1 == manual_setup.water){
 				ac_pumb_start(CONTINUE_MODE);
 				osal_lyh_delay_task(Ms_39000);
-				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;
+				app_task_substep = HOTWATER_COMPLETE_STATE;
 			}
 			else if(2 == manual_setup.water){
 				ac_pumb_start(CONTINUE_MODE);
 				osal_lyh_delay_task(Ms_97000);
-				app_task_substep = HOTWATER_WAIT_WATER_END_STATE;				
+				app_task_substep = HOTWATER_COMPLETE_STATE;				
 			}
 			break;
 		/* 等待时间结束 */	
-		case HOTWATER_WAIT_WATER_END_STATE:
+		case HOTWATER_COMPLETE_STATE:
 			ac_pumb_stop();
 			app_relay_set(COFFEE_MODE);
-			app_task_substep = HOTWATER_COMPLETE_STATE;	
-			break;
-		case HOTWATER_COMPLETE_STATE:
 			app_turn_heat_off();
 			app_led_finish_step();
 			app_task_nextstep(APP_NORMAL_STATE, NORMAL_INIT_STATE);		//回到normal状态，等待下一次操作
